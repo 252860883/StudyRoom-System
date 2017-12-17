@@ -1,0 +1,89 @@
+<template>
+<header v-if="this.$route.path!='/login'">
+    <div class="con">
+        <img :src="require('../assets/img/logo.png')" class="logo" alt="">
+        <div class="btngroup">
+            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich='-1'" @click="navClick('/message')">
+                <img :src="require('../assets/img/icon-remind.png')" alt="消息通知" v-if="iswhich!=0">
+                <img :src="require('../assets/img/icon-remind-on.png')" alt="消息通知" v-if="iswhich==0">                
+            </div>
+            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/addAll')">
+                <img :src="require('../assets/img/icon-has.png')" alt="已添加的自习" v-if="iswhich!=1">
+                <img :src="require('../assets/img/icon-has-on.png')" alt="已添加的自习" v-if="iswhich==1">                
+            </div>
+            <div class="btn-border" @mouseover="iswhich=2" @mouseout="iswhich='-1'" @click="navClick('/login')">
+                <img :src="require('../assets/img/icon-user.png')" alt="个人中心" v-if="iswhich!=2">     
+                <img :src="require('../assets/img/icon-user-on.png')" alt="已添加的自习" v-if="iswhich==2">                   
+            </div>
+        </div>
+    </div>
+</header>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+        iswhich:-1
+    };
+  },
+  methods:{
+      navClick(path){
+          this.$router.push({path:path});
+      }
+  }
+};
+</script>
+
+<style lang="scss">
+@import "../assets/common.scss";
+header {
+  width: 100%;
+  height: 60px;
+  background: $blue;
+  overflow: hidden;
+  .con {
+    //   width: 1200px;
+    margin: 0 auto;
+    .logo {
+      margin-top: 10px;
+      margin-left: 30px;
+      height: 40px;
+      width: auto;
+    }
+    .btngroup {
+      float: right;
+      height: 100%;
+      width: 200px;
+      line-height: 18px;
+      .btn-border {
+        width: 60px;
+        height: 100%;
+        float: left;
+        cursor: pointer;
+        text-align: center;
+        img {
+          
+          height: 20px;
+          width: 20px;
+          margin: 20px 0;
+        }
+        &:first-child {
+          width: 50px;
+          height: 100%;
+          float: left;
+          img {
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            margin: 15px 0;
+          }
+        }
+        &:hover{
+            background:#fff;
+        }
+      }
+    }
+  }
+}
+</style>
