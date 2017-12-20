@@ -66,7 +66,6 @@ export default {
     border: 1px solid $blue;
     box-shadow: 0;
     padding-left: 10px;
-    font-size: 16px;
   }
   .click{
       display: block;
