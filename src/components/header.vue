@@ -1,13 +1,17 @@
 <template>
 <header v-if="this.$route.path!='/login'">
     <div class="con">
-        <img :src="require('../assets/img/logo.png')" class="logo" alt="">
+        <img :src="require('../assets/img/logo.png')" class="logo" @click="navClick('/')">
         <div class="btngroup">
+         
             <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich='-1'" @click="navClick('/message')">
+              <el-badge :value="newsNum">
                 <img :src="require('../assets/img/icon-remind.png')" alt="消息通知" v-if="iswhich!=0">
-                <img :src="require('../assets/img/icon-remind-on.png')" alt="消息通知" v-if="iswhich==0">                
-            </div>
-            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/addAll')">
+                <img :src="require('../assets/img/icon-remind-on.png')" alt="消息通知" v-if="iswhich==0">    
+              </el-badge>            
+            </div>          
+
+            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/isselected')">
                 <img :src="require('../assets/img/icon-has.png')" alt="已添加的自习" v-if="iswhich!=1">
                 <img :src="require('../assets/img/icon-has-on.png')" alt="已添加的自习" v-if="iswhich==1">                
             </div>
@@ -24,14 +28,19 @@
 export default {
   data() {
     return {
-        iswhich:-1
+        iswhich:'-1',
+        newsNum:3
     };
   },
   methods:{
       navClick(path){
           this.$router.push({path:path});
       }
+  },
+  mounted(){
+      // console.log(this.iswhich)
   }
+
 };
 </script>
 
@@ -50,6 +59,7 @@ header {
       margin-left: 30px;
       height: 40px;
       width: auto;
+      cursor: pointer;
     }
     .btngroup {
       float: right;
@@ -84,6 +94,10 @@ header {
         }
       }
     }
+  }
+  .el-badge__content.is-fixed{
+    top: 18px;
+    right: 15px;
   }
 }
 </style>

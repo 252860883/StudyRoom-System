@@ -3,12 +3,15 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// 按需加载element
-import {Select,Option,DatePicker} from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-Vue.use(Select);
-Vue.use(Option);
-Vue.use(DatePicker);
+// // 按需加载element
+// import {Select,Option,DatePicker,} from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
+// Vue.use(Select);
+// Vue.use(Option);
+// Vue.use(DatePicker);
+
+import element from 'element-ui';
+Vue.use(element);
 
 import DinosaurUI from 'dinosaur-ui';
 Vue.use(DinosaurUI);

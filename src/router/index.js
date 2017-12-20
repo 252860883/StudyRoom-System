@@ -6,7 +6,7 @@ import roomDetail from '@/components/roomDetail'
 import login from '@/components/login'
 import message from '@/components/message'
 import user from '@/components/user'
-
+import isSelected from '@/components/isSeleted'
 Vue.use(Router)
 
 export default new Router({
@@ -35,6 +35,12 @@ export default new Router({
       path: '/user',
       name: 'home',
       component: user
-    }
+    },
+    {
+      path: '/isselected',
+      name: 'isSeleted',
+      component: isSelected
+    },
+
   ]
 })

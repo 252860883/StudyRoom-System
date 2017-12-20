@@ -26,17 +26,18 @@
     <!-- 教室情况 -->
     <div class="home-seats">
         <div  v-for="room in roomLists" :key="room.roomId">
-            <div v-if="room.created" class="room-border" @click="toDetail(room)">
+            <div  :class="room.created ? 'room-border' : 'room-border-no'" @click="toDetail(room)">
                 <span class="roomId">{{room.roomId}}</span>
-                <span>容纳：{{room.allNum}}人 已预约：{{room.hasNum}}人</span>
-                <span>创建者：{{room.created}}</span>
-                <p>详情：{{room.content || '暂无详情介绍'}}</p>
-            </div>
-            <div v-if="!room.created" class="room-border-no" @click="toDetail(room)">
-                <span class="roomId">{{room.roomId}}</span>
-                <span>容纳：{{room.allNum}}人 已预约：{{room.hasNum}}人</span>
-                <span>创建者：暂无</span>
-                <p>详情：{{room.content || '暂无详情介绍'}}</p>
+                  <span class="seat-con">
+                  <img class="icon-seat"  :src="require('../assets/img/seat-off.png')" alt="">
+                  <span class="seats-num">{{room.allNum}}</span>
+                  <img class="icon-seat"  :src="room.created ? require('../assets/img/seat-on.png') :require('../assets/img/seat-grey.png')" alt="">
+                  <span class="seats-num">{{room.hasNum}}</span>
+                  <img class="icon-seat"  :src="room.created ? require('../assets/img/icon-creater-blue.png') : require('../assets/img/icon-creater-grey.png')" alt="">
+                  <span class="seats-num created">{{room.created || '暂无'}}</span>
+                </span>
+                <p class="title">主题：{{room.title || '未命名'}}</p>
+                <p class="content">详情：{{room.content || '暂无详情介绍'}}</p>
             </div>
         </div>
     </div>
@@ -55,7 +56,7 @@ export default {
       roomLists: [
         {
           roomId: "101",
-          build:"一公教A座",
+          build: "一公教A座",
           created: "管理员",
           time: "8:00-10:00",
           allNum: 60,
@@ -64,7 +65,7 @@ export default {
         },
         {
           roomId: "102",
-          build:"一公教A座",          
+          build: "一公教A座",
           created: "死学霸",
           time: "8:00-10:00",
           allNum: 100,
@@ -73,7 +74,7 @@ export default {
         },
         {
           roomId: "103",
-          build:"一公教A座",          
+          build: "一公教A座",
           created: "",
           time: "8:00-10:00",
           allNum: 60,
@@ -82,7 +83,7 @@ export default {
         },
         {
           roomId: "104",
-          build:"一公教A座",          
+          build: "一公教A座",
           created: "",
           time: "8:00-10:00",
           allNum: 60,
@@ -91,8 +92,8 @@ export default {
         },
         {
           roomId: "105",
-          build:"一公教A座",
-          
+          build: "一公教A座",
+
           created: "",
           time: "8:00-10:00",
           allNum: 60,
@@ -101,7 +102,7 @@ export default {
         },
         {
           roomId: "106",
-          build:"一公教A座",
+          build: "一公教A座",
           created: "",
           time: "8:00-10:00",
           allNum: 60,
@@ -110,7 +111,7 @@ export default {
         },
         {
           roomId: "107",
-          build:"一公教A座",          
+          build: "一公教A座",
           created: "张晓梅",
           time: "8:00-10:00",
           allNum: 60,
@@ -119,7 +120,7 @@ export default {
         },
         {
           roomId: "108",
-          build:"一公教A座",
+          build: "一公教A座",
           created: "",
           time: "8:00-10:00",
           allNum: 60,
@@ -128,7 +129,7 @@ export default {
         },
         {
           roomId: "109",
-          build:"一公教A座",          
+          build: "一公教A座",
           created: "张晓梅",
           time: "8:00-10:00",
           allNum: 60,
@@ -138,19 +139,25 @@ export default {
       ]
     };
   },
-  watch:{
-    time(val){
-      let today= new Date();
-      if(val<new Date() || ((val.getMonth()-today.getMonth())*30+val.getDate()-today.getDate())>5){
-        alert('只能预约未来五天的自习哟~');
-        this.time=new Date();
+  watch: {
+    time(val) {
+      let today = new Date();
+      if (
+        val < new Date() ||
+        (val.getMonth() - today.getMonth()) * 30 +
+          val.getDate() -
+          today.getDate() >
+          5
+      ) {
+        alert("只能预约未来五天的自习哟~");
+        this.time = new Date();
       }
     }
   },
-  methods:{
-      toDetail(room){
-          this.$router.push({path:'/roomDetail',query:{room:room}});
-      }
+  methods: {
+    toDetail(room) {
+      this.$router.push({ path: "/roomDetail", query: { room: room } });
+    }
   }
 };
 </script>
@@ -161,10 +168,10 @@ export default {
   width: 100%;
   min-width: 1200px;
   margin: 0 auto;
-  .banner{
+  .banner {
     width: 100%;
     background: $blank;
-    img{
+    img {
       display: block;
       width: 1200px;
       margin: 0 auto;
@@ -179,11 +186,12 @@ export default {
     text-align: center;
     .home-top-title {
       p {
-        line-height: 80px;
+        // line-height: 80px;
         display: inline-block;
         color: $black;
         vertical-align: text-top;
         margin-left: -30px;
+        margin-top: 15px;
         .con {
           font-weight: bold;
           padding-left: 40px;
@@ -192,12 +200,12 @@ export default {
         .el-select-dropdown__item {
           text-align: center;
         }
-        button{
+        button {
           height: 40px;
           width: 100px;
           background: $blue;
           border: 0;
-          color:$blank;
+          color: $blank;
           border-radius: 4px;
           margin-left: 40px;
           cursor: pointer;
@@ -205,6 +213,7 @@ export default {
       }
     }
   }
+
   .home-seats {
     width: 1220px;
     margin: 0 auto;
@@ -224,17 +233,15 @@ export default {
         font-size: 14px;
         margin-top: 5px;
       }
+
       .roomId {
+        height: 50px;
+        line-height: 50px;
         font-size: 40px;
-        color: $blue;
-        margin: 10px;
-      }
-      p {
-        color: $light;
-        padding: 0 15px;
-        font-size: 14px;
-        margin-top: 20px;
-        text-align: left;
+        color: $blank;
+        margin-bottom: 10px;
+        margin-top: 0;
+        background: $blue;
       }
     }
     .room-border-no {
@@ -253,18 +260,44 @@ export default {
         margin-top: 5px;
       }
       .roomId {
+        height: 50px;
+        line-height: 50px;
         font-size: 40px;
         color: $black;
-        margin: 10px;
-      }
-      p {
-        color: $light;
-        padding: 0 15px;
-        font-size: 14px;
-        margin-top: 20px;
-        text-align: left;
+        margin-bottom: 10px;
+        margin-top: 0;
+        background: $blank;
       }
     }
+
+    .seat-con {
+      height: 18px;
+      .seats-num {
+        display: inline-block;
+        text-align: left;
+      }
+      .created{
+        width: 45px;
+        text-align: left;
+      }
+      .icon-seat {
+        vertical-align: middle;
+        width: 18px;
+        height: 18px;
+        margin:0 2px 0 5px;
+      }
+    }
+    .title,.content {
+      color: $light;
+      padding: 0 18px;
+      font-size: 13px;
+      margin-top: 25px;
+      text-align: left;
+    }
+    .content{
+      margin-top: 5px;
+    }
+
     .room-border,
     .room-border-no {
       &:hover {

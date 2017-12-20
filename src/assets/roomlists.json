@@ -1,0 +1,83 @@
+{[{
+    roomId: "101",
+    build: "一公教A座",
+    created: "管理员",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 32,
+    content: "复习英语四级和听力 ，希望大家可以踊跃报名参加，么么哒~"
+  },
+  {
+    roomId: "102",
+    build: "一公教A座",
+    created: "死学霸",
+    time: "8:00-10:00",
+    allNum: 100,
+    hasNum: 59,
+    content: "敢不敢和我决一死战，学到最晚"
+  },
+  {
+    roomId: "103",
+    build: "一公教A座",
+    created: "",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: ""
+  },
+  {
+    roomId: "104",
+    build: "一公教A座",
+    created: "",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: ""
+  },
+  {
+    roomId: "105",
+    build: "一公教A座",
+
+    created: "",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: ""
+  },
+  {
+    roomId: "106",
+    build: "一公教A座",
+    created: "",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: ""
+  },
+  {
+    roomId: "107",
+    build: "一公教A座",
+    created: "张晓梅",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: "快来吧哈哈哈哈哈哈哈"
+  },
+  {
+    roomId: "108",
+    build: "一公教A座",
+    created: "",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: ""
+  },
+  {
+    roomId: "109",
+    build: "一公教A座",
+    created: "张晓梅",
+    time: "8:00-10:00",
+    allNum: 60,
+    hasNum: 0,
+    content: "快来吧哈哈哈哈哈哈哈"
+  }
+]}
