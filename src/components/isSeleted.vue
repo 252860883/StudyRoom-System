@@ -1,14 +1,16 @@
 <template>
 <!-- 已经选择的课程 -->
   <div class="isselected">
-    <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="date" label="日期" width="150px"></el-table-column>
-        <el-table-column prop="address" label="地点" width="180px"></el-table-column>
-        <el-table-column prop="class" label="教室" width="150px"></el-table-column>
-        <el-table-column prop="title" label="自习主题" width="150px"></el-table-column>
-        <el-table-column prop="creater" label="创建者" width="150px"></el-table-column>
-        <el-table-column label="操作" ></el-table-column>
-    </el-table>
+    <div class="list-con" v-for="item in tableData">
+      <div class="list-left">
+        <span class="list-date">{{item.date}}</span>
+        <span class="list-address">{{item.address}}{{item.class}}</span>
+        <span class="list-title">{{item.title}}</span>
+      </div>
+      <div class="list-right">
+        <a>查看详情</a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,7 +28,7 @@ export default {
         },
         {
           date: "2016-05-02",
-          address: "一公教A座",
+          address: "一公教C座",
           class: "101",
           title: "英语复习",
           creater: "死学霸"
@@ -42,8 +44,59 @@ export default {
 .isselected {
   width: 1000px;
   margin: 0 auto;
-}
-.el-table_1_column_1 is-leaf {
-  background: $blank;
+  height: 100%;
+  // background: $blank;
+  .list-con {
+    width: 100%;
+    height: 100px;
+    border: 1px solid $blank;
+    border-radius: 5px;
+    margin: 10px 0;
+    cursor: pointer;
+    &:hover{
+      border: 1px solid $blue;
+    }
+    .list-left {
+      float: left;
+      .list-date {
+        font-size: 30px;
+        line-height: 100px;
+        color: $light;
+        margin-left: 10px;
+      }
+      .list-address {
+        font-size: 30px;
+        line-height: 100px;
+        color: $light;
+        margin-left: 50px;
+      }
+      .list-title {
+        font-size: 30px;
+        line-height: 100px;
+        color: $light;
+        margin-left: 50px;
+      }
+    }
+    .list-right {
+      float: right;
+      height: 100px;
+      a {
+        display: block;
+        width: 100px;
+        height: 45px;
+        line-height: 45px;
+        background: $blue;
+        text-align: center;
+        color: #fff;
+        border-radius: 5px;
+        margin-top: 26px;
+        margin-right: 10px;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
 }
 </style>
