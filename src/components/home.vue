@@ -58,7 +58,7 @@ export default {
           roomId: "101",
           build: "一公教A座",
           created: "管理员",
-          time: "8:00-10:00",
+          time: "2016-05-02",
           allNum: 60,
           hasNum: 32,
           content: "复习英语四级和听力 ，希望大家可以踊跃报名参加，么么哒~"
@@ -67,7 +67,7 @@ export default {
           roomId: "102",
           build: "一公教A座",
           created: "死学霸",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 100,
           hasNum: 59,
           content: "敢不敢和我决一死战，学到最晚"
@@ -76,7 +76,7 @@ export default {
           roomId: "103",
           build: "一公教A座",
           created: "",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: ""
@@ -85,7 +85,7 @@ export default {
           roomId: "104",
           build: "一公教A座",
           created: "",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: ""
@@ -95,7 +95,7 @@ export default {
           build: "一公教A座",
 
           created: "",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: ""
@@ -104,7 +104,7 @@ export default {
           roomId: "106",
           build: "一公教A座",
           created: "",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: ""
@@ -113,7 +113,7 @@ export default {
           roomId: "107",
           build: "一公教A座",
           created: "张晓梅",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: "快来吧哈哈哈哈哈哈哈"
@@ -122,7 +122,7 @@ export default {
           roomId: "108",
           build: "一公教A座",
           created: "",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: ""
@@ -131,7 +131,7 @@ export default {
           roomId: "109",
           build: "一公教A座",
           created: "张晓梅",
-          time: "8:00-10:00",
+          time: "2015-05-02",
           allNum: 60,
           hasNum: 0,
           content: "快来吧哈哈哈哈哈哈哈"
@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     toDetail(room) {
-      this.$router.push({ path: "/roomDetail", query: { room: room } });
+      this.$router.push({ path: "/roomdetail", query: { room: room } });
     }
   }
 };

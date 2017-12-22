@@ -4,11 +4,11 @@
     <div class="list-con" v-for="item in tableData">
       <div class="list-left">
         <span class="list-date">{{item.date}}</span>
-        <span class="list-address">{{item.address}}{{item.class}}</span>
+        <span class="list-build">{{item.build}}{{item.roomId}}</span>
         <span class="list-title">{{item.title}}</span>
       </div>
       <div class="list-right">
-        <a>查看详情</a>
+        <a @click="toDetail(item)">查看详情</a>
       </div>
     </div>
   </div>
@@ -21,20 +21,65 @@ export default {
       tableData: [
         {
           date: "2016-05-02",
-          address: "一公教A座",
-          class: "101",
+          build: "一公教A座",
+          roomId: "101",
           title: "英语复习",
-          creater: "死学霸"
+          created: "死学霸",
+          allNum: 60,
+          hasNum: 10
         },
         {
           date: "2016-05-02",
-          address: "一公教C座",
-          class: "101",
+          build: "一公教C座",
+          roomId: "101",
           title: "英语复习",
-          creater: "死学霸"
-        }
+          created: "死学霸",
+          allNum: 60,
+          hasNum: 10
+        },
+        {
+          date: "2016-05-02",
+          build: "一公教C座",
+          roomId: "101",
+          title: "英语复习",
+          created: "死学霸",
+          allNum: 60,
+          hasNum: 10
+        },
+        {
+          date: "2016-05-02",
+          build: "一公教C座",
+          roomId: "101",
+          title: "英语复习",
+          created: "死学霸",
+          allNum: 60,
+          hasNum: 10
+        },
+        {
+          date: "2016-05-02",
+          build: "一公教C座",
+          roomId: "101",
+          title: "英语复习",
+          created: "死学霸",
+          allNum: 60,
+          hasNum: 10
+        },
+        {
+          date: "2016-05-02",
+          build: "一公教C座",
+          roomId: "101",
+          title: "英语复习",
+          created: "死学霸",
+          allNum: 60,
+          hasNum: 10
+        } 
       ]
     };
+  },
+  methods: {
+    toDetail(room) {
+      this.$router.push({ path: "/roomdetail", query: {room:room }});
+    }
   }
 };
 </script>
@@ -42,18 +87,18 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/common.scss";
 .isselected {
-  width: 1000px;
-  margin: 0 auto;
-  height: 100%;
-  // background: $blank;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
   .list-con {
     width: 100%;
     height: 100px;
     border: 1px solid $blank;
     border-radius: 5px;
+    background: #fff;
     margin: 10px 0;
     cursor: pointer;
-    &:hover{
+    &:hover {
       border: 1px solid $blue;
     }
     .list-left {
@@ -64,7 +109,7 @@ export default {
         color: $light;
         margin-left: 10px;
       }
-      .list-address {
+      .list-build {
         font-size: 30px;
         line-height: 100px;
         color: $light;
