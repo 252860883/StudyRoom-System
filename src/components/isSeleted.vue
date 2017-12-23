@@ -3,9 +3,14 @@
   <div class="isselected">
     <div class="list-con" v-for="item in tableData">
       <div class="list-left">
-        <span class="list-date">{{item.date}}</span>
-        <span class="list-build">{{item.build}}{{item.roomId}}</span>
-        <span class="list-title">{{item.title}}</span>
+        <div class="list-left-up">
+          <span class="list-date">{{item.date}}</span>
+          <span class="list-build">{{item.build}}{{item.roomId}}</span>
+          <span class="list-title">{{item.title}}</span>
+        </div>
+        <div class="list-left-down">
+          <span>简介：{{item.content}}</span>
+        </div>
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
@@ -20,16 +25,17 @@ export default {
     return {
       tableData: [
         {
-          date: "2016-05-02",
-          build: "一公教A座",
+          date: "2018-05-02",
+          build: "一公教C座",
           roomId: "101",
           title: "英语复习",
           created: "死学霸",
           allNum: 60,
-          hasNum: 10
+          hasNum: 10,
+          content: "敢不敢和我决一死战，学到最晚"
         },
         {
-          date: "2016-05-02",
+          date: "2018-05-04",
           build: "一公教C座",
           roomId: "101",
           title: "英语复习",
@@ -38,47 +44,20 @@ export default {
           hasNum: 10
         },
         {
-          date: "2016-05-02",
+          date: "2018-05-06",
           build: "一公教C座",
           roomId: "101",
           title: "英语复习",
           created: "死学霸",
           allNum: 60,
           hasNum: 10
-        },
-        {
-          date: "2016-05-02",
-          build: "一公教C座",
-          roomId: "101",
-          title: "英语复习",
-          created: "死学霸",
-          allNum: 60,
-          hasNum: 10
-        },
-        {
-          date: "2016-05-02",
-          build: "一公教C座",
-          roomId: "101",
-          title: "英语复习",
-          created: "死学霸",
-          allNum: 60,
-          hasNum: 10
-        },
-        {
-          date: "2016-05-02",
-          build: "一公教C座",
-          roomId: "101",
-          title: "英语复习",
-          created: "死学霸",
-          allNum: 60,
-          hasNum: 10
-        } 
+        }
       ]
     };
   },
   methods: {
     toDetail(room) {
-      this.$router.push({ path: "/roomdetail", query: {room:room }});
+      this.$router.push({ path: "/roomdetail", query: { room: room } });
     }
   }
 };
@@ -103,23 +82,27 @@ export default {
     }
     .list-left {
       float: left;
-      .list-date {
-        font-size: 30px;
-        line-height: 100px;
-        color: $light;
-        margin-left: 10px;
+      line-height: 70px;
+      padding-left: 20px;
+      .list-left-up {
+        height: 30px;
+        font-size: 20px;
+        color: $black;
+        .list-date {
+          // margin-left: 20px;
+        }
+        .list-build {
+          margin-left: 50px;
+        }
+        .list-title {
+          margin-left: 50px;
+        }
       }
-      .list-build {
-        font-size: 30px;
-        line-height: 100px;
+      .list-left-down{
+        height: 25px;
+        width: 100%;
+        font-size: 16px;
         color: $light;
-        margin-left: 50px;
-      }
-      .list-title {
-        font-size: 30px;
-        line-height: 100px;
-        color: $light;
-        margin-left: 50px;
       }
     }
     .list-right {

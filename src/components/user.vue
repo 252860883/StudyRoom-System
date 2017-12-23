@@ -1,6 +1,8 @@
 <template>
   <div class="user">
-      <div class="user-left"></div>
+      <div class="user-left">
+        <user-show></user-show>
+      </div>
       <div class="user-right">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="自习提醒" name="first">用户管理</el-tab-pane>
@@ -13,12 +15,16 @@
 </template>
 <script>
 import isSelectPage from '../components/isSeleted';
+import userShow from '../components/userShow';
 export default {
   data() {
-    return {};
+    return {
+      activeName:"second"
+    };
   },
   components:{
-      isSelectPage
+      isSelectPage,
+      userShow
   },
   methods: {
     handleClick(tab, event) {
@@ -33,7 +39,7 @@ export default {
   width: 1100px;
   margin: 0 auto;
   .user-left {
-    width: 300px;
+    width: 280px;
     height: 300px;
     background: rgba($color: #eee, $alpha: 0.5);
     // border: 1px solid $blank;
@@ -42,7 +48,7 @@ export default {
     float: left;
   }
   .user-right {
-    width: 760px;
+    width: 780px;
     // height: 500px;
     border-radius: 5px;
     margin: 10px;

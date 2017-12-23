@@ -11,7 +11,7 @@
               </el-badge>            
             </div>          
 
-            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/isselected')">
+            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/user')">
                 <img :src="require('../assets/img/icon-has.png')" alt="已添加的自习" v-if="iswhich!=1">
                 <img :src="require('../assets/img/icon-has-on.png')" alt="已添加的自习" v-if="iswhich==1">                
             </div>
