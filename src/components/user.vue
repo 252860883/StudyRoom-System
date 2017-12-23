@@ -5,7 +5,9 @@
       </div>
       <div class="user-right">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="自习提醒" name="first">用户管理</el-tab-pane>
+            <el-tab-pane label="自习提醒" name="first">
+              <class-clock></class-clock>
+            </el-tab-pane>
             <el-tab-pane label="已预约的自习" name="second">
                 <is-select-page></is-select-page>
             </el-tab-pane>
@@ -16,6 +18,7 @@
 <script>
 import isSelectPage from '../components/isSeleted';
 import userShow from '../components/userShow';
+import classClock from '../components/classClock';
 export default {
   data() {
     return {
@@ -24,7 +27,8 @@ export default {
   },
   components:{
       isSelectPage,
-      userShow
+      userShow,
+      classClock
   },
   methods: {
     handleClick(tab, event) {
@@ -38,11 +42,11 @@ export default {
 .user {
   width: 1100px;
   margin: 0 auto;
+  overflow: hidden;
   .user-left {
     width: 280px;
     height: 300px;
     background: rgba($color: #eee, $alpha: 0.5);
-    // border: 1px solid $blank;
     border-radius: 5px;
     margin: 10px;
     float: left;

@@ -1,8 +1,7 @@
 <template>
 <div class="userShow">
-  <div class="photo">
-
-  </div>
+  <img class="rename" :src="require('../assets/img/rename.png')">
+  <div class="photo"></div>
   <p class="name">{{user.name}}</p>
   <p class="school"><span>{{user.school}}</span> | <span>{{user.major}}</span> </p>
   <div class="award-con">
@@ -33,6 +32,17 @@ export default {
 .userShow{
   width: 100%;
   margin: 0 auto;
+  position: relative;
+  .rename{
+    position: absolute;
+    width: 20px;
+    top: -10px;
+    right: 8px;
+    cursor: pointer;
+    &:hover{
+      transform: translateY(-2px);
+    }
+  }
   .photo{
     width: 100px;
     height: 100px;
