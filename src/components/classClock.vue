@@ -10,7 +10,7 @@
                     <span>今天暂时还没有自习通知哦！</span>
                 </span>
                 <span class="class-yes" v-if="!hasClass">
-                    <span class="class-up">童鞋，有自习安排呦</span>
+                    <span class="class-up">童鞋，今天有自习安排呦</span>
                     <span>2018-05-02 / 一公教C座101 / 英语复习</span>
                     <a>查看详情</a>
                 </span>
@@ -62,9 +62,9 @@ export default {
         color: $light;
         .class-up {
           display: block;
-          font-size: 30px;
+          font-size: 26px;
           color: #ea9518;
-          margin-top: 40px;
+          margin-top: 50px;
           margin-bottom: 15px;
         }
         a {

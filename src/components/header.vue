@@ -4,14 +4,14 @@
         <img :src="require('../assets/img/logo.png')" class="logo" @click="navClick('/')">
         <div class="btngroup">
          
-            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich='-1'" @click="navClick('/message')">
+            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich='-1'" @click="navClick('/user','first')">
               <el-badge :value="newsNum">
                 <img :src="require('../assets/img/icon-remind.png')" alt="消息通知" v-if="iswhich!=0">
                 <img :src="require('../assets/img/icon-remind-on.png')" alt="消息通知" v-if="iswhich==0">    
               </el-badge>            
             </div>          
 
-            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/user')">
+            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/user','second')">
                 <img :src="require('../assets/img/icon-has.png')" alt="已添加的自习" v-if="iswhich!=1">
                 <img :src="require('../assets/img/icon-has-on.png')" alt="已添加的自习" v-if="iswhich==1">                
             </div>
@@ -33,12 +33,11 @@ export default {
     };
   },
   methods:{
-      navClick(path){
-          this.$router.push({path:path});
+      navClick(path,index){
+          this.$router.push({path:path,query:{index:index}});
       }
   },
   mounted(){
-      // console.log(this.iswhich)
   }
 
 };

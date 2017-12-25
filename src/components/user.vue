@@ -16,19 +16,27 @@
   </div>
 </template>
 <script>
-import isSelectPage from '../components/isSeleted';
-import userShow from '../components/userShow';
-import classClock from '../components/classClock';
+import isSelectPage from "../components/isSeleted";
+import userShow from "../components/userShow";
+import classClock from "../components/classClock";
 export default {
   data() {
     return {
-      activeName:"second"
+      activeName: "second"
     };
   },
-  components:{
-      isSelectPage,
-      userShow,
-      classClock
+  components: {
+    isSelectPage,
+    userShow,
+    classClock
+  },
+  created() {
+    this.activeName = this.$route.query.index;
+  },
+  watch: {
+    "$route.query.index": function(val) {
+      this.activeName = this.$route.query.index;
+    }
   },
   methods: {
     handleClick(tab, event) {
