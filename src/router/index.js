@@ -7,11 +7,11 @@ import login from '@/components/login'
 import message from '@/components/message'
 import user from '@/components/user'
 import isSelected from '@/components/isSeleted'
+import userChange from '@/components/userChange'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'home',
       component: home
@@ -35,6 +35,11 @@ export default new Router({
       path: '/user',
       name: 'home',
       component: user
+    },
+    {
+      path: '/userinfo',
+      name: 'userinformation',
+      component: userChange
     },
     {
       path: '/isselected',

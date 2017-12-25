@@ -1,10 +1,10 @@
 <template>
 <div class="userShow">
-  <img class="rename" :src="require('../assets/img/rename.png')">
+  <img @click="userInfoClick" class="rename" :src="require('../assets/img/rename.png')">
   <div class="photo"></div>
   <p class="name">{{user.name}}</p>
   <p class="school"><span>{{user.school}}</span> | <span>{{user.major}}</span> </p>
-  <div class="award-con">
+  <div class="award-con"> 
     <img :src="require('../assets/img/award.png')">
     <div class="award-text">
       <span class="award-title">自习室达人</span>
@@ -15,75 +15,79 @@
 </template>
 <script>
 export default {
-  data(){
-      return{
-        user:{
-          name:"杜小辉",
-          photo:"",
-          school:"天津工业大学",
-          major:"软件工程"
-        }
+  data() {
+    return {
+      user: {
+        name: "杜小辉",
+        photo: "",
+        school: "天津工业大学",
+        major: "软件工程"
       }
+    };
+  },
+  methods: {
+    userInfoClick() {
+      this.$router.push({path:'/userinfo'})
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../assets/common.scss";
-.userShow{
+.userShow {
   width: 100%;
   margin: 0 auto;
   position: relative;
-  .rename{
+  .rename {
     position: absolute;
     width: 20px;
     top: -10px;
     right: 8px;
     cursor: pointer;
-    &:hover{
+    &:hover {
       transform: translateY(-2px);
     }
   }
-  .photo{
+  .photo {
     width: 100px;
     height: 100px;
     background: $light;
     border-radius: 50%;
     margin: 20px auto;
   }
-  .name{
+  .name {
     text-align: center;
     font-size: 20px;
     color: $black;
     font-weight: bold;
   }
-  .school{
+  .school {
     margin-top: 5px;
     text-align: center;
     font-size: 15px;
     color: $black;
   }
-  .award-con{
+  .award-con {
     width: 180px;
     margin: 20px auto;
-    img{
+    img {
       float: left;
       width: 50px;
     }
-    .award-text{
-      span{
+    .award-text {
+      span {
         display: block;
       }
-      .award-title{
+      .award-title {
         font-size: 25px;
         font-weight: bold;
         color: #e16531;
       }
-      .award-num{
+      .award-num {
         font-size: 12px;
         color: #ea9518;
       }
     }
   }
 }
-
 </style>
