@@ -1,7 +1,10 @@
 <template>
   <div class="user-change">
     <div class="user-con">
-      <a class="btn-sub" @click="submit">确定</a>
+      <div class="btn-group">
+        <a class="btn-sub" @click="submit">确定</a>
+        <a class="btn-sub" @click="returnBack">返回</a>
+      </div>
       <div class="photo">设置头像</div>
       <div class="user-row">
         <span>姓名</span>
@@ -52,6 +55,9 @@ export default {
           self.isShowMsg = false;
         }, 2000);
       }
+    },
+    returnBack(){
+      this.$router.push({path:'/user',query:{index:"first"}});
     }
   }
 };
@@ -72,14 +78,21 @@ export default {
       height: 100px;
       background: $light;
       border-radius: 50%;
-      margin: 20px auto;
+      margin: 30px auto;
       text-align: center;
       line-height: 100px;
       color: #fff;
+      cursor: pointer;
     }
     .user-row {
-      width: 300px;
+      width: 295px;
       margin: 10px auto;
+      &:nth-of-type(2) {
+        // margin-top: 40px;
+      }
+      &:nth-of-type(5) {
+        // margin-bottom: 20px;
+      }
       span {
         font-size: 20px;
         margin-right: 5px;
@@ -94,19 +107,27 @@ export default {
         padding-left: 10px;
       }
     }
-    .btn-sub {
-      display: block;
-      width: 60px;
-      margin: 0 auto;
+    .btn-group {
       margin-right: 0;
+      // width: 200px;
       height: 35px;
-      background: $blue;
-      color: #fff;
-      text-align: center;
-      line-height: 35px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
+      .btn-sub {
+        display: block;
+        float: right;
+        width: 60px;
+        height: 35px;
+        margin-left:8px;
+        background: $blue;
+        color: #fff;
+        text-align: center;
+        line-height: 35px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        &:hover{
+          opacity: 0.8;
+        }
+      }
     }
   }
 }

@@ -7,8 +7,11 @@
     </div>
     <input type="text" placeholder="请输入账号">
     <input type="password" placeholder="请输入密码">
-    <a class="click">确定</a>
-    <a class="forgot">忘记密码</a>
+    <a class="click" @click="login">确定</a>
+    <div class="btn-bottom">
+     <a class="forgot" @click="forgotPassword">忘记密码</a>     
+     <a class="forgot" @click="register">注册</a>     
+    </div>
 </div>
 </div>
   
@@ -18,6 +21,17 @@
 export default {
   data() {
     return {};
+  },
+  methods:{
+    register(){
+      this.$router.push({path:'/userinfo'})
+    },
+    forgotPassword(){
+
+    },
+    login(){
+      this.$router.push({path:'/'})
+    }
   }
 };
 </script>
@@ -25,12 +39,12 @@ export default {
 <style lang='scss'>
 @import "../assets/common.scss";
 .login {
-    background-image: url('../assets/img/login-bg.jpg');
-    background-size: 100%;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+  background-image: url("../assets/img/login-bg.jpg");
+  background-size: 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
   .login-con {
     width: 300px;
     position: absolute;
@@ -44,16 +58,16 @@ export default {
     text-align: center;
     overflow: hidden;
     .img-con {
-        background: $blue;
-        width: 100%;
+      background: $blue;
+      width: 100%;
       img {
         width: 100px;
-        margin:10px;
+        margin: 10px;
       }
-      p{
-          line-height: 1;
-          font-size: 14px;
-          color: $black;
+      p {
+        line-height: 1;
+        font-size: 14px;
+        color: $black;
       }
     }
   }
@@ -67,25 +81,30 @@ export default {
     box-shadow: 0;
     padding-left: 10px;
   }
-  .click{
-      display: block;
-      margin: 20px auto;
-      margin-bottom: 15px;
-      width:250px;
-      height: 35px;
-      line-height: 35px;
-      background: $blue;
-      border-radius: 5px;
-      color: #ffffff;
-      cursor: pointer;
+  .click {
+    display: block;
+    margin: 20px auto;
+    margin-bottom: 15px;
+    width: 262px;
+    height: 35px;
+    line-height: 35px;
+    background: $blue;
+    border-radius: 5px;
+    color: #ffffff;
+    cursor: pointer;
   }
-  .forgot{
+  .btn-bottom {
+    .forgot {
+      float: right;
       display: block;
       font-size: 13px;
       cursor: pointer;
-      margin-bottom: 20px;
+      margin:10px 20px 20px 0; 
+      &:hover{
+        color: $blue;
+      }
+    }
   }
-  
 }
 </style>
 
