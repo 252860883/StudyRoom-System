@@ -1,6 +1,21 @@
 <template>
   <div class="room-detail">
+   <!-- 右侧信息 -->
+    <div class="detail">
+      <div class="detail-con">
+        <div class="title">{{room.build}}{{room.roomId}}</div>
+        <div><span>创建者：</span><span>{{room.created ||'暂无'}}</span></div>
+        <div>简介：{{room.content || '暂无'}}</div>        
+      </div>
+    </div>
+
     <div class="seats">
+      <div class="title">
+        <img :src="require('../assets/img/seat-on.png')" alt="">
+        <span>已选座位</span>
+        <img :src="require('../assets/img/seat-off.png')" alt="">
+        <span>可选座位</span>
+      </div>
       <div class="desk">讲台</div>
       <div class="seats-border">
         <div class="seats-one" v-for="i in room.hasNum" :key="i">
@@ -11,11 +26,8 @@
         </div>
       </div>
     </div>
-    <!-- 右侧信息 -->
-    <div class="detail">
-        <div class="title">{{room.build}}{{room.roomId}}</div>
-        <div><span>创建者：</span><span>{{room.created ||'暂无'}}</span></div>
-        <div>简介：{{room.content || '暂无'}}</div>
+
+
         <!-- 按钮区 -->
         <div class="btn-group">
           <div class="addClass">
@@ -43,7 +55,6 @@
             </div>
           </div>
         </div>
-    </div>
   </div>
 </template>
 
@@ -70,20 +81,42 @@ export default {
   width: 1200px;
   margin: 0 auto;
   .seats {
-    width: 500px;
+    width: 550px;
+    margin: 0 auto;
     height: 500px;
-    background: $blank;
+    background: rgba(200, 200, 200, 0.2);
+    border: 2px solid $blue;
     margin-top: 10px;
     box-sizing: border-box;
-    float: left;
-    .desk {
-      width: 500px;
+    border-radius: 5px;
+    overflow: hidden;
+    // float: left;
+    .title {
+      width: 150px;
       margin: 0 auto;
-      height: 30px;
-      background: #ccc;
+      margin-top: 5px;
+      img {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+      }
+      span {
+        display: inline-block;
+        vertical-align: middle;
+        color: $light;
+        font-size: 12px;
+        // font-weight: bold;
+        margin-right: 2px;
+      }
+    }
+    .desk {
+      margin: 0 auto;
+      margin-top: 5px;
+      height: 40px;
+      background: $blue;
       color: $blank;
       text-align: center;
-      line-height: 30px;
+      line-height: 40px;
     }
     .seats-border {
       width: 100%;
@@ -95,32 +128,44 @@ export default {
         height: 40px;
         padding: 8px;
         box-sizing: border-box;
+        cursor: pointer;
         img {
           width: 100%;
           height: 100%;
+        }
+        &:nth-of-type(11n + 4),
+        &:nth-of-type(11n + 9) {
+          margin-left: 20px;
+        }
+        &:hover {
+          transform: translateY(-1px);
         }
       }
     }
   }
   .detail {
-    float: right;
-    width: 500px;
-    // height: 200px;
+    // float: right;
+    width: 620px;
+    height: 200px;
+    margin: 0 auto;
     margin-top: 10px;
     text-align: center;
-
+    .detail-con {
+      border: 2px solid $blue;
+      border-radius: 5px;
+    }
     .title {
       font-size: 40px;
       color: $blue;
       width: 280px;
       margin: 0 auto;
     }
-
     .btn-group {
       text-align: center;
       width: 400px;
       margin: 50px auto;
-      .addClass,.createClass {
+      .addClass,
+      .createClass {
         float: left;
         cursor: pointer;
         position: relative;
@@ -128,7 +173,8 @@ export default {
         text-align: center;
         width: 90px;
         height: 100px;
-        .yes,.create-yes{
+        .yes,
+        .create-yes {
           position: absolute;
           top: 0;
           width: 90px;
@@ -145,7 +191,8 @@ export default {
             font-size: 12px;
           }
         }
-        .no,.create-no {
+        .no,
+        .create-no {
           position: absolute;
           top: 0;
           width: 90px;
