@@ -3,7 +3,7 @@
   <div class="login-con">
     <div class="img-con">
         <img :src="require('../assets/img/logo.png')" alt="">
-        <!-- <p>您的自习室管家</p> -->
+        <!-- <p>您的自习室管家</p> --> 
     </div>
     <span class="errMsg" v-show="isErr">{{errShow}}</span>
     <input type="text" v-model="name" placeholder="请输入账号">

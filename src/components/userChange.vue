@@ -5,10 +5,13 @@
         <a class="btn-sub" @click="submit">确定</a>
         <!-- <a class="btn-sub" @click="returnBack">返回</a> -->
       </div>
-      <div class="photo">设置头像</div>
+      <div class="photo">
+      设置头像
+      <input type="file" v-on="photoUrl" accept="image/png,image/gif"/>
+      </div>
       <div class="user-row">
         <span>姓名</span>
-        <input type="text" v-model="name">        
+        <input type="text" v-model="name" >        
       </div>
       <div class="user-row">
         <span>学校</span>
@@ -42,11 +45,17 @@ export default {
       stuId: "1411651104",
       password: "123456",
       msg: "这是一个提示",
-      isShowMsg: false
+      isShowMsg: false,
+      photoUrl: ""
     };
   },
   components: {
     showTag
+  },
+  watch: {
+    photoUrl: function(val) {
+      console.log(val);
+    }
   },
   methods: {
     submit() {
@@ -59,7 +68,7 @@ export default {
         this.showErr("输入不完整，请填写完整后再提交");
         return;
       }
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: "/user", query: { index: "first" } });
     },
     returnBack() {
       this.$router.push({ path: "/user", query: { index: "first" } });
@@ -70,6 +79,19 @@ export default {
       setTimeout(() => {
         self.isShowMsg = false;
       }, 2000);
+    },
+    uploadPhoto() {
+      var file = e.target.files[0]; //获取File对象，这里是上传单张图片，[0]代表第一张图片。如果多张，就是一个var file = e.target.files;
+      var type = file.type.split("/")[0]; //按照惯例，不应该由前端判断格式，因为这里是根据后缀名判断的，修改后缀名仍旧可以上传，理应由后端根据文件格式来判断。
+      if (type != "image") {
+        alert("请上传图片");
+        return;
+      }
+      var size = Math.round(file.size / 1024 / 1024);
+      if (size > 3) {
+        alert("图片大小不得超过3M");
+        return;
+      }
     }
   }
 };
@@ -88,13 +110,26 @@ export default {
     .photo {
       width: 100px;
       height: 100px;
+      display: block;
       background: $light;
       border-radius: 50%;
       margin: 30px auto;
       text-align: center;
       line-height: 100px;
       color: #fff;
-      cursor: pointer;
+
+      position: relative;
+      input {
+        display: block;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: transparent;
+        cursor: pointer;
+        opacity: 0;
+      }
     }
     .user-row {
       width: 295px;

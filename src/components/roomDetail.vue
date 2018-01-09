@@ -1,33 +1,13 @@
 <template>
   <div class="room-detail">
-   <!-- 右侧信息 -->
+   <!-- 信息 -->
     <div class="detail">
       <div class="detail-con">
         <div class="title">{{room.build}}{{room.roomId}}</div>
-        <div><span>创建者：</span><span>{{room.created ||'暂无'}}</span></div>
-        <div>简介：{{room.content || '暂无'}}</div>        
-      </div>
-    </div>
-
-    <div class="seats">
-      <div class="title">
-        <img :src="require('../assets/img/seat-on.png')" alt="">
-        <span>已选座位</span>
-        <img :src="require('../assets/img/seat-off.png')" alt="">
-        <span>可选座位</span>
-      </div>
-      <div class="desk">讲台</div>
-      <div class="seats-border">
-        <div class="seats-one" v-for="i in room.hasNum" :key="i">
-          <img :src="require('../assets/img/seat-on.png')" alt="">
+        <div>
+          <span>创建者：</span><span>{{room.created ||'暂无'}}</span>
+          <span style="margin-left:20px;">简介：{{room.content || '暂无'}}</span> 
         </div>
-        <div class="seats-one" v-for="i in (room.allNum-room.hasNum)" :key="i">
-          <img :src="require('../assets/img/seat-off.png')" alt="">
-        </div>
-      </div>
-    </div>
-
-
         <!-- 按钮区 -->
         <div class="btn-group">
           <div class="addClass">
@@ -55,6 +35,27 @@
             </div>
           </div>
         </div>
+    
+      </div>
+    </div>
+    <!-- 座位 -->
+    <div class="seats">
+      <div class="title">
+        <img :src="require('../assets/img/seat-on.png')" alt="">
+        <span>已选座位</span>
+        <img :src="require('../assets/img/seat-off.png')" alt="">
+        <span>可选座位</span>
+      </div>
+      <div class="desk">讲台</div>
+      <div class="seats-border">
+        <div class="seats-one" v-for="i in room.hasNum" :key="i">
+          <img :src="require('../assets/img/seat-on.png')" alt="">
+        </div>
+        <div class="seats-one" v-for="i in (room.allNum-room.hasNum)" :key="i">
+          <img :src="require('../assets/img/seat-off.png')" alt="">
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -80,17 +81,35 @@ export default {
 .room-detail {
   width: 1200px;
   margin: 0 auto;
+  // 信息
+  .detail {
+    width: 820px;
+    margin: 20px auto;
+    text-align: center;
+    .detail-con {
+      border: 2px solid $blue;
+      border-radius: 5px;
+      padding: 10px;
+      // padding-bottom: 40px;
+    }
+    .title {
+      font-size: 40px;
+      color: $blue;
+      width: 280px;
+      margin: 0 auto;
+    }
+  }
+  // 座位图
   .seats {
-    width: 550px;
+    width: 820px;
     margin: 0 auto;
-    height: 500px;
+    padding-bottom: 22px;
     background: rgba(200, 200, 200, 0.2);
     border: 2px solid $blue;
-    margin-top: 10px;
     box-sizing: border-box;
     border-radius: 5px;
     overflow: hidden;
-    // float: left;
+
     .title {
       width: 150px;
       margin: 0 auto;
@@ -120,7 +139,7 @@ export default {
     }
     .seats-border {
       width: 100%;
-      padding: 30px;
+      padding: 26px 100px;
       box-sizing: border-box;
       .seats-one {
         float: left;
@@ -133,8 +152,8 @@ export default {
           width: 100%;
           height: 100%;
         }
-        &:nth-of-type(11n + 4),
-        &:nth-of-type(11n + 9) {
+        &:nth-of-type(14n + 5),
+        &:nth-of-type(14n + 11) {
           margin-left: 20px;
         }
         &:hover {
@@ -143,99 +162,93 @@ export default {
       }
     }
   }
-  .detail {
-    // float: right;
-    width: 620px;
-    height: 200px;
-    margin: 0 auto;
-    margin-top: 10px;
+
+  .btn-group {
     text-align: center;
-    .detail-con {
-      border: 2px solid $blue;
-      border-radius: 5px;
-    }
-    .title {
-      font-size: 40px;
-      color: $blue;
-      width: 280px;
-      margin: 0 auto;
-    }
-    .btn-group {
+    width: 430px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 20px;
+
+    .addClass,
+    .createClass {
+      float: left;
+      cursor: pointer;
+      position: relative;
+      margin: 0 20px;
       text-align: center;
-      width: 400px;
-      margin: 50px auto;
-      .addClass,
-      .createClass {
-        float: left;
-        cursor: pointer;
-        position: relative;
-        margin: 0 20px;
-        text-align: center;
-        width: 90px;
-        height: 100px;
-        .yes,
-        .create-yes {
-          position: absolute;
-          top: 0;
-          width: 90px;
-          height: 100px;
-          border: 1px solid $blue;
-          border-radius: 5px;
-          background: #fff;
-          img {
-            margin-top: 10px;
-            width: 50px;
-          }
-          p {
-            margin-top: 5px;
-            font-size: 12px;
-          }
-        }
-        .no,
-        .create-no {
-          position: absolute;
-          top: 0;
-          width: 90px;
-          height: 100px;
-          border: 1px solid $blank;
-          border-radius: 5px;
-          background: #ddd;
-          img {
-            margin-top: 10px;
-            width: 50px;
-          }
-          p {
-            margin-top: 5px;
-            font-size: 12px;
-            color: $light;
-          }
-        }
-      }
-      .create {
-        cursor: pointer;
-        float: left;
-        width: 90px;
-        height: 100px;
-        margin: 0 20px;
+      width: 100px;
+      height: 30px;
+      .yes,
+      .create-yes {
+        position: absolute;
+        top: 0;
+        width: 100px;
+        // height: 40px;
+        padding: 5px 0;
         border: 1px solid $blue;
-        background: #fff;
         border-radius: 5px;
-        text-align: center;
+        background: #fff;
         img {
-          margin-top: 10px;
-          width: 50px;
+          width: 20px;
+          vertical-align: middle;
         }
         p {
-          margin-top: 5px;
+          display: inline-block;
+          vertical-align: middle;
           font-size: 12px;
+          color: $blue;
+          font-weight: bold;
         }
       }
-
-      .create-yes:hover,
-      .create:hover,
-      .addClass .yes:hover {
-        transform: translateY(-2px);
+      .no,
+      .create-no {
+        position: absolute;
+        top: 0;
+        width: 100px;
+        padding: 5px 0;
+        border: 1px solid $blank;
+        border-radius: 5px;
+        background: #ddd;
+        img {
+          vertical-align: middle;
+          width: 20px;
+        }
+        p {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 12px;
+          color: #fff;
+        }
       }
+    }
+    .create {
+      cursor: pointer;
+      float: left;
+      width: 100px;
+      padding: 5px 0;
+      margin: 0 20px;
+      border: 1px solid $blue;
+      background: #fff;
+      border-radius: 5px;
+      text-align: center;
+      img {
+        width: 20px;
+        vertical-align: middle;
+      }
+      p {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        color: $blue;
+        font-weight: bold;
+      }
+    }
+
+    .create-yes:hover,
+    .create:hover,
+    .addClass .yes:hover {
+      transform: translateY(-2px);
     }
   }
 }

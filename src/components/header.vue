@@ -3,22 +3,24 @@
     <div class="con">
         <img :src="require('../assets/img/logo.png')" class="logo" @click="navClick('/')">
         <div class="btngroup">
-         
-            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich='-1'" @click="navClick('/user','first')">
+
+            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich=-1" @click="navClick('/user','first')">
               <el-badge :value="newsNum">
                 <img :src="require('../assets/img/icon-remind.png')" alt="消息通知" v-if="iswhich!=0">
                 <img :src="require('../assets/img/icon-remind-on.png')" alt="消息通知" v-if="iswhich==0">    
               </el-badge>            
             </div>          
 
-            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich='-1'" @click="navClick('/user','second')">
+            <div class="btn-border" @mouseover="iswhich=1" @mouseout="iswhich=-1" @click="navClick('/user','second')">
                 <img :src="require('../assets/img/icon-has.png')" alt="已添加的自习" v-if="iswhich!=1">
                 <img :src="require('../assets/img/icon-has-on.png')" alt="已添加的自习" v-if="iswhich==1">                
             </div>
-            <div class="btn-border" @mouseover="iswhich=2" @mouseout="iswhich='-1'" @click="navClick('/login')">
-                <img :src="require('../assets/img/icon-user.png')" alt="个人中心" v-if="iswhich!=2">     
-                <img :src="require('../assets/img/icon-user-on.png')" alt="已添加的自习" v-if="iswhich==2">                   
+
+            <div class="btn-border" @mouseover="iswhich=2" @mouseout="iswhich=-1" @click="navClick('/user','first')">
+                <img :src="require('../assets/img/icon-user-on.png')" alt="已添加的自习" v-if="iswhich==2">     
+                <img :src="require('../assets/img/icon-user.png')" alt="个人中心" v-if="iswhich!==2">                 
             </div>
+
         </div>
     </div>
 </header>
@@ -28,16 +30,23 @@
 export default {
   data() {
     return {
-        iswhich:'-1',
+        iswhich:-1,
         newsNum:3
     };
+  },
+  watch:{
+    iswhich:function(val,oldval){
+      console.log(val,oldval);
+    }
   },
   methods:{
       navClick(path,index){
           this.$router.push({path:path,query:{index:index}});
+          this.iswhich=-1;
       }
   },
   mounted(){
+    console.log('ok'+this.iswhich);
   }
 
 };
