@@ -1,18 +1,19 @@
 <template>
 <div class="login">
-<div class="login-con">
+  <div class="login-con">
     <div class="img-con">
         <img :src="require('../assets/img/logo.png')" alt="">
         <!-- <p>您的自习室管家</p> -->
     </div>
-    <input type="text" placeholder="请输入账号">
-    <input type="password" placeholder="请输入密码">
+    <span class="errMsg" v-show="isErr">{{errShow}}</span>
+    <input type="text" v-model="name" placeholder="请输入账号">
+    <input type="password" v-model="password" placeholder="请输入密码">
     <a class="click" @click="login">确定</a>
     <div class="btn-bottom">
      <a class="forgot" @click="forgotPassword">忘记密码</a>     
      <a class="forgot" @click="register">注册</a>     
     </div>
-</div>
+  </div>
 </div>
   
 </template>
@@ -20,17 +21,49 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      isErr: false,
+      errShow: "",
+      name: "",
+      password: ""
+    };
   },
-  methods:{
-    register(){
-      this.$router.push({path:'/userinfo'})
+  watch: {
+    name(oldVal, newVal) {
+      if (oldVal != newVal) {
+        this.isErr = false;
+      }
     },
-    forgotPassword(){
-
+    password(oldVal, newVal) {
+      if (oldVal != newVal) {
+        this.isErr = false;
+      }
+    }
+  },
+  methods: {
+    register() {
+      this.$router.push({ path: "/userinfo" });
     },
-    login(){
-      this.$router.push({path:'/'})
+    forgotPassword() {},
+    login() {
+      if (!this.name) {
+        this.showErr("请输入账号");
+        return;
+      }
+      if (this.password.length < 6) {
+        this.showErr("密码不少于六位");
+        return;
+      }
+      if (this.name == "admin" && this.password == "123456") {
+        this.$router.push({ path: "/" });
+      } else {
+        this.showErr("账号或密码错误");
+        return;
+      }
+    },
+    showErr(msg) {
+      this.isErr = true;
+      this.errShow = msg;
     }
   }
 };
@@ -53,10 +86,16 @@ export default {
     margin-left: -150px;
     transform: translateY(-50%);
     background: #fff;
-    // border: 1px solid $blue;
     border-radius: 5px;
     text-align: center;
     overflow: hidden;
+    .errMsg {
+      display: block;
+      margin: 10px auto;
+      // margin-bottom: 0;
+      font-size: 12px;
+      color: red;
+    }
     .img-con {
       background: $blue;
       width: 100%;
@@ -76,6 +115,7 @@ export default {
     width: 250px;
     height: 35px;
     margin: 20px auto;
+    // margin-top: 10px;
     border-radius: 5px;
     border: 1px solid $blue;
     box-shadow: 0;
@@ -99,8 +139,8 @@ export default {
       display: block;
       font-size: 13px;
       cursor: pointer;
-      margin:10px 20px 20px 0; 
-      &:hover{
+      margin: 10px 20px 20px 0;
+      &:hover {
         color: $blue;
       }
     }

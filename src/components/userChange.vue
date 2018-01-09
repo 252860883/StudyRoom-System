@@ -3,7 +3,7 @@
     <div class="user-con">
       <div class="btn-group">
         <a class="btn-sub" @click="submit">确定</a>
-        <a class="btn-sub" @click="returnBack">返回</a>
+        <!-- <a class="btn-sub" @click="returnBack">返回</a> -->
       </div>
       <div class="photo">设置头像</div>
       <div class="user-row">
@@ -22,7 +22,10 @@
         <span>学号</span>
         <input type="text" v-model="stuId">        
       </div>
-      
+      <div class="user-row">
+        <span>密码</span>
+        <input type="password" v-model="password">        
+      </div>
     </div>
     <!-- 提示 -->
     <show-tag :msg="msg" v-show="isShowMsg"></show-tag>
@@ -37,6 +40,7 @@ export default {
       school: "123",
       major: "233",
       stuId: "1411651104",
+      password: "123456",
       msg: "这是一个提示",
       isShowMsg: false
     };
@@ -47,17 +51,25 @@ export default {
   methods: {
     submit() {
       let self = this;
-      if (this.name && this.school && this.major && this.stuId) {
-      } else {
-        this.msg = "输入不完整，请填写完整后再提交";
-        this.isShowMsg = true;
-        setTimeout(() => {
-          self.isShowMsg = false;
-        }, 2000);
+      if (this.password.length < 6) {
+        this.showErr("密码不得少于六位");
+        return;
       }
+      if (!(this.name && this.school && this.major && this.stuId)) {
+        this.showErr("输入不完整，请填写完整后再提交");
+        return;
+      }
+      this.$router.push({ path: "/" });
     },
-    returnBack(){
-      this.$router.push({path:'/user',query:{index:"first"}});
+    returnBack() {
+      this.$router.push({ path: "/user", query: { index: "first" } });
+    },
+    showErr(msg) {
+      this.msg = msg;
+      this.isShowMsg = true;
+      setTimeout(() => {
+        self.isShowMsg = false;
+      }, 2000);
     }
   }
 };
@@ -116,7 +128,7 @@ export default {
         float: right;
         width: 60px;
         height: 35px;
-        margin-left:8px;
+        margin-left: 8px;
         background: $blue;
         color: #fff;
         text-align: center;
@@ -124,7 +136,7 @@ export default {
         border-radius: 5px;
         cursor: pointer;
         font-size: 14px;
-        &:hover{
+        &:hover {
           opacity: 0.8;
         }
       }
