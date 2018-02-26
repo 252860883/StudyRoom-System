@@ -72,7 +72,7 @@ export default {
 <style lang='scss'>
 @import "../assets/common.scss";
 .login {
-  background-image: url("../assets/img/login-bg.jpg");
+  background-image: url("@/assets/img/login-bg.jpg");
   background-size: 100%;
   width: 100%;
   height: 100%;

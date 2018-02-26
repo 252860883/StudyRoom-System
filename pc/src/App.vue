@@ -16,7 +16,7 @@ export default {
   },
   created() {
     if (!this.islogin) {
-      // this.$router.push({ path: "/login" });
+      this.$router.push({ path: "/login" });
     }
   },
   watch: {
