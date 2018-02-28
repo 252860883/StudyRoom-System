@@ -13,9 +13,6 @@ import router from './router'
 import element from 'element-ui';
 Vue.use(element);
 
-import DinosaurUI from 'dinosaur-ui';
-Vue.use(DinosaurUI);
-
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

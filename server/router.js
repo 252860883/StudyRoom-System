@@ -7,10 +7,14 @@ let router =new Router();
 
 console.log()
 
-router.get('/', (ctx,next)=>{
+// 自习室列表信息
+router.get('/roomlist', (ctx,next)=>{
     ctx.body='默认的信息';
 });
 
+//
+
+// 登陆接口
 router.get('/login', (ctx,next)=>{
     ctx.body="这是登陆接口"
 });
