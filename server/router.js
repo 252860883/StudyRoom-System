@@ -5,6 +5,10 @@ const Router = require('koa-router');
 let app = new Koa();
 let router = new Router();
 
+let mongoose =require('mongoose');
+// 连接数据库
+// mongoose.connect('mogondb://localhost:27017')
+
 // 登陆接口
 router.post('/login', (ctx, next) => {
     ctx.body = "这是登陆接口"
