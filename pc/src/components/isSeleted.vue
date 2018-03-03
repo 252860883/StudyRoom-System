@@ -14,6 +14,7 @@
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
+        <a class="del" @click="toDetail(item)">删除</a>
       </div>
     </div>
   </div>
@@ -109,7 +110,7 @@ export default {
       float: right;
       height: 100px;
       a {
-        display: block;
+        display: inline-block;
         width: 100px;
         height: 45px;
         line-height: 45px;
@@ -124,6 +125,11 @@ export default {
           opacity: 0.8;
         }
       }
+      .del{
+        background: $red;
+        width: 70px;
+      }
+
     }
   }
 }

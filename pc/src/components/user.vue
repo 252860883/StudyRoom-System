@@ -11,6 +11,9 @@
             <el-tab-pane label="已预约的自习" name="second">
                 <is-select-page></is-select-page>
             </el-tab-pane>
+            <el-tab-pane label="收藏夹" name="third">
+                <!-- <is-select-page></is-select-page> -->
+            </el-tab-pane>
         </el-tabs>
       </div>
   </div>
