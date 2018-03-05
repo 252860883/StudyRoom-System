@@ -1,28 +1,18 @@
 "use strict";
 
-const Koa = require('koa');
+let Student=require('./controllers/student');
 const Router = require('koa-router');
-let app = new Koa();
+
 let router = new Router();
 
 let mongoose = require('mongoose');
 // 连接数据库
-mongoose.connect('mogondb://localhost:27017/demo2');
-// mongodb://{hostname}:{port}/{dbname}
-
-// var schema = new mongoose.Schema({
-//     name: {
-//         type: String
-//     },
-//     password: {
-//         type: String
-//     }
-// });
-// var Student = mongoose.model('student', schema);
+mongoose.connect('mogondb://localhost:27017/demo');
 
 // 登陆接口
 router.post('/login', (ctx, next) => {
     ctx.body = "这是登陆接口"
+    Student.login();
 });
 
 // 注册接口
@@ -65,7 +55,4 @@ router.get('/hasRoomlists', (ctx) => {
     ctx.body = "已预约自习室";
 })
 
-app.use(router.routes());
-app.listen(4000, () => {
-    console.log('server is running at 4000');
-});
+module.exports.router=router;
