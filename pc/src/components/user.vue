@@ -14,6 +14,9 @@
             <el-tab-pane label="收藏夹" name="third">
                 <!-- <is-select-page></is-select-page> -->
             </el-tab-pane>
+            <el-tab-pane label="申请消息" name="forth">
+              <!-- <class-clock></class-clock> -->
+            </el-tab-pane>
         </el-tabs>
       </div>
   </div>

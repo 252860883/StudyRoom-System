@@ -111,9 +111,9 @@ export default {
       height: 100px;
       a {
         display: inline-block;
-        width: 100px;
-        height: 45px;
-        line-height: 45px;
+        width: 90px;
+        height: 40px;
+        line-height: 40px;
         background: $blue;
         text-align: center;
         color: #fff;
@@ -121,13 +121,14 @@ export default {
         margin-top: 26px;
         margin-right: 10px;
         cursor: pointer;
+        font-size: 15px;
         &:hover {
           opacity: 0.8;
         }
       }
       .del{
         background: $red;
-        width: 70px;
+        width: 60px;
       }
 
     }
