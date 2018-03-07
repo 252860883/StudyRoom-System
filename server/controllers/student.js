@@ -1,9 +1,23 @@
 const mongoose=require('mongoose');
-// const student=mongoose.model('Student');
-// import "../models/student";
-// 和用户有关系的一系列操作
+const Student=mongoose.model('Student');
 
-module.exports.login= function(){
-    console.log('注册');
+/**
+ * 封装一系列和用户有关的方法
+ */
+
+// 登陆
+module.exports.login= async function(params){
+    let docall=await Student.find();
+    console.log('all'+docall);
+    let docs= await Student.find({password:'456'});
+    console.log(docs);
+    return docs.length ? true :false; 
 }
+
+// 注册
+module.exports.resigter= async function(params){
+    console.log('注册');
+    let docs= await mongoose.create(params); 
+}
+
 

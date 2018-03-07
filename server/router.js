@@ -1,23 +1,26 @@
 "use strict";
 
-let Student=require('./controllers/student');
+let student = require('./controllers/student');
 const Router = require('koa-router');
 
 let router = new Router();
 
-let mongoose = require('mongoose');
-// 连接数据库
-mongoose.connect('mogondb://localhost:27017/demo');
-
 // 登陆接口
-router.post('/login', (ctx, next) => {
-    ctx.body = "这是登陆接口"
-    Student.login();
+router.post('/login', async (ctx, next) => {
+    let params=ctx.query;
+    let isOk = await student.login(params);
+    // let isOk=true;
+    if (isOk) {
+        ctx.body = "登陆成功";
+    } else {
+        ctx.body = "登录失败";
+    }
 });
 
 // 注册接口
 router.post('/register', (ctx, next) => {
     ctx.body = "这是注册接口"
+
 });
 
 // 自习室列表信息
@@ -55,4 +58,4 @@ router.get('/hasRoomlists', (ctx) => {
     ctx.body = "已预约自习室";
 })
 
-module.exports.router=router;
+module.exports.router = router;
