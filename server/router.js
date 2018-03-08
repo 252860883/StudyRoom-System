@@ -18,9 +18,20 @@ router.post('/login', async (ctx, next) => {
 });
 
 // 注册接口
-router.post('/register', (ctx, next) => {
-    ctx.body = "这是注册接口"
-
+router.post('/register', async (ctx, next) => {
+    
+    let hasReg=await student.register(ctx.query);
+    if(hasReg){
+        ctx.body = {
+            sucess:true,
+            msg:"注册成功"
+        }
+    }else{
+        ctx.body={
+            sucess:false,
+            msg:"注册失败，账号已存在"
+        }
+    }
 });
 
 // 自习室列表信息

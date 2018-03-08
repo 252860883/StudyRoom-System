@@ -1,23 +1,31 @@
-const mongoose=require('mongoose');
-const Student=mongoose.model('Student');
+const mongoose = require('mongoose');
+const Student = mongoose.model('student');
 
 /**
  * 封装一系列和用户有关的方法
  */
 
 // 登陆
-module.exports.login= async function(params){
-    let docall=await Student.find();
-    console.log('all'+docall);
-    let docs= await Student.find({password:'456'});
-    console.log(docs);
-    return docs.length ? true :false; 
+module.exports.login = async function (params) {
+    let docs = await Student.find({
+        stuId: params.stuId,
+        password: params.password
+    });
+    return docs.length ? true : false;
 }
 
 // 注册
-module.exports.resigter= async function(params){
-    console.log('注册');
-    let docs= await mongoose.create(params); 
+module.exports.register = async function (params) {
+    console.log(params);
+    let isNew = await Student.find({
+        stuId: params.stuId
+    });
+    console.log(isNew)
+    if (!isNew.length) {
+        let docs = await Student.create(params);
+        return true;
+    } else {
+        return false;
+    }
+
 }
-
-

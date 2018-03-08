@@ -6,37 +6,37 @@ var studentSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    name: {
-        type: String,
-        required: true
-    },
     password: {
         type: String,
         required: true
     },
-    avatorUrl:{
-        type:String
+    name: {
+        type: String,
+        required: true
     },
-    school:{
-        type:String,
-        required:true
+    avatorUrl: {
+        type: String
     },
-    major:{
-        type:String,
-        required:true
+    school: {
+        type: String,
+        required: true
     },
-    collectRoomLists:{
-        type:Array
+    major: {
+        type: String,
+        required: true
     },
-    hasRoomLists:{
-        type:Array
+    collectRoomLists: {
+        type: Array
     },
-    createRoomLists:{
-        type:Array
+    hasRoomLists: {
+        type: Array
     },
-    remind:{
-        type:Object
+    createRoomLists: {
+        type: Array
+    },
+    remind: {
+        type: Object
     }
 });
 
-mongoose.model('Student', studentSchema);
+mongoose.model('student', studentSchema);
