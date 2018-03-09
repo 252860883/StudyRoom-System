@@ -7,6 +7,8 @@ server：nodejs koa koa-router
 
 sql: MongoDB mongooseODM
 
+UI:elementUI iconfont
+
 environment：node v8.0.0
 
   
