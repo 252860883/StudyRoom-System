@@ -16,16 +16,26 @@ module.exports.login = async function (params) {
 
 // 注册
 module.exports.register = async function (params) {
-    console.log(params);
     let isNew = await Student.find({
         stuId: params.stuId
     });
-    console.log(isNew)
     if (!isNew.length) {
         let docs = await Student.create(params);
         return true;
     } else {
         return false;
     }
-
+}
+// 修改个人资料
+module.exports.modify=async function(params){
+    // let stuIdOk= await Student.find({
+    //     stuId:params.stuId
+    // });
+    // 如果学号存在则修改信息
+    // if(stuIdOk){
+        console.log(params);
+        let updates = {$set: params};
+        let hasModify=await Student.update({'stuId' : '1411651104'}, {$set:{'name':"测试"}});
+        return hasModify;
+    // }
 }

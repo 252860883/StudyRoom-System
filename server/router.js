@@ -34,6 +34,25 @@ router.post('/register', async (ctx, next) => {
     }
 });
 
+
+// 修改个人信息
+router.post('/modify', async (ctx, next) => {
+    
+    let hasModify=await student.modify(ctx.query);
+
+    if(hasModify){
+        ctx.body = {
+            sucess:true,
+            msg:"修改成功"
+        }
+    }else{
+        ctx.body={
+            sucess:false,
+            msg:"修改失败"
+        }
+    }
+});
+
 // 自习室列表信息
 router.get('/roomlist', (ctx, next) => {
     ctx.body = '自习室列表信息';

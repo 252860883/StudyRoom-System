@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-console.log('学校');
+
 // 学生信息 学号、头像、姓名、学校、专业、密码、已预约自习室信息、收藏夹
 var studentSchema = new mongoose.Schema({
     stuId: {
