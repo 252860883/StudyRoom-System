@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 const Room = mongoose.model('room');
 
 //  获取自习室列表
+// params:{build,floor,moon,day}
 module.exports.getRoomLists = async (params) => {
-
+    let roomLists = await Room.find(params);
+    // console.log(roomLists);
+    return roomLists;
 }
 
 // 创建自习室
@@ -19,13 +22,13 @@ module.exports.creatRoom = async (params) => {
         let create = new Room(params);
         await create.save();
         return {
-            success:true,
-            msg:"创建自习成功"
+            success: true,
+            msg: "创建自习成功"
         }
-    }else{
+    } else {
         return {
-            success:false,
-            mag:"自习室已经被创建"
+            success: false,
+            mag: "自习室已经被创建"
         }
     }
 }

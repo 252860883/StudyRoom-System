@@ -7,6 +7,7 @@ const Router = require('koa-router');
 let router = new Router();
 
 // 登陆接口
+// params: stuId,password
 router.post('/login', async (ctx, next) => {
     let params = ctx.query;
     let isOk = await student.login(params);
@@ -62,12 +63,24 @@ router.get('/user', async (ctx) => {
 })
 
 // 获取自习室列表信息
-router.get('/getRoomLists', (ctx, next) => {
-    ctx.body = '自习室列表信息';
+// params:{build,floor,moon,day}
+router.get('/getRoomLists', async (ctx, next) => {
+    let roomLists= await room.getRoomLists(ctx.query);
+    console.log(roomLists);
+    ctx.body = {
+        sucess:true,
+        data:roomLists
+    };
+});
+
+// 成为管理员,创建自习室
+router.get('/addAdmin', async (ctx) => {
+    let callback = await room.creatRoom(ctx.query);
+    ctx.body = callback;
 });
 
 // 提醒
-router.get('/remind', (ctx, next) => {
+router.get('/remind', (ctx, next) => {  
     ctx.body = '提醒';
 });
 
@@ -79,12 +92,6 @@ router.get('/addRoom', (ctx, next) => {
 // 加入收藏
 router.get('/addStar', (ctx, next) => {
     ctx.body = '加入收藏';
-})
-
-// 成为管理员,创建自习室
-router.get('/addAdmin', async (ctx) => {
-    let callback = await room.creatRoom(ctx.query);
-    ctx.body = callback;
 })
 
 // 已预约自习室
