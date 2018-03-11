@@ -26,16 +26,26 @@ module.exports.register = async function (params) {
         return false;
     }
 }
+
 // 修改个人资料
 module.exports.modify=async function(params){
-    // let stuIdOk= await Student.find({
-    //     stuId:params.stuId
-    // });
     // 如果学号存在则修改信息
-    // if(stuIdOk){
-        console.log(params);
-        let updates = {$set: params};
-        let hasModify=await Student.update({'stuId' : '1411651104'}, {$set:{'name':"测试"}});
-        return hasModify;
-    // }
+    let hasStudent = await Student.find({stuId:params.stuId});
+    
+    if(hasStudent.length){
+        let hasSave= await Student.update({stuId:params.stuId},{$set:params});
+        return hasSave;
+    }else{
+        return false;
+    }
 }
+
+// 获取用户资料
+module.exports.getUser= async (params)=>{
+    let getInfo= await Student.findOne({stuId:params.stuId});
+    return getInfo;
+}
+
+
+
+
