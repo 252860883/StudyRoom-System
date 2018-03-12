@@ -1,49 +1,22 @@
 var mongoose = require('mongoose');
 
-// 学生信息 学号、头像、姓名、学校、专业、密码、已预约自习室信息、收藏夹
+// 固定自习室的信息，这个表只能查询不能修改
 var roomSchema = new mongoose.Schema({
     number: {
-        type: Number
+        type: Number,
+        required:true
     },
     build: {
-        type: String
+        type: String,
+        required:true
     },
     floor: {
-        type: Number
-    },
-    moon: {
-        type: Number
-    },
-    day: {
-        type: Number
+        type: Number,
+        required:true
     },
     allSeats: {
-        type: Number
-    },
-    hasSeats: {
-        type: Number
-    },
-    // 创建者id
-    createrId: {
-        type: Number
-    },
-    createrName: {
-        type: String
-    },
-    title: {
-        type: String
-    },
-    action: {
-        type: String
-    },
-    // 已经预约的人员id统计
-    isSelectIdLists: {
-        type: Array
-    },
-    // 已经收藏的人员id统计
-    saveIdLists: {
-        type: Array
+        type: Number,
+        required:true
     }
-
 });
 mongoose.model('room', roomSchema);

@@ -9,6 +9,7 @@ let router = new Router();
 // 登陆接口
 // params: stuId,password
 router.post('/login', async (ctx, next) => {
+    console.log('调接口');
     let params = ctx.query;
     let isOk = await student.login(params);
     if (isOk) {
@@ -66,7 +67,6 @@ router.get('/user', async (ctx) => {
 // params:{build,floor,moon,day}
 router.get('/getRoomLists', async (ctx, next) => {
     let roomLists= await room.getRoomLists(ctx.query);
-    console.log(roomLists);
     ctx.body = {
         sucess:true,
         data:roomLists

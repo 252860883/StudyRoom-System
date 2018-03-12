@@ -25,17 +25,13 @@ var studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // 收藏的自习室id列表
     collectRoomLists: {
         type: Array
     },
+    // 已经预约的自习室列表
     hasRoomLists: {
         type: Array
-    },
-    createRoomLists: {
-        type: Array
-    },
-    remind: {
-        type: Object
     }
 });
 

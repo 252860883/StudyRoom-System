@@ -7,6 +7,7 @@ mongoose.connect('mongodb://localhost:27017/demo');
 
 // 引入 schema
 require('./models/student');
+require('./models/hasroom');
 require('./models/room');
 
 // 注册路由
