@@ -44,7 +44,7 @@ module.exports.modify = async function (params) {
 module.exports.getUser = async (params) => {
     let getInfo = await Student.findOne({ stuId: params.stuId })
         .populate({
-            path: 'hasRoomLists.roomRecords collectRoomLists.roomRecord',
+            path: 'hasRoomLists.roomRecord collectRoomLists.roomRecord',
             model: 'hasroom',
             populate: ({
                 path: 'roomInfo',
