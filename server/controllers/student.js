@@ -28,21 +28,30 @@ module.exports.register = async function (params) {
 }
 
 // 修改个人资料
-module.exports.modify=async function(params){
+module.exports.modify = async function (params) {
     // 如果学号存在则修改信息
-    let hasStudent = await Student.find({stuId:params.stuId});
-    
-    if(hasStudent.length){
-        let hasSave= await Student.update({stuId:params.stuId},{$set:params});
+    let hasStudent = await Student.find({ stuId: params.stuId });
+
+    if (hasStudent.length) {
+        let hasSave = await Student.update({ stuId: params.stuId }, { $set: params });
         return hasSave;
-    }else{
+    } else {
         return false;
     }
 }
 
 // 获取用户资料
-module.exports.getUser= async (params)=>{
-    let getInfo= await Student.findOne({stuId:params.stuId});
+module.exports.getUser = async (params) => {
+    let getInfo = await Student.findOne({ stuId: params.stuId })
+        .populate({
+            path: 'hasRoomLists.roomRecords collectRoomLists.roomRecord',
+            model: 'hasroom',
+            populate: ({
+                path: 'roomInfo',
+                select: '-_id'
+            })
+        });
+
     return getInfo;
 }
 

@@ -80,24 +80,21 @@ router.get('/addAdmin', async (ctx) => {
 });
 
 // 提醒
-router.get('/remind', (ctx, next) => {  
+router.get('/remind', async (ctx, next) => {  
     ctx.body = '提醒';
 });
 
 // 加入自习
-router.get('/addRoom', (ctx, next) => {
-    ctx.body = '加入自习';
-})
-
-// 加入收藏
-router.get('/addStar', (ctx, next) => {
-    let callback= room.saveRoom(ctx.query);
+router.get('/addRoom',async (ctx, next) => {
+    let callback= await room.addRoom(ctx.query);
     ctx.body = callback;
 })
 
-// 已预约自习室
-router.get('/hasRoomlists', (ctx) => {
-    ctx.body = "已预约自习室";
+// 加入收藏
+router.get('/addStar', async (ctx, next) => {
+    let callback= await room.saveRoom(ctx.query);
+    console.log(callback+'666')
+    ctx.body = callback;
 })
 
 module.exports.router = router;

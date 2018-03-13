@@ -9,15 +9,20 @@ module.exports.getRoomLists = async (params) => {
     let roomIdLists = await Room.find({
         moon: params.moon,
         day: params.day
-    }).populate({
-        path: 'roomInfo',
+    }).populate([{
+        path: 'roomInfo ',
         match: { build: params.build, floor: params.floor },
         select: 'number build floor'
-    })
+    }, {
+        path: 'stuInfo',
+        select: 'name stuId -_id'
+    }]);
 
-    return roomIdLists.filter((value) => {
+    // 过滤不符合的自习室，同时按照教室号排序
+    roomIdLists = roomIdLists.filter((value) => {
         return value.roomInfo != null;
-    });
+    }).sort(compare('roomInfo', 'number'));
+    return roomIdLists;
 }
 
 // 创建自习室
@@ -33,17 +38,23 @@ module.exports.creatRoom = async (params) => {
         let noBlank = await Room.findOne({ roomInfo: hasRoom._id, moon: params.moon, day: params.day });
 
         if (!noBlank) {
+            // 查询创建者信息
+            let stuInfo = await Student.findOne({ stuId: params.stuId });
+            console.log(stuInfo);
             // id绑定到hasroom上
             params['roomInfo'] = hasRoom._id;
             params['seatsLists'] = [];
             params.seatsLists.push(params.seatIndex);
+            params['stuInfo'] = stuInfo._id;
+            console.log(params);
+
             // 创建教室记录
             let createRoom = new Room(params);
-            await createRoom.save();
+            let roomrecord = await createRoom.save();
 
             // 用户信息记录写入加入自习列表
             let newHasroom = {
-                roomInfo: hasRoom._id,
+                roomRecord: roomrecord._id,
                 seatIndex: params.seatIndex
             }
             let a = await Student.update({ stuId: params.stuId }, { $push: { hasRoomLists: newHasroom } });
@@ -69,39 +80,93 @@ module.exports.creatRoom = async (params) => {
 
 // 加入自习室
 module.exports.addRoom = async (params) => {
+    try {
+        // 判断是否已经加入这个教室
+        let isHas = await Student.findOne({ stuId: params.stuId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } });
+        // console.log(isHas)
+        if (!isHas) {
+            // 教室中插入信息
+            let roomRecord=await Room.update({_id:params.roomId},{$push:{seatsLists: params.seatIndex}});
+            // 学生写入信息
+            let newHasroom = {
+                roomRecord: params.roomId,
+                seatIndex: params.seatIndex
+            }
+            let a=await Student.update({stuId:params.stuId},{$push: { hasRoomLists: newHasroom }});
+            if(a.ok){
+                return{
+                    sucess:true,
+                    msg:'加入成功'
+                }
+            }
+
+        } else {
+            return {
+                sucess: false,
+                msg: '已经添加'
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
 
 }
 
 // 收藏自习室
 module.exports.saveRoom = async (params) => {
-    let findRoom = await Room.find({
-        moon: params.moon,
-        day: params.day,
-    }).populate({
-        path: 'roomInfo',
-        match: { build: params.build, floor: params.floor, number: params.number },
-    }).where({ roomInfo: { $ne: null } });
-    console.log(findRoom);
-    let a = await Student.update({ stuId: params.stuId }, { $push: { collectRoomLists: findRoom.roomInfo._id } });
 
-    
+    try {
+        // 找到符合要求的房间
+        var room = await RoomInfo.findOne({
+            build: params.build,
+            floor: params.floor,
+            number: params.number
+        });
+
+        // 查询该房间的制定日期房间id
+        let findRoom = await Room.findOne({
+            moon: params.moon,
+            day: params.day,
+            roomInfo: room._id
+        });
+        console.log(findRoom._id);
+        // 查询用户是否已经收藏该自习室
+        let isSave = await Student.findOne({ stuId: params.stuId, collectRoomLists: { $elemMatch: { roomRecord: findRoom._id } } });
+
+        if (!isSave) {
+            await Student.update({ stuId: params.stuId }, { $push: { collectRoomLists: { roomRecord: findRoom._id } } });
+            return {
+                sucess: true,
+                msg: '收藏成功'
+            };
+        } else {
+            return {
+                sucess: false,
+                msg: '已收藏'
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+    // console.log(findRoom.roomInfo);
 }
 
 // 审核通过加入自习室
 module.exports.accept = async (params) => {
 
 }
-// 获取已加入的自习室列表
-module.exports.getHasRoomLists = async (params) => {
-
-}
-
-// 获取已收藏的自习室列表
-module.exports.getSaveRoomLists = async (params) => {
-
-}
 
 // 删除已经加入的自习室
 module.exports.deleteRoom = async (params) => {
 
+}
+
+// 按照对象内部排序
+// 第一个是主属性，后面是子属性
+function compare(property, child) {
+    return function (obj1, obj2) {
+        var value1 = child ? obj1[property][child] : obj1[property];
+        var value2 = child ? obj2[property][child] : obj2[property];
+        return value1 - value2;// 升序
+    }
 }

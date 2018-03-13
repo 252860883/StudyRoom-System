@@ -26,14 +26,17 @@ var studentSchema = new mongoose.Schema({
         required: true
     },
     // 收藏的自习室id列表
-    collectRoomLists: {
-        type: mongoose.Schema.Types.ObjectId
-    },
+    collectRoomLists: [{
+        roomRecord: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'hasroom'
+        }
+    }],
     // 已经预约的自习室和座位列表
     hasRoomLists: [{
-        roomInfo: {
+        roomRecord: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'room'
+            ref: 'hasroom'
         },
         seatIndex: {
             type: Number
