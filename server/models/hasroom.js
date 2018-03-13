@@ -12,8 +12,8 @@ var roomSchema = new mongoose.Schema({
     day: {
         type: Number
     },
-    hasSeats: {
-        type: Number
+    seatsLists: {
+        type: Array
     },
     // 创建者id
     stuId: {

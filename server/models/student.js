@@ -27,12 +27,22 @@ var studentSchema = new mongoose.Schema({
     },
     // 收藏的自习室id列表
     collectRoomLists: {
-        type: Array
+        type: mongoose.Schema.Types.ObjectId
     },
-    // 已经预约的自习室列表
-    hasRoomLists: {
-        type: Array
-    }
+    // 已经预约的自习室和座位列表
+    hasRoomLists: [{
+        roomInfo: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'room'
+        },
+        seatIndex: {
+            type: Number
+        }
+    }],
+    // 创建的自习室
+    // createRoomLists: {
+    //     type: Array
+    // }
 });
 
 mongoose.model('student', studentSchema);

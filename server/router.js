@@ -91,7 +91,8 @@ router.get('/addRoom', (ctx, next) => {
 
 // 加入收藏
 router.get('/addStar', (ctx, next) => {
-    ctx.body = '加入收藏';
+    let callback= room.saveRoom(ctx.query);
+    ctx.body = callback;
 })
 
 // 已预约自习室
