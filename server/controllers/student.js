@@ -43,16 +43,37 @@ module.exports.modify = async function (params) {
 // 获取用户资料
 module.exports.getUser = async (params) => {
     let getInfo = await Student.findOne({ stuId: params.stuId })
-        .populate({
-            path: 'hasRoomLists.roomRecord collectRoomLists.roomRecord',
+        .populate([{
+            path: 'hasRoomLists.roomRecord collectRoomLists.roomRecord ',
             model: 'hasroom',
             populate: ({
                 path: 'roomInfo',
                 select: '-_id'
             })
-        });
+        }, {
+            path: 'remind.stuInfo',
+            select: 'stuId name '
+
+        }, {
+            path: 'remind.roomInfo',
+            select:'-stuInfo',
+            populate:{
+                path:'roomInfo'
+            }
+        }]);
 
     return getInfo;
+}
+
+// 获取提示数量，0表示没有提示
+module.exports.remind = async (params) => {
+    try {
+        let stuInfo = await this.getUser(params);
+        return stuInfo.remind.length;
+    } catch (err) {
+        throw err;
+    }
+
 }
 
 

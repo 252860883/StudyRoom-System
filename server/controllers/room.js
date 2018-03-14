@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Room = mongoose.model('hasroom');
 const RoomInfo = mongoose.model('room');
 const Student = mongoose.model('student');
+let student = require('./student');
 
 //  获取自习室列表
 module.exports.getRoomLists = async (params) => {
@@ -71,48 +72,37 @@ module.exports.creatRoom = async (params) => {
         }
 
     } catch (err) {
-        return {
-            sucess: false,
-            msg: err
-        }
+        console.log(err);
     }
 }
 
-// 加入自习室
+// 申请加入自习室
 module.exports.addRoom = async (params) => {
     try {
         // 判断是否已经加入这个教室
         let isHas = await Student.findOne({ stuId: params.stuId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } });
-        // console.log(isHas)
-        if (!isHas) {
-            // 教室中插入信息
-            let roomRecord=await Room.update({_id:params.roomId},{$push:{seatsLists: params.seatIndex}});
-            // 学生写入信息
-            let newHasroom = {
-                roomRecord: params.roomId,
-                seatIndex: params.seatIndex
-            }
-            let a=await Student.update({stuId:params.stuId},{$push: { hasRoomLists: newHasroom }});
-            if(a.ok){
-                return{
-                    sucess:true,
-                    msg:'加入成功'
-                }
-            }
+        if (isHas) return { sucess: false, msg: '已经加入该自习室' }
+        // 获取房间和申请者的信息
+        let roomInfo = await Room.findOne({ _id: params.roomId }).populate('stuInfo');
+        let addStu = await student.getUser({ stuId: params.stuId });
+        // 判断是否已经提交申请了
+        let isRemind = await Student.findOne({ stuId: roomInfo.stuInfo.stuId, remind: { $elemMatch: { roomInfo: params.roomId, stuInfo: addStu._id } } });
+        if (isRemind) return { sucess: false, msg: '已经提交申请，请耐心等待管理员审核通过' }
 
-        } else {
-            return {
-                sucess: false,
-                msg: '已经添加'
-            }
+        // 没有问题，写入管理员remind，用户添加到review中
+        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id } } });
+        await Student.update({ stuId: params.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
+        return {
+            sucess: true,
+            msg: '加入自习室审核已成功发送至管理员'
         }
+
     } catch (err) {
         console.log(err);
     }
-
 }
 
-// 收藏自习室
+// 收藏自习室(字段待改)
 module.exports.saveRoom = async (params) => {
 
     try {
@@ -152,13 +142,28 @@ module.exports.saveRoom = async (params) => {
 }
 
 // 审核通过加入自习室
-module.exports.accept = async (params) => {
+module.exports.agree = async (params) => {
+    // 删除管理员的 remind信息
+    // await Student.update({ stuId: params.stuId }, { $pull: { remind: { _id: params.remindId } } });
+    // 添加信息到加入者的 hasRoom，移除其review信息
+    // let a = await Student.findOne({ stuId: params.addId, reviewRoomLists: { $elemMatch: { roomRecord: params.roomId } } },'reviewRoomLists');
+    // await Student.update({ stuId: params.addId }, { $pull: { reviewRoomLists: { roomRecord: params.roomId } } });
+    console.log(a);
+}
+// 审核不通过
+module.exports.disagree = async (params) => {
+    try {
+        // 删除管理员的 remind信息
+        await Student.update({ stuId: params.stuId }, { $pull: { remind: { _id: params.remindId } } });
 
+
+    } catch (error) {
+        throw error;
+    }
 }
 
 // 删除已经加入的自习室
 module.exports.deleteRoom = async (params) => {
-
 }
 
 // 按照对象内部排序

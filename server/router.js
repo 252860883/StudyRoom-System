@@ -66,10 +66,13 @@ router.get('/user', async (ctx) => {
 // 获取自习室列表信息
 // params:{build,floor,moon,day}
 router.get('/getRoomLists', async (ctx, next) => {
-    let roomLists= await room.getRoomLists(ctx.query);
+    let roomLists = await room.getRoomLists(ctx.query);
+    ctx.set({
+        'Access-Control-Allow-Origin': '*'
+    });
     ctx.body = {
-        sucess:true,
-        data:roomLists
+        sucess: true,
+        data: roomLists
     };
 });
 
@@ -79,21 +82,33 @@ router.get('/addAdmin', async (ctx) => {
     ctx.body = callback;
 });
 
-// 提醒
-router.get('/remind', async (ctx, next) => {  
-    ctx.body = '提醒';
-});
+// 申请加入自习
+router.get('/addRoom', async (ctx, next) => {
+    let callback = await room.addRoom(ctx.query);
+    ctx.body = callback;
+})
 
-// 加入自习
-router.get('/addRoom',async (ctx, next) => {
-    let callback= await room.addRoom(ctx.query);
+// 同意加入自习
+router.post('/agree', async (ctx) => {
+    let callback = room.agree(ctx.query);
+    ctx.body = callback;
+})
+// 拒绝加入自习
+router.post('/disagree', async (ctx) => {
+    let callback = room.disagree(ctx.query);
     ctx.body = callback;
 })
 
 // 加入收藏
 router.get('/addStar', async (ctx, next) => {
-    let callback= await room.saveRoom(ctx.query);
-    console.log(callback+'666')
+    let callback = await room.saveRoom(ctx.query);
+    console.log(callback + '666')
+    ctx.body = callback;
+})
+
+// 是否提醒
+router.get('/remind', async (ctx) => {
+    let callback = await student.remind(ctx.query);
     ctx.body = callback;
 })
 

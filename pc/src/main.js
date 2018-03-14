@@ -3,17 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// // 按需加载element
-// import {Select,Option,DatePicker,} from 'element-ui'
-// import 'element-ui/lib/theme-chalk/index.css'
-// Vue.use(Select);
-// Vue.use(Option);
-// Vue.use(DatePicker);
 
 import element from 'element-ui';
 Vue.use(element);
 
-Vue.config.productionTip = false
+// import axios from 'axios'
+// Vue.use(axios)
+
+import '../config/axios'
+
+// Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
