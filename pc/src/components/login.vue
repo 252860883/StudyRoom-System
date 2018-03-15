@@ -73,11 +73,11 @@ export default {
         this.isErr = false;
       }
     },
-    // password(oldVal, newVal) {
-    //   if (oldVal != newVal && newVal!='') {
-    //     this.isErr = false;
-    //   }
-    // },
+    password(oldVal, newVal) {
+      if (oldVal != newVal) {
+        this.isErr = false;
+      }
+    },
     stuId(oldVal, newVal) {
       if (oldVal != newVal) {
         this.isErr = false;
@@ -150,7 +150,10 @@ export default {
         })
         .then(res => {
           if (res.data.sucess) {
-            self.password=""
+            self.password="";
+            self.name="";
+            self.school="";
+            self.major="";
             self.isErr=true;
             self.showErr("注册成功，请登录");
             self.islogin = true;
