@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 
 // 已经开放的自习室
 var roomSchema = new mongoose.Schema({
+    // _id:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     index:true
+    // },
     roomInfo: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'room'
@@ -12,12 +16,13 @@ var roomSchema = new mongoose.Schema({
     day: {
         type: Number
     },
-    hasSeats: {
-        type: Number
+    seatsLists: {
+        type: Array
     },
     // 创建者id
-    stuId: {
-        type: Number
+    stuInfo: {
+        type:  mongoose.Schema.Types.ObjectId,
+        ref:'student'
     },
     createrName: {
         type: String
@@ -31,4 +36,6 @@ var roomSchema = new mongoose.Schema({
 
 });
 mongoose.model('hasroom', roomSchema);
+
+// roomSchema.index({ name: 1, type: -1 });
 

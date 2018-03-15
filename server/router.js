@@ -9,20 +9,27 @@ let router = new Router();
 // 登陆接口
 // params: stuId,password
 router.post('/login', async (ctx, next) => {
-    console.log('调接口');
-    let params = ctx.query;
+    
+    let params = ctx.request.body;
     let isOk = await student.login(params);
     if (isOk) {
-        ctx.body = "登陆成功";
+        ctx.body = {
+            sucess: true,
+            msg: "登陆成功"
+        };
     } else {
-        ctx.body = "登录失败";
+        ctx.body = {
+            sucess: false,
+            msg: '登录失败'
+        };
     }
 });
 
 // 注册接口
-router.post('/register', async (ctx, next) => {
+router.post('/register', async (ctx) => {
+    // console.log(ctx.request.body);
+    let hasReg = await student.register(ctx.request.body);
 
-    let hasReg = await student.register(ctx.query);
     if (hasReg) {
         ctx.body = {
             sucess: true,
@@ -64,14 +71,22 @@ router.get('/user', async (ctx) => {
 })
 
 // 获取自习室列表信息
-// params:{build,floor,moon,day}
 router.get('/getRoomLists', async (ctx, next) => {
-    let roomLists= await room.getRoomLists(ctx.query);
+    let roomLists = await room.getRoomLists(ctx.query);
+    ctx.set({
+        'Access-Control-Allow-Origin': '*'
+    });
     ctx.body = {
-        sucess:true,
-        data:roomLists
+        sucess: true,
+        data: roomLists
     };
 });
+
+// 获取自习室详情以及用户的状态
+router.get('/getRoom', async (ctx) => {
+    let roomInfo = await room.getRoom(ctx.query);
+    ctx.body = roomInfo;
+})
 
 // 成为管理员,创建自习室
 router.get('/addAdmin', async (ctx) => {
@@ -79,24 +94,48 @@ router.get('/addAdmin', async (ctx) => {
     ctx.body = callback;
 });
 
-// 提醒
-router.get('/remind', (ctx, next) => {  
-    ctx.body = '提醒';
-});
+// 申请加入自习
+router.get('/addRoom', async (ctx, next) => {
+    let callback = await room.addRoom(ctx.query);
+    ctx.body = callback;
+})
 
-// 加入自习
-router.get('/addRoom', (ctx, next) => {
-    ctx.body = '加入自习';
+// 同意加入自习
+router.post('/agree', async (ctx) => {
+    let callback = room.agree(ctx.query);
+    ctx.body = callback;
+})
+
+// 拒绝加入自习
+router.post('/disagree', async (ctx) => {
+    let callback = await room.disagree(ctx.query);
+    ctx.body = callback;
 })
 
 // 加入收藏
-router.get('/addStar', (ctx, next) => {
-    ctx.body = '加入收藏';
+router.get('/addStar', async (ctx, next) => {
+    let callback = await room.saveRoom(ctx.query);
+    console.log(callback + '666')
+    ctx.body = callback;
 })
 
-// 已预约自习室
-router.get('/hasRoomlists', (ctx) => {
-    ctx.body = "已预约自习室";
+// 提醒数量
+router.get('/remind', async (ctx) => {
+    let callback = await student.remind(ctx.query);
+    ctx.body = callback;
 })
+
+// 删除收藏的自习室
+router.get('/delCollectList', async (ctx) => {
+    let callback = await room.deleteCollectRoom(ctx.query);
+    ctx.body = callback;
+})
+
+// 删除加入的自习室
+router.get('/delHasList', async (ctx) => {
+    let callback = await room.deleteHasRoom(ctx.query);
+    ctx.body = callback;
+})
+
 
 module.exports.router = router;

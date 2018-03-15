@@ -1,7 +1,7 @@
 <template>
 <!-- 已经选择的课程 -->
   <div class="isselected">
-    <div class="list-con" v-for="item in tableData">
+    <div class="list-con" v-for="item in tableData" :key="item">
       <div class="list-left">
         <div class="list-left-up">
           <span class="list-date">{{item.date}}</span>

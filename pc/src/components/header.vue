@@ -1,5 +1,5 @@
 <template>
-<header v-if="this.$route.path!='/login'">
+<header v-if="this.$route.path!='/login' && this.$route.path!='/userinfo' ">
     <div class="con">
         <img :src="require('../assets/img/logo.png')" class="logo" @click="navClick('/')">
         <div class="btngroup">

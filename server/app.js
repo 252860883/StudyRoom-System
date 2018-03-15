@@ -1,5 +1,8 @@
 const Koa = require('koa');
+const koaBody = require('koa-bodyparser');
 let app = new Koa();
+
+app.use(koaBody());
 
 // 连接数据库
 let mongoose = require('mongoose');
