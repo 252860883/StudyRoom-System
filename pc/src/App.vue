@@ -18,7 +18,6 @@ export default {
     if (!this.islogin) {
       // this.$router.push({ path: "/login" });
     }
-    console.log(this.$http);
     this.$http.get("/getRoomLists", {
       params: {
         build: "二公教",

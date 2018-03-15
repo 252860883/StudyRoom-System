@@ -9,20 +9,27 @@ let router = new Router();
 // 登陆接口
 // params: stuId,password
 router.post('/login', async (ctx, next) => {
-    console.log('调接口');
-    let params = ctx.query;
+    
+    let params = ctx.request.body;
     let isOk = await student.login(params);
     if (isOk) {
-        ctx.body = "登陆成功";
+        ctx.body = {
+            sucess: true,
+            msg: "登陆成功"
+        };
     } else {
-        ctx.body = "登录失败";
+        ctx.body = {
+            sucess: false,
+            msg: '登录失败'
+        };
     }
 });
 
 // 注册接口
-router.post('/register', async (ctx, next) => {
+router.post('/register', async (ctx) => {
+    // console.log(ctx.request.body);
+    let hasReg = await student.register(ctx.request.body);
 
-    let hasReg = await student.register(ctx.query);
     if (hasReg) {
         ctx.body = {
             sucess: true,

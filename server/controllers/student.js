@@ -16,15 +16,20 @@ module.exports.login = async function (params) {
 
 // 注册
 module.exports.register = async function (params) {
-    let isNew = await Student.find({
-        stuId: params.stuId
-    });
-    if (!isNew.length) {
-        let docs = await Student.create(params);
-        return true;
-    } else {
-        return false;
+    try {
+        let isNew = await Student.find({
+            stuId: params.stuId
+        });
+        if (!isNew.length) {
+            let docs = await Student.create(params);
+            return true;
+        } else {
+            return false;
+        }
+    }catch(err){
+        console.log(err);
     }
+
 }
 
 // 修改个人资料
@@ -56,9 +61,9 @@ module.exports.getUser = async (params) => {
 
         }, {
             path: 'remind.roomInfo',
-            select:'-stuInfo',
-            populate:{
-                path:'roomInfo'
+            select: '-stuInfo',
+            populate: {
+                path: 'roomInfo'
             }
         }]);
 

@@ -102,10 +102,12 @@ export default {
   width: 400px;
   margin: 20px auto;
   box-sizing: border-box;
-  background: $blank;
+  // background: $blank;
   border-radius: 5px;
   padding: 20px;
   color: $black;
+  border: 2px solid #ddd;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
   .user-con {
     .photo {
       width: 100px;
@@ -117,7 +119,6 @@ export default {
       text-align: center;
       line-height: 100px;
       color: #fff;
-
       position: relative;
       input {
         display: block;
