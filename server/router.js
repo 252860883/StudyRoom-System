@@ -64,7 +64,6 @@ router.get('/user', async (ctx) => {
 })
 
 // 获取自习室列表信息
-// params:{build,floor,moon,day}
 router.get('/getRoomLists', async (ctx, next) => {
     let roomLists = await room.getRoomLists(ctx.query);
     ctx.set({
@@ -75,6 +74,12 @@ router.get('/getRoomLists', async (ctx, next) => {
         data: roomLists
     };
 });
+
+// 获取自习室详情以及用户的状态
+router.get('/getRoom', async (ctx) => {
+    let roomInfo = await room.getRoom(ctx.query);
+    ctx.body = roomInfo;
+})
 
 // 成为管理员,创建自习室
 router.get('/addAdmin', async (ctx) => {
@@ -93,9 +98,10 @@ router.post('/agree', async (ctx) => {
     let callback = room.agree(ctx.query);
     ctx.body = callback;
 })
+
 // 拒绝加入自习
 router.post('/disagree', async (ctx) => {
-    let callback = room.disagree(ctx.query);
+    let callback = await room.disagree(ctx.query);
     ctx.body = callback;
 })
 
@@ -106,10 +112,23 @@ router.get('/addStar', async (ctx, next) => {
     ctx.body = callback;
 })
 
-// 是否提醒
+// 提醒数量
 router.get('/remind', async (ctx) => {
     let callback = await student.remind(ctx.query);
     ctx.body = callback;
 })
+
+// 删除收藏的自习室
+router.get('/delCollectList', async (ctx) => {
+    let callback = await room.deleteCollectRoom(ctx.query);
+    ctx.body = callback;
+})
+
+// 删除加入的自习室
+router.get('/delHasList', async (ctx) => {
+    let callback = await room.deleteHasRoom(ctx.query);
+    ctx.body = callback;
+})
+
 
 module.exports.router = router;
