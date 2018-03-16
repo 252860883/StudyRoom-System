@@ -3,26 +3,17 @@
 let student = require('./controllers/student');
 let room = require('./controllers/room');
 const Router = require('koa-router');
+const passport = require('./lib/passport');
 
 let router = new Router();
 
 // 登陆接口
 // params: stuId,password
-router.post('/login', async (ctx, next) => {
-    
+router.post('/login', async (ctx) => {
+
     let params = ctx.request.body;
-    let isOk = await student.login(params);
-    if (isOk) {
-        ctx.body = {
-            sucess: true,
-            msg: "登陆成功"
-        };
-    } else {
-        ctx.body = {
-            sucess: false,
-            msg: '登录失败'
-        };
-    }
+    let docs = await student.login(params,ctx);
+    ctx.body=docs;
 });
 
 // 注册接口

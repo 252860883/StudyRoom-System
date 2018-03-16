@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            border: 1px solid red;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="father">
+        我是父元素
+        <div id="child">
+            我是子元素
+            <div id="sunzi">
+                我是孙子元素
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('father').addEventListener('click',function(e){
+            console.log(e.target);
+        })
+        document.getElementById('child').addEventListener('click',function(e){
+            e.stopPropagation();
+        })
+
+
+    </script>
+</body>
+
+</html>

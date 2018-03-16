@@ -1,15 +1,15 @@
 <template>
   <div class="user">
       <div class="user-left">
-        <user-show></user-show>
+        <user-show :userdata='userData'></user-show>
       </div>
       <div class="user-right">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="自习提醒" name="first">
-              <class-clock></class-clock>
+              <class-clock ></class-clock>
             </el-tab-pane>
             <el-tab-pane label="已预约的自习" name="second">
-                <is-select-page></is-select-page>
+                <is-select-page :hasRoomLists='userData.hasRoomLists'></is-select-page>
             </el-tab-pane>
             <el-tab-pane label="收藏夹" name="third">
                 <!-- <is-select-page></is-select-page> -->
@@ -28,7 +28,8 @@ import classClock from "../components/classClock";
 export default {
   data() {
     return {
-      activeName: "second"
+      activeName: "second",
+      userData:{}
     };
   },
   components: {
@@ -37,7 +38,17 @@ export default {
     classClock
   },
   created() {
+    let self = this;
     this.activeName = this.$route.query.index;
+    this.$http
+      .get("/user", {
+        params: {
+          stuId: 1411651101
+        }
+      })
+      .then(res => {
+        self.userData = res.data.data;
+      });
   },
   watch: {
     "$route.query.index": function(val) {

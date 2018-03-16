@@ -18,14 +18,7 @@ export default {
     if (!this.islogin) {
       // this.$router.push({ path: "/login" });
     }
-    this.$http.get("/getRoomLists", {
-      params: {
-        build: "二公教",
-        floor: 1,
-        moon: 3,
-        day: 13
-      }
-    });
+
   },
   watch: {
     islogin(val) {

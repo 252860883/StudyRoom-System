@@ -189,7 +189,7 @@ export default {
     margin-left: -150px;
     transform: translateY(-50%);
     background: #fff;
-    border-radius: 5px;
+    border-radius: 9px;
     text-align: center;
     overflow: hidden;
     border: 2px solid #ddd;
