@@ -13,8 +13,12 @@
   },
   "dependencies": {
     "element-ui": "^2.0.7",
+<<<<<<< HEAD
     "passport": "^0.4.0",
     "sass": "^1.0.0-beta.5.2",
+=======
+    "sass": "^1.0.0-beta.5.3",
+>>>>>>> 6deb8ec4ddebbe933e829a83335426ec1d33c632
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
@@ -41,7 +45,11 @@
     "html-webpack-plugin": "^2.30.1",
     "nightwatch": "^0.9.12",
     "node-notifier": "^5.1.2",
+<<<<<<< HEAD
+    "node-sass": "^4.7.2",
+=======
     "node-sass": "^4.8.1",
+>>>>>>> 0d6097670b5d382f9ddb3481aaf46a203b36390c
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
@@ -52,7 +60,7 @@
     "selenium-server": "^3.0.1",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
-    "style-loader": "^0.20.2",
+    "style-loader": "^0.20.3",
     "stylus-loader": "^3.0.2",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
@@ -65,7 +73,7 @@
     "webpack-merge": "^4.1.0"
   },
   "engines": {
-    "node": ">= 4.0.0",
+    "node": ">= 8.0.0",
     "npm": ">= 3.0.0"
   },
   "browserslist": [
