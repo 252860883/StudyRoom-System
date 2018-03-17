@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "element-ui": "^2.0.7",
+    "node-sass": "^4.7.2",
     "sass": "^1.0.0-beta.5.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
@@ -40,11 +41,6 @@
     "html-webpack-plugin": "^2.30.1",
     "nightwatch": "^0.9.12",
     "node-notifier": "^5.1.2",
-<<<<<<< HEAD
-    "node-sass": "^4.7.2",
-=======
-    "node-sass": "^4.8.1",
->>>>>>> 0d6097670b5d382f9ddb3481aaf46a203b36390c
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
