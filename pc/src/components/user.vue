@@ -8,14 +8,17 @@
             <el-tab-pane label="自习提醒" name="first">
               <class-clock ></class-clock>
             </el-tab-pane>
-            <el-tab-pane label="已预约的自习" name="second">
+            <el-tab-pane label="已预约" name="second">
                 <is-select-page :hasRoomLists='userData.hasRoomLists'></is-select-page>
             </el-tab-pane>
-            <el-tab-pane label="收藏夹" name="third">
-                <!-- <is-select-page></is-select-page> -->
+            <el-tab-pane label="待审核" name="third">
+              <is-review :reviewRoomLists="userData.reviewRoomLists"></is-review>
             </el-tab-pane>
-            <el-tab-pane label="申请消息" name="forth">
-              <!-- <class-clock></class-clock> -->
+            <el-tab-pane label="收藏夹" name="forth">
+                <is-collect-page :hasCollectLists='userData.collectRoomLists'></is-collect-page>
+            </el-tab-pane>
+            <el-tab-pane label="申请消息" name="fifth">
+              <remind :remindLists="userData.remind"></remind>
             </el-tab-pane>
         </el-tabs>
       </div>
@@ -23,8 +26,11 @@
 </template>
 <script>
 import isSelectPage from "../components/isSeleted";
+import isCollectPage from '../components/isSave';
 import userShow from "../components/userShow";
+import isReview from "../components/isreview";
 import classClock from "../components/classClock";
+import remind from "../components/remind";
 export default {
   data() {
     return {
@@ -35,7 +41,10 @@ export default {
   components: {
     isSelectPage,
     userShow,
-    classClock
+    classClock,
+    isCollectPage,
+    isReview,
+    remind
   },
   created() {
     let self = this;
@@ -43,7 +52,7 @@ export default {
     this.$http
       .get("/user", {
         params: {
-          stuId: 1411651101
+          stuId: 1411651103
         }
       })
       .then(res => {

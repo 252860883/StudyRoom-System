@@ -10,7 +10,7 @@
     <div class="login" v-if='islogin' >
       
       <div class="clomn">
-        <img src="../assets/img/login/name.png" alt=""> 
+        <img src="../assets/img/login/stuId.png" alt=""> 
         <input type="text" v-model="stuId" placeholder="请输入学号">
       </div>
       <div class="clomn">
@@ -25,7 +25,7 @@
     <!-- 注册 -->
     <div class="resigter" v-else>
       <div class="clomn">
-        <img src="../assets/img/login/name.png" alt="">
+        <img src="../assets/img/login/stuId.png" alt="">
         <input type="text" v-model="stuId" placeholder="请输入学号">
       </div>
       <div class="clomn">

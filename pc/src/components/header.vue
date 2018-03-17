@@ -4,7 +4,7 @@
         <img :src="require('../assets/img/logo.png')" class="logo" @click="navClick('/')">
         <div class="btngroup">
 
-            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich=-1" @click="navClick('/user','first')">
+            <div class="btn-border" @mouseover="iswhich=0" @mouseout="iswhich=-1" @click="navClick('/user','fifth')">
               <el-badge :value="newsNum">
                 <img :src="require('../assets/img/icon-remind.png')" alt="消息通知" v-if="iswhich!=0">
                 <img :src="require('../assets/img/icon-remind-on.png')" alt="消息通知" v-if="iswhich==0">    
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
         iswhich:-1,
-        newsNum:3
+        newsNum:1
     };
   },
   watch:{
@@ -45,10 +45,15 @@ export default {
           this.iswhich=-1;
       }
   },
-  mounted(){
-    console.log('ok'+this.iswhich);
-  }
-
+  created(){
+    let self=this;
+    this.$http.get('/remind',{params:{
+      stuId:1411651103
+    }}).then(res=>{
+      console.log(res.data);
+      self.newsNum=res.data;
+    })
+  },
 };
 </script>
 

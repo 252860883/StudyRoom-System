@@ -30,11 +30,11 @@
             <div  :class="room.title ? 'room-border' : 'room-border-no'" @click="toDetail(room)">
                 <span class="roomId">{{ room |roomNumber}}</span>
                   <span class="seat-con">
-                  <img class="icon-seat"  :src="require('../assets/img/seat-off.png')" alt="">
+                  <img class="icon-seat"  :src="room.title ? require('../assets/img/login/seat-off.png') :require('../assets/img/login/seat-off-grey.png')" alt="">
                   <span class="seats-num">{{room.roomInfo.allSeats}}</span>
-                  <img class="icon-seat"  :src="room.title ? require('../assets/img/seat-on.png') :require('../assets/img/seat-grey.png')" alt="">
+                  <img class="icon-seat"  :src="room.title ? require('../assets/img/login/seat-on.png') :require('../assets/img/login/seat-on-grey.png')" alt="">
                   <span class="seats-num">{{room.title ? room.seatsLists.length : 0}}</span>
-                  <img class="icon-seat"  :src="room.title ? require('../assets/img/login/user.png') : require('../assets/img/icon-creater-grey.png')" alt="">
+                  <img class="icon-seat"  :src="room.title ? require('../assets/img/login/user.png') : require('../assets/img/login/user-grey.png')" alt="">
                   <span class="seats-num created">{{room.stuInfo ? room.stuInfo.name:'暂无'}}</span>
                 </span>
                 <p class="title">主题：{{room.title || '未命名'}}</p>
