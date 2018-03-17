@@ -13,17 +13,30 @@ module.exports.getRoomLists = async (params) => {
     }).populate([{
         path: 'roomInfo ',
         match: { build: params.build, floor: params.floor },
-        select: 'number build floor'
+        select: 'number build floor allSeats'
     }, {
         path: 'stuInfo',
         select: 'name stuId -_id'
     }]);
 
-    // 过滤不符合的自习室，同时按照教室号排序
+    // 过滤不符合的自习室，同时按照教室号排序,这是已经有的自习室
     roomIdLists = roomIdLists.filter((value) => {
         return value.roomInfo != null;
     }).sort(compare('roomInfo', 'number'));
-    return roomIdLists;
+
+    // 查询出对应的固定自习室信息
+    let roomInfoLists = await RoomInfo.find({ build: params.build, floor: params.floor });
+
+    let resultLists=[];//存放结果
+
+    roomInfoLists.map((roomInfo, index) => {
+        if(roomIdLists.length && roomIdLists[0].roomInfo.number== roomInfo.number){
+            resultLists.push(roomIdLists.shift());
+        }else{
+            resultLists.push({roomInfo});
+        }
+    })
+    return resultLists;
 }
 
 // 创建自习室
@@ -41,7 +54,6 @@ module.exports.creatRoom = async (params) => {
         if (!noBlank) {
             // 查询创建者信息
             let stuInfo = await Student.findOne({ stuId: params.stuId });
-            console.log(stuInfo);
             // id绑定到hasroom上
             params['roomInfo'] = hasRoom._id;
             params['seatsLists'] = [];

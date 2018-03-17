@@ -1,15 +1,15 @@
 <template>
 <!-- 已经选择的课程 -->
   <div class="isselected">
-    <div class="list-con" v-for="item in tableData" :key="item">
+    <div class="list-con" v-for="(item,index) in tableData" :key="index">
       <div class="list-left">
         <div class="list-left-up">
-          <span class="list-date">{{item.date}}</span>
-          <span class="list-build">{{item.build}}{{item.roomId}}</span>
-          <span class="list-title">{{item.title}}</span>
+          <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span>
+          <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span>
+          <span class="list-title">{{item.roomRecord.title}}</span>
         </div>
         <div class="list-left-down">
-          <span>简介：{{item.content}}</span>
+          <span>简介：{{item.roomRecord.action}}</span>
         </div>
       </div>
       <div class="list-right">
@@ -22,39 +22,29 @@
 
 <script>
 export default {
+  props: {
+    hasRoomLists: {
+      type: Array
+    }
+  },
   data() {
     return {
-      tableData: [
-        {
-          date: "2018-05-02",
-          build: "一公教C座",
-          roomId: "101",
-          title: "英语复习",
-          created: "死学霸",
-          allNum: 60,
-          hasNum: 10,
-          content: "敢不敢和我决一死战，学到最晚"
-        },
-        {
-          date: "2018-05-04",
-          build: "一公教C座",
-          roomId: "101",
-          title: "英语复习",
-          created: "死学霸",
-          allNum: 60,
-          hasNum: 10
-        },
-        {
-          date: "2018-05-06",
-          build: "一公教C座",
-          roomId: "101",
-          title: "英语复习",
-          created: "死学霸",
-          allNum: 60,
-          hasNum: 10
-        }
-      ]
+      tableData: []
     };
+  },
+  watch: {
+    hasRoomLists: function(n, o) {
+      this.tableData = n;
+    }
+  },
+  filters: {
+    roomNumber(room) {
+      if (room.roomInfo.number < 10) {
+        return room.roomInfo.floor + "0" + room.roomInfo.number;
+      } else {
+        return room.roomInfo.floor + "" + room.roomInfo.number;
+      }
+    }
   },
   methods: {
     toDetail(room) {
@@ -99,7 +89,7 @@ export default {
           margin-left: 50px;
         }
       }
-      .list-left-down{
+      .list-left-down {
         height: 25px;
         width: 100%;
         font-size: 16px;
@@ -126,11 +116,10 @@ export default {
           opacity: 0.8;
         }
       }
-      .del{
+      .del {
         background: $red;
         width: 60px;
       }
-
     }
   }
 }

@@ -4,19 +4,19 @@ var mongoose = require('mongoose');
 var roomSchema = new mongoose.Schema({
     number: {
         type: Number,
-        required:true
+        required: true
     },
     build: {
         type: String,
-        required:true
+        required: true
     },
     floor: {
         type: Number,
-        required:true
+        required: true
     },
     allSeats: {
         type: Number,
-        required:true
+        required: true
     }
 });
 mongoose.model('room', roomSchema);

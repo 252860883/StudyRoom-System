@@ -6,12 +6,25 @@ const Student = mongoose.model('student');
  */
 
 // 登陆
-module.exports.login = async function (params) {
+module.exports.login = async function (params,ctx) {
     let docs = await Student.find({
         stuId: params.stuId,
         password: params.password
-    });
-    return docs.length ? true : false;
+    },'-password');
+    console.log(docs);
+    if (docs.length) {
+        let n = ctx.session.views || 0;
+        ctx.session.views = ++n;
+        return {
+            sucess: true,
+            msg: '登陆成功'
+        }
+    } else {
+        return {
+            sucess: false,
+            msg: '账号或密码错误'
+        }
+    }
 }
 
 // 注册
@@ -26,7 +39,7 @@ module.exports.register = async function (params) {
         } else {
             return false;
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
 

@@ -1,4 +1,5 @@
 <template>
+
 <div class="userShow">
   <img @click="userInfoClick" class="rename" :src="require('../assets/img/rename.png')">
   <div class="photo"></div>
@@ -7,23 +8,31 @@
   <div class="award-con"> 
     <img :src="require('../assets/img/award.png')">
     <div class="award-text">
-      <span class="award-title">自习室达人</span>
-      <span class="award-num">您已经累计20课时自习</span>
+      <span class="award-title">自习室小白</span>
+      <span class="award-num">您已经累计{{user.hasRoomLists.length}}课时自习</span>
     </div>
   </div>
 </div>
+
 </template>
 <script>
 export default {
+  props:{
+    userdata:{
+      type:Object
+    }
+  },
   data() {
     return {
       user: {
-        name: "杜小辉",
-        photo: "",
-        school: "天津工业大学",
-        major: "软件工程"
+        hasRoomLists:[]
       }
     };
+  },
+  watch:{
+    userdata:function(n,o){
+      this.user=n;
+    }
   },
   methods: {
     userInfoClick() {
