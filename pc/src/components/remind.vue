@@ -58,19 +58,19 @@ export default {
   methods: {
     agree(room){
       console.log(room)
-      // this.$http
-      //   .get("/agree", {
-      //     params: {
-      //       roomId: room.roomRecord._id,
-      //       stuId: 1411651103,
-      //       remindId:room,
-      //       addId:room,
-      //       seatIndex:room
-      //     }
-      //   })
-      //   .then(res => {
-      //     this.$emit("updateData");
-      //   });
+      this.$http
+        .get("/agree", {
+          params: {
+            roomId: room.roomRecord._id,
+            stuId: 1411651103,
+            remindId:room,
+            addId:room,
+            seatIndex:room.stuInfo.stuId
+          }
+        })
+        .then(res => {
+          this.$emit("updateData");
+        });
     },
     disagree(room){
 
