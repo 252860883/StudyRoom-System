@@ -13,8 +13,8 @@
         </div>
       </div>
       <div class="list-right">
-        <a @click="toDetail(item)">同意</a>
-        <a class="del" @click="toDetail(item)">拒绝</a>
+        <a @click="agree(item)">同意</a>
+        <a class="del" @click="disagree(item)">拒绝</a>
       </div>
     </div>
   </div>
@@ -56,8 +56,24 @@ export default {
     }
   },
   methods: {
-    toDetail(room) {
-      this.$router.push({ path: "/roomdetail", query: { room: room } });
+    agree(room){
+      console.log(room)
+      // this.$http
+      //   .get("/agree", {
+      //     params: {
+      //       roomId: room.roomRecord._id,
+      //       stuId: 1411651103,
+      //       remindId:room,
+      //       addId:room,
+      //       seatIndex:room
+      //     }
+      //   })
+      //   .then(res => {
+      //     this.$emit("updateData");
+      //   });
+    },
+    disagree(room){
+
     }
   }
 };

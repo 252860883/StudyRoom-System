@@ -14,7 +14,7 @@
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
-        <a class="del" @click="toDetail(item)">删除</a>
+        <a class="del" @click="deleteRoom(item)">删除</a>
       </div>
     </div>
   </div>
@@ -49,6 +49,18 @@ export default {
   methods: {
     toDetail(room) {
       this.$router.push({ path: "/roomdetail", query: { room: room } });
+    },
+    deleteRoom(room) {
+      this.$http
+        .get("/delCollectList", {
+          params: {
+            roomId: room.roomRecord._id,
+            stuId: 1411651103
+          }
+        })
+        .then(res => {
+          this.$emit("updateData");
+        });
     }
   }
 };

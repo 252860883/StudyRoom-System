@@ -8,14 +8,14 @@
             <el-tab-pane label="自习提醒" name="first">
               <class-clock ></class-clock>
             </el-tab-pane>
-            <el-tab-pane label="已预约" name="second">
-                <is-select-page :hasRoomLists='userData.hasRoomLists'></is-select-page>
+            <el-tab-pane label="已预约" name="second" >
+                <is-select-page :hasRoomLists='userData.hasRoomLists' @updateData="getUserData"></is-select-page>
             </el-tab-pane>
             <el-tab-pane label="待审核" name="third">
               <is-review :reviewRoomLists="userData.reviewRoomLists"></is-review>
             </el-tab-pane>
             <el-tab-pane label="收藏夹" name="forth">
-                <is-collect-page :hasCollectLists='userData.collectRoomLists'></is-collect-page>
+                <is-collect-page :hasCollectLists='userData.collectRoomLists' @updateData="getUserData"></is-collect-page>
             </el-tab-pane>
             <el-tab-pane label="申请消息" name="fifth">
               <remind :remindLists="userData.remind"></remind>
@@ -26,7 +26,7 @@
 </template>
 <script>
 import isSelectPage from "../components/isSeleted";
-import isCollectPage from '../components/isSave';
+import isCollectPage from "../components/isSave";
 import userShow from "../components/userShow";
 import isReview from "../components/isreview";
 import classClock from "../components/classClock";
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       activeName: "second",
-      userData:{}
+      userData: {}
     };
   },
   components: {
@@ -49,15 +49,7 @@ export default {
   created() {
     let self = this;
     this.activeName = this.$route.query.index;
-    this.$http
-      .get("/user", {
-        params: {
-          stuId: 1411651103
-        }
-      })
-      .then(res => {
-        self.userData = res.data.data;
-      });
+    this.getUserData();
   },
   watch: {
     "$route.query.index": function(val) {
@@ -67,6 +59,18 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    getUserData() {
+      let self=this;
+      this.$http
+        .get("/user", {
+          params: {
+            stuId: 1411651103
+          }
+        })
+        .then(res => {
+          self.userData = res.data.data;
+        });
     }
   }
 };
