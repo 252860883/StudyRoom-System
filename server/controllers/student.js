@@ -6,11 +6,11 @@ const Student = mongoose.model('student');
  */
 
 // 登陆
-module.exports.login = async function (params,ctx) {
+module.exports.login = async function (params, ctx) {
     let docs = await Student.find({
         stuId: params.stuId,
         password: params.password
-    },'-password');
+    }, '-password');
     console.log(docs);
     if (docs.length) {
         let n = ctx.session.views || 0;
@@ -62,7 +62,7 @@ module.exports.modify = async function (params) {
 module.exports.getUser = async (params) => {
     let getInfo = await Student.findOne({ stuId: params.stuId })
         .populate([{
-            path: 'hasRoomLists.roomRecord collectRoomLists.roomRecord ',
+            path: 'hasRoomLists.roomRecord',
             model: 'hasroom',
             populate: ({
                 path: 'roomInfo',
@@ -78,7 +78,51 @@ module.exports.getUser = async (params) => {
             populate: {
                 path: 'roomInfo'
             }
+        }, {
+            path: 'hasRoomLists.roomRecord',
+            populate: ({
+                path: 'stuInfo',
+                select: 'stuId -_id'
+            })
+        }, {
+            path: "reviewRoomLists.roomRecord",
+            populate: ([
+                {
+                    path: 'stuInfo',
+                    select: 'stuId -_id'
+                }, {
+                    path: 'roomInfo',
+                    select: '-stuInfo'
+                }
+            ])
+
+        }, {
+            path: "collectRoomLists.roomRecord",
+            populate: ([
+                {
+                    path: 'stuInfo',
+                    select: 'stuId -_id'
+                }, {
+                    path: 'roomInfo',
+                    select: '-stuInfo'
+                }
+            ])
         }]);
+
+    let hasRoomLists = getInfo.hasRoomLists.map(item => {
+        console.log(item.seatIndex);
+        // if (item.stuId == params.stuId) {
+        // item['isCreater'] = true;
+        item.isCreater = true;
+        // } else {
+        // item['isCreater'] = false;
+        // }
+        return item;
+    })
+    console.log(hasRoomLists);
+    delete getInfo.hasRoomLists;
+
+    // console.log(getInfo.hasRoomLists)
 
     return getInfo;
 }

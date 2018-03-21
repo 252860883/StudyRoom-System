@@ -68,7 +68,8 @@ module.exports.creatRoom = async (params) => {
             // 用户信息记录写入加入自习列表
             let newHasroom = {
                 roomRecord: roomrecord._id,
-                seatIndex: params.seatIndex
+                seatIndex: params.seatIndex,
+                isCreater:true
             }
             let a = await Student.update({ stuId: params.stuId }, { $push: { hasRoomLists: newHasroom } });
 
@@ -102,7 +103,7 @@ module.exports.addRoom = async (params) => {
         if (isRemind) return { sucess: false, msg: '已经提交申请，请耐心等待管理员审核通过' }
 
         // 没有问题，写入管理员remind，用户添加到review中
-        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id } } });
+        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id,seatIndex: params.seatIndex} } });
         await Student.update({ stuId: params.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
         return {
             sucess: true,
@@ -206,9 +207,14 @@ module.exports.disagree = async (params) => {
 }
 
 // 删除已经加入的自习室
+// 这里有问题，如果是管理员删除自习室怎么办呢？直接删除掉自习室？还是说不可以删掉？
+// 应该添加一个自习者字段
 module.exports.deleteHasRoom = async (params) => {
     // 删除用户的 has字段
     try {
+        await Room.find({
+            roomId:params.roomId
+        })
         // 删除用户has列表的信息
         await Student.update(
             { stuId: params.stuId },
@@ -228,7 +234,6 @@ module.exports.deleteHasRoom = async (params) => {
         console.log(error);
     }
 
-    // 修改 自习室的座位情况
 }
 
 // 删除收藏的自习室

@@ -14,7 +14,8 @@
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
-        <a class="del" @click="deleteRoom(item)">删除</a>
+        <!-- 管理员不能删除自习室 -->
+        <a class="del" v-show="!item.isCreater" @click="deleteRoom(item)">删除</a>
       </div>
     </div>
   </div>
