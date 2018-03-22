@@ -3,6 +3,7 @@ const Room = mongoose.model('hasroom');
 const RoomInfo = mongoose.model('room');
 const Student = mongoose.model('student');
 let student = require('./student');
+const stu = require('./student');
 
 //  获取自习室列表
 module.exports.getRoomLists = async (params) => {
@@ -27,13 +28,13 @@ module.exports.getRoomLists = async (params) => {
     // 查询出对应的固定自习室信息
     let roomInfoLists = await RoomInfo.find({ build: params.build, floor: params.floor });
 
-    let resultLists=[];//存放结果
+    let resultLists = [];//存放结果
 
     roomInfoLists.map((roomInfo, index) => {
-        if(roomIdLists.length && roomIdLists[0].roomInfo.number== roomInfo.number){
+        if (roomIdLists.length && roomIdLists[0].roomInfo.number == roomInfo.number) {
             resultLists.push(roomIdLists.shift());
-        }else{
-            resultLists.push({roomInfo});
+        } else {
+            resultLists.push({ roomInfo });
         }
     })
     return resultLists;
@@ -69,7 +70,7 @@ module.exports.creatRoom = async (params) => {
             let newHasroom = {
                 roomRecord: roomrecord._id,
                 seatIndex: params.seatIndex,
-                isCreater:true
+                isCreater: true
             }
             let a = await Student.update({ stuId: params.stuId }, { $push: { hasRoomLists: newHasroom } });
 
@@ -103,7 +104,7 @@ module.exports.addRoom = async (params) => {
         if (isRemind) return { sucess: false, msg: '已经提交申请，请耐心等待管理员审核通过' }
 
         // 没有问题，写入管理员remind，用户添加到review中
-        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id,seatIndex: params.seatIndex} } });
+        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id, seatIndex: params.seatIndex } } });
         await Student.update({ stuId: params.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
         return {
             sucess: true,
@@ -213,7 +214,7 @@ module.exports.deleteHasRoom = async (params) => {
     // 删除用户的 has字段
     try {
         await Room.find({
-            roomId:params.roomId
+            roomId: params.roomId
         })
         // 删除用户has列表的信息
         await Student.update(
@@ -254,18 +255,56 @@ module.exports.deleteCollectRoom = async (params) => {
 
 }
 
-
 // 获取自习室详情
 module.exports.getRoom = async (params) => {
-    let room = Room.findOne({
-        _id: params.roomId
-    }).populate([{
-        path: 'stuInfo',
-        select:'name stuId -_id' 
-    }, {
-        path: 'roomInfo'
-    }]);
-    return room;
+    console.log(params.isblank);
+
+    if (params.isblank=='true') {
+        let room = await RoomInfo.findOne({
+            _id:params.roomId
+        })
+        let roomInfo={
+            roomInfo:room
+        }
+        return roomInfo;
+
+    } else {
+        let room = await Room.findOne({
+            _id: params.roomId
+        }).populate([{
+            path: 'stuInfo',
+            select: 'name stuId -_id'
+        }, {
+            path: 'roomInfo'
+        }]).lean();
+
+        let student = await stu.getUser(params);
+
+        // 判断用户是否已经 加入/收藏/审核中..
+        student.hasRoomLists.map(item => {
+            if (item.roomRecord._id == params.roomId) {
+                room['isHas'] = true;
+                room['ownSeat'] = item.seatIndex;
+            }
+        })
+        student.collectRoomLists.map(item => {
+            if (item.roomRecord._id == params.roomId) {
+                room['isCollect'] = true;
+
+            }
+        })
+        student.reviewRoomLists.map(item => {
+            if (item.roomRecord._id == params.roomId) {
+                room['isReview'] = true;
+            }
+        })
+        // 添加自习室创建者
+        room['createdStuId'] = room.stuInfo.stuId;
+        room['createName'] = room.stuInfo.name;
+        delete room.stuInfo;
+        return room;
+    }
+
 }
 
 

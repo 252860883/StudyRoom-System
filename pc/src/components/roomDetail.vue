@@ -5,31 +5,33 @@
       <div class="detail-con">
         <div class="title">{{room.roomInfo.build}}{{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}</div>
         <div>
-          <span>创建者：</span><span>{{room.created ||'暂无'}}</span>
-          <span style="margin-left:20px;">简介：{{room.content || '暂无'}}</span> 
+          <span>创建者：</span><span>{{room.createName ||'暂无'}}</span>
+          <span style="margin-left:20px;">简介：{{room.action || '暂无'}}</span> 
         </div>
         <!-- 按钮区 -->
         <div class="btn-group">
           <div class="addClass">
-            <div class="yes">
+            <div class="yes" v-if="room.title && !room.isHas">
               <img :src="require('../assets/img/btn-addClass.png')" alt="">
-              <p>加入我们</p>
+              <p>加入自习</p>
             </div>
-            <div class="no">
+            <div class="no" v-else>
               <img :src="require('../assets/img/btn-addClass-no.png')" alt="">
               <p>加入自习</p>
             </div>
           </div>
+          <!-- 这里需要一个灰色的状态 -->
           <div class="create">
             <img :src="require('../assets/img/btn-save.png')" alt="">
             <p>加入收藏</p>
           </div>
+
           <div class="createClass">
-            <div class="create-yes">
+            <div class="create-yes" v-if="!room.title">
               <img :src="require('../assets/img/btn-addCreate.png')" alt="">
               <p>成为管理员</p>
             </div>
-            <div class="create-no"> 
+            <div class="create-no" v-else> 
               <img :src="require('../assets/img/btn-addCreate-no.png')" alt="">
               <p>成为管理员</p>
             </div>
@@ -37,24 +39,29 @@
         </div>
       </div>
     </div> 
+
     <!-- 座位 -->
-    <!-- <div class="seats">
+    <div class="seats">
       <div class="title">
-        <img :src="require('../assets/img/seat-on.png')" alt="">
+        <img :src="require('../assets/img/login/seat-on.png')" alt="">
         <span>已选座位</span>
-        <img :src="require('../assets/img/seat-off.png')" alt="">
+        <img :src="require('../assets/img/login/seat-off.png')" alt="">
         <span>可选座位</span>
       </div>
       <div class="desk">讲台</div>
       <div class="seats-border">
-        <div class="seats-one" v-for="i in room.hasNum" :key="i">
-          <img :src="require('../assets/img/seat-on.png')" alt="">
+        
+        <div class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
+
+          <img v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
         </div>
-        <div class="seats-one" v-for="i in (room.allNum-room.hasNum)" :key="i">
-          <img :src="require('../assets/img/seat-off.png')" alt="">
-        </div>
+
       </div>
-    </div> -->
+    </div>
+
+
   </div>
 </template>
 
@@ -62,34 +69,35 @@
 export default {
   data() {
     return {
+      istouch: false,
       room: {
+        roomInfo: ""
       }
     };
   },
   created() {
     let self = this;
-    console.log('ccc')
+    console.log(!this.$route.query.roomId);
     // 如果自习室为空
-    if (this.$route.query.empty) {
-    } else {
-      // 自习室已经被创建
-      this.$http
-        .get("/getRoom", {
-          params: {
-            roomId: this.$route.query.roomId,
-            stuId: 1411651103
-          }
-        })
-        .then(res => {
-          console.log(res.data);
-          self.room = res.data;
-        });
-    }
+
+    this.$http
+      .get("/getRoom", {
+        params: {
+          roomId: this.$route.query.roomId,
+          stuId: 1411651103,
+          isblank: this.$route.query.empty
+        }
+      })
+      .then(res => {
+        self.room = res.data;
+        console.log(self.room.roomInfo.allSeats);
+      });
   },
-  filters:{
-    numberJudge(num){
-      if(num<10){
-        return '0'+num;
+
+  filters: {
+    numberJudge(num) {
+      if (num < 10) {
+        return "0" + num;
       }
     }
   },

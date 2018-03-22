@@ -107,23 +107,7 @@ module.exports.getUser = async (params) => {
                     select: '-stuInfo'
                 }
             ])
-        }]);
-
-    let hasRoomLists = getInfo.hasRoomLists.map(item => {
-        console.log(item.seatIndex);
-        // if (item.stuId == params.stuId) {
-        // item['isCreater'] = true;
-        item.isCreater = true;
-        // } else {
-        // item['isCreater'] = false;
-        // }
-        return item;
-    })
-    console.log(hasRoomLists);
-    delete getInfo.hasRoomLists;
-
-    // console.log(getInfo.hasRoomLists)
-
+        }]).lean();
     return getInfo;
 }
 

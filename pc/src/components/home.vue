@@ -92,7 +92,7 @@ export default {
       if (room.title) {
         this.$router.push({ path: "/roomdetail", query: { roomId: room._id ,empty:false} });
       } else {
-        this.$router.push({ path: "/roomdetail", query: { roomInfoId: room.roomInfo._id,empty:true} });
+        this.$router.push({ path: "/roomdetail", query: { roomId: room.roomInfo._id,empty:true} });
       }
     },
     getRoomLists() {
