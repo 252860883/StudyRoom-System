@@ -151,31 +151,42 @@ module.exports.saveRoom = async (params) => {
 
 // 审核通过加入自习室
 module.exports.agree = async (params) => {
-    // 删除管理员的 remind信息
-    await Student.update(
-        { stuId: params.stuId },
-        {
-            $pull: { remind: { _id: params.remindId } }
-        });
-    // 添加信息到加入者的 hasRoom，移除其review信息
-    await Student.update(
-        { stuId: params.addId },
-        { $pull: { reviewRoomLists: { roomRecord: params.roomId } } }
-    );
-    await Student.update(
-        { stuId: params.addId },
-        { $push: { hasRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } }
-    );
+    try {
+        // 删除管理员的 remind信息
+        await Student.update(
+            { stuId: params.stuId, },
+            {
+                $pull: { remind: { _id: params.remindId } }
+            });
+        // 添加信息到加入者的 hasRoom，移除其review信息
+        await Student.update(
+            { stuId: params.addId },
+            { $pull: { reviewRoomLists: { roomRecord: params.roomId } } }
+        );
+        let isPush = await Student.find(
+            { stuId: params.addId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } }
+        )
+        // console.log(!isPush.length)
+        if (!isPush.length) {
+            await Student.update(
+                { stuId: params.addId },
+                { $push: { hasRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } },
+            );
+        }
 
-    // 更新自习室的信息
-    await Room.update(
-        { _id: params.roomId },
-        { $push: { seatsLists: params.seatIndex } }
-    )
-    return {
-        sucess: true,
-        msg: '审核完成'
+        // 更新自习室的信息
+        await Room.update(
+            { _id: params.roomId },
+            { $push: { seatsLists: params.seatIndex } }
+        )
+        return {
+            sucess: true,
+            msg: '审核完成'
+        }
+    } catch (error) {
+        throw error;
     }
+
 }
 
 // 审核不通过
@@ -257,14 +268,14 @@ module.exports.deleteCollectRoom = async (params) => {
 
 // 获取自习室详情
 module.exports.getRoom = async (params) => {
-    console.log(params.isblank);
+    // console.log(params.isblank);
 
-    if (params.isblank=='true') {
+    if (params.isblank == 'true') {
         let room = await RoomInfo.findOne({
-            _id:params.roomId
+            _id: params.roomId
         })
-        let roomInfo={
-            roomInfo:room
+        let roomInfo = {
+            roomInfo: room
         }
         return roomInfo;
 

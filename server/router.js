@@ -92,13 +92,13 @@ router.get('/addRoom', async (ctx, next) => {
 })
 
 // 同意加入自习
-router.post('/agree', async (ctx) => {
+router.get('/agree', async (ctx) => {
     let callback = room.agree(ctx.query);
     ctx.body = callback;
 })
 
 // 拒绝加入自习
-router.post('/disagree', async (ctx) => {
+router.get('/disagree', async (ctx) => {
     let callback = await room.disagree(ctx.query);
     ctx.body = callback;
 })

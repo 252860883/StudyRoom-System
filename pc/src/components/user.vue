@@ -23,7 +23,7 @@
                 <is-collect-page :hasCollectLists='userData.collectRoomLists' @updateData="getUserData"></is-collect-page>
             </el-tab-pane>
             <el-tab-pane label="申请消息" name="fifth">
-              <remind :remindLists="userData.remind"></remind>
+              <remind :remindLists="userData.remind" @updateData="getUserData"></remind>
             </el-tab-pane>
         </el-tabs>
       </div>

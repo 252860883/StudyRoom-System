@@ -5,8 +5,14 @@
       <div class="list-left">
         <div class="list-left-up">
           <span class="list-date">{{item.roomInfo.moon}}月{{item.roomInfo.day}}日</span>
-          <span class="list-build">{{item.roomInfo.roomInfo.build}} {{item.roomInfo | roomNumber}}</span>
+          <span class="list-build">{{item.roomInfo.build}} {{item.roomInfo | roomNumber}}</span>
           <span class="list-title">{{item.roomInfo.title}}</span>
+          <br>
+          <!-- <span>{{item.stuInfo.name}}</span> -->
+          <span>{{item.stuId}}</span>
+          <span>{{item.school}}</span>
+          <span>{{item.major}}</span>
+          <span>{{item.name}}</span>
         </div>
         <div class="list-left-down">
           <!-- <span>简介：{{item.roomRecord.action}}</span> -->
@@ -33,7 +39,7 @@ export default {
         {
           roomInfo: {
             roomInfo: {
-              build:"" 
+              build: ""
             }
           }
         }
@@ -48,32 +54,45 @@ export default {
   },
   filters: {
     roomNumber(room) {
-      if (room.roomInfo.number < 10) {
-        return room.roomInfo.floor + "0" + room.roomInfo.number;
+      console.log(room);
+      if (room.number < 10) {
+        return room.floor + "0" + room.number;
       } else {
-        return room.roomInfo.floor + "" + room.roomInfo.number;
+        return room.floor + "" + room.number;
       }
     }
   },
   methods: {
-    agree(room){
-      console.log(room)
+    agree(room) {
+      console.log(room);
+
       this.$http
         .get("/agree", {
           params: {
-            roomId: room.roomRecord._id,
+            roomId: room.roomInfo._id,
             stuId: 1411651103,
-            remindId:room,
-            addId:room,
-            seatIndex:room.stuInfo.stuId
+            remindId: room._id,
+            addId: room.stuId,
+            seatIndex: room.seatIndex
           }
         })
         .then(res => {
           this.$emit("updateData");
         });
     },
-    disagree(room){
-
+    disagree(room) {
+      this.$http
+        .get("/disagree", {
+          params: {
+            roomId: room.roomInfo._id,
+            stuId: 1411651103,
+            remindId: room._id,
+            addId: room.stuId
+          }
+        })
+        .then(res => {
+          this.$emit("updateData");
+        });
     }
   }
 };
@@ -87,7 +106,7 @@ export default {
   box-sizing: border-box;
   .list-con {
     width: 100%;
-    height: 100px;
+    height: 140px;
     border: 1px solid $blank;
     border-radius: 5px;
     background: #fff;

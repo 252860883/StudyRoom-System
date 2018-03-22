@@ -70,7 +70,7 @@ module.exports.getUser = async (params) => {
             })
         }, {
             path: 'remind.stuInfo',
-            select: 'stuId name '
+            select: 'stuId name major school'
 
         }, {
             path: 'remind.roomInfo',
@@ -107,7 +107,27 @@ module.exports.getUser = async (params) => {
                     select: '-stuInfo'
                 }
             ])
-        }]).lean();
+        }])
+    .lean();
+    
+    let remind=getInfo.remind.map(item=>{
+        item.roomInfo['roomId']=item.roomInfo.roomInfo._id;
+        delete item.roomInfo.roomInfo._id;
+        delete item.stuInfo._id;
+        for(var key in item.roomInfo.roomInfo ){
+            item.roomInfo[key]=item.roomInfo.roomInfo[key];
+        }
+        for(let key in item.stuInfo){
+            item[key]=item.stuInfo[key];
+        }
+        delete item.roomInfo.roomInfo
+        delete item.stuInfo
+        return item;
+    })
+    console.log(remind);
+    delete getInfo.remind
+    getInfo['remind']=remind;
+    
     return getInfo;
 }
 
