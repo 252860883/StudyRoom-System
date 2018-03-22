@@ -261,9 +261,9 @@ module.exports.getRoom = async (params) => {
         _id: params.roomId
     }).populate([{
         path: 'stuInfo',
+        select:'name stuId -_id' 
     }, {
-        path: 'roomInfo',
-        select: 'name stuId'
+        path: 'roomInfo'
     }]);
     return room;
 }

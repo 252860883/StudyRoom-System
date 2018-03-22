@@ -85,12 +85,18 @@ export default {
     }
   },
   methods: {
+    // 点击进入自习室详情
     toDetail(room) {
-      this.$router.push({ path: "/roomdetail", query: { room: room } });
+      console.log(room);
+      // 如果是已经创建的自习室
+      if (room.title) {
+        this.$router.push({ path: "/roomdetail", query: { roomId: room._id ,empty:false} });
+      } else {
+        this.$router.push({ path: "/roomdetail", query: { roomInfoId: room.roomInfo._id,empty:true} });
+      }
     },
     getRoomLists() {
       let self = this;
-      console.log(this.buildName);
       this.$http
         .get("/getRoomLists", {
           params: {
@@ -104,8 +110,7 @@ export default {
           self.roomLists = res.data.data;
           console.log(self.roomLists);
         });
-    },
-    
+    }
   }
 };
 </script>

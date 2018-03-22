@@ -3,7 +3,7 @@
    <!-- 信息 -->
     <div class="detail">
       <div class="detail-con">
-        <div class="title">{{room.build}}{{room.roomId}}</div>
+        <div class="title">{{room.roomInfo.build}}{{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}</div>
         <div>
           <span>创建者：</span><span>{{room.created ||'暂无'}}</span>
           <span style="margin-left:20px;">简介：{{room.content || '暂无'}}</span> 
@@ -11,11 +11,11 @@
         <!-- 按钮区 -->
         <div class="btn-group">
           <div class="addClass">
-            <div class="yes" v-if="room.created">
+            <div class="yes">
               <img :src="require('../assets/img/btn-addClass.png')" alt="">
               <p>加入我们</p>
             </div>
-            <div class="no" v-if="!room.created">
+            <div class="no">
               <img :src="require('../assets/img/btn-addClass-no.png')" alt="">
               <p>加入自习</p>
             </div>
@@ -25,21 +25,20 @@
             <p>加入收藏</p>
           </div>
           <div class="createClass">
-            <div class="create-yes" v-if="!room.created">
+            <div class="create-yes">
               <img :src="require('../assets/img/btn-addCreate.png')" alt="">
               <p>成为管理员</p>
             </div>
-            <div class="create-no" v-if="room.created"> 
+            <div class="create-no"> 
               <img :src="require('../assets/img/btn-addCreate-no.png')" alt="">
               <p>成为管理员</p>
             </div>
           </div>
         </div>
-    
       </div>
-    </div>
+    </div> 
     <!-- 座位 -->
-    <div class="seats">
+    <!-- <div class="seats">
       <div class="title">
         <img :src="require('../assets/img/seat-on.png')" alt="">
         <span>已选座位</span>
@@ -55,7 +54,7 @@
           <img :src="require('../assets/img/seat-off.png')" alt="">
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -63,12 +62,36 @@
 export default {
   data() {
     return {
-      room: {}
+      room: {
+      }
     };
   },
   created() {
-    //这里刷新数据就会消失
-    this.room = this.$route.query.room;
+    let self = this;
+    console.log('ccc')
+    // 如果自习室为空
+    if (this.$route.query.empty) {
+    } else {
+      // 自习室已经被创建
+      this.$http
+        .get("/getRoom", {
+          params: {
+            roomId: this.$route.query.roomId,
+            stuId: 1411651103
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+          self.room = res.data;
+        });
+    }
+  },
+  filters:{
+    numberJudge(num){
+      if(num<10){
+        return '0'+num;
+      }
+    }
   },
   components: {},
   mounted() {},

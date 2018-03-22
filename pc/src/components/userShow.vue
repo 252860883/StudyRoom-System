@@ -17,26 +17,26 @@
 </template>
 <script>
 export default {
-  props:{
-    userdata:{
-      type:Object
+  props: {
+    userdata: {
+      type: Object
     }
   },
   data() {
     return {
       user: {
-        hasRoomLists:[]
+        hasRoomLists: []
       }
     };
   },
-  watch:{
-    userdata:function(n,o){
-      this.user=n;
+  watch: {
+    userdata: function(n, o) {
+      this.user = n;
     }
   },
   methods: {
     userInfoClick() {
-      this.$router.push({path:'/userinfo'})
+      this.$router.push({ path: "/userinfo" });
     }
   }
 };
@@ -46,11 +46,14 @@ export default {
 .userShow {
   width: 100%;
   margin: 0 auto;
+  padding: 20px 0;
   position: relative;
+  background: rgba($color: #eee, $alpha: 0.5);
+  border-radius: 5px;
   .rename {
     position: absolute;
     width: 20px;
-    top: -10px;
+    top: 10px;
     right: 8px;
     cursor: pointer;
     &:hover {

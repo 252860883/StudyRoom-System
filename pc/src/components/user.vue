@@ -2,6 +2,11 @@
   <div class="user">
       <div class="user-left">
         <user-show :userdata='userData'></user-show>
+        <!-- 导航 -->
+        <div class="nav">
+          <p>个人中心</p>
+          <p>退出账户</p>
+        </div>
       </div>
       <div class="user-right">
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -61,7 +66,7 @@ export default {
       console.log(tab, event);
     },
     getUserData() {
-      let self=this;
+      let self = this;
       this.$http
         .get("/user", {
           params: {
@@ -82,15 +87,36 @@ export default {
   margin: 0 auto;
   overflow: hidden;
   .user-left {
-    width: 280px;
-    height: 300px;
-    background: rgba($color: #eee, $alpha: 0.5);
+    width: 260px;
+    // height: 300px;
+    // background: rgba($color: #eee, $alpha: 0.5);
     border-radius: 5px;
     margin: 10px;
     float: left;
+
+    .nav {
+      background: rgba($color: #eee, $alpha: 0.5);
+      border-radius: 5px;
+      margin-top: 10px;
+      p{
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        color: $blue;
+        border-bottom: 1px solid $blank;
+        cursor: pointer;
+        &:last-child{
+          border: 0;
+        }
+        &:hover{
+          opacity: 0.8;
+          // color: $orange;
+        }
+      }
+    }
   }
   .user-right {
-    width: 780px;
+    width: 800px;
     // height: 500px;
     border-radius: 5px;
     margin: 10px;
