@@ -48,7 +48,11 @@ export default {
   },
   methods: {
     toDetail(room) {
-      this.$router.push({ path: "/roomdetail", query: { room: room } });
+      // this.$router.push({ path: "/roomdetail", query: { room: room } });
+      this.$router.push({
+        path: "/roomdetail",
+        query: { roomId: room.roomRecord._id, empty: false }
+      });
     },
     deleteRoom(room) {
       this.$http

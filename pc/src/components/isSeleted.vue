@@ -52,7 +52,7 @@ export default {
   methods: {
     // 查看详情
     toDetail(room) {
-      console.log(room);
+      // console.log(room);
       this.$router.push({
         path: "/roomdetail",
         query: { roomId: room.roomRecord._id, empty: false }

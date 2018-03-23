@@ -20,7 +20,7 @@
               <p>加入自习</p>
             </div>
           </div>
-          <div class="create">
+          <div v-if="!room.isCollect" class="create" @click="collectClick">
             <img :src="require('../assets/img/btn-save.png')" alt="">
             <p>加入收藏</p>
           </div>
@@ -115,7 +115,7 @@ export default {
         })
         .then(res => {
           console.log(res.data.roomId);
-          self.getRoomDetail(res.data.roomId,false);
+          self.getRoomDetail(res.data.roomId, false);
           self.$router.replace({
             path: "/roomdetail",
             query: {
@@ -138,6 +138,20 @@ export default {
         })
         .then(res => {
           self.room = res.data;
+        });
+    },
+    collectClick() {
+      let self = this;
+      this.$http
+        .get("/addStar", {
+          params: {
+            roomId: this.$route.query.roomId,
+            stuId: 1411651103
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          self.getRoomDetail(this.$route.query.roomId, false);
         });
     }
   }
