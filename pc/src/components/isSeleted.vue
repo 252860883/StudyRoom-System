@@ -3,6 +3,8 @@
   <div class="isselected">
     <div class="list-con" v-for="(item,index) in tableData" :key="index">
       <div class="list-left">
+        <!-- 这里要加一个管理员的标识 -->
+        
         <div class="list-left-up">
           <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span>
           <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span>
@@ -48,21 +50,26 @@ export default {
     }
   },
   methods: {
+    // 查看详情
     toDetail(room) {
-      this.$router.push({ path: "/roomdetail", query: { room: room } });
+      console.log(room);
+      this.$router.push({
+        path: "/roomdetail",
+        query: { roomId: room.roomRecord._id, empty: false }
+      });
     },
     deleteRoom(room) {
-      console.log(room);
+      // console.log(room);
       this.$http
         .get("/delHasList", {
           params: {
-            roomId:room.roomRecord._id,
-            stuId:1411651103,
-            seatIndex:room.seatIndex
+            roomId: room.roomRecord._id,
+            stuId: 1411651103,
+            seatIndex: room.seatIndex
           }
         })
         .then(res => {
-          this.$emit('updateData');
+          this.$emit("updateData");
         });
     }
   }

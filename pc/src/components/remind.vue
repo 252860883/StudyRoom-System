@@ -48,13 +48,12 @@ export default {
   },
   watch: {
     remindLists: function(n, o) {
-      console.log(n);
+      // console.log(n);
       this.tableData = n;
     }
   },
   filters: {
     roomNumber(room) {
-      console.log(room);
       if (room.number < 10) {
         return room.floor + "0" + room.number;
       } else {

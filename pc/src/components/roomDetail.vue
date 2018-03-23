@@ -54,7 +54,7 @@
         <div class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
 
           <img v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
-          <img v-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-else-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
           <img v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
         </div>
 

@@ -124,7 +124,6 @@ module.exports.getUser = async (params) => {
         delete item.stuInfo
         return item;
     })
-    console.log(remind);
     delete getInfo.remind
     getInfo['remind']=remind;
     

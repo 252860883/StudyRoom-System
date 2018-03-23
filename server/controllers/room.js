@@ -318,6 +318,26 @@ module.exports.getRoom = async (params) => {
 
 }
 
+// 获取今天是否有自习安排
+module.exports.getTodayHasRoom = async (params) => {
+    let moon = new Date().getMonth() + 1;
+    let day = new Date().getDate();
+
+    let Rooms = await stu.getUser(params);
+    let todayHasRooms = [];
+    Rooms.hasRoomLists.map(room => {
+        if (room.roomRecord.moon == moon && room.roomRecord.day == day) {
+            for (let key in room.roomRecord.roomInfo) {
+                room.roomRecord[key] = room.roomRecord.roomInfo[key];
+            }
+            delete room.roomRecord.roomInfo;
+            todayHasRooms.push(room);
+        }
+    })
+    // console.log(todayHasRooms);
+    return todayHasRooms;
+}
+
 
 // 按照对象内部排序
 // 第一个是主属性，后面是子属性

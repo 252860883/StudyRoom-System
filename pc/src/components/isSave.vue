@@ -1,5 +1,5 @@
 <template>
-<!-- 已经选择的课程 -->
+<!-- 已经收藏的课程 -->
   <div class="isselected">
     <div class="list-con" v-for="(item,index) in tableData" :key="index">
       <div class="list-left">

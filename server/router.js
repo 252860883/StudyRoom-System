@@ -12,8 +12,8 @@ let router = new Router();
 router.post('/login', async (ctx) => {
 
     let params = ctx.request.body;
-    let docs = await student.login(params,ctx);
-    ctx.body=docs;
+    let docs = await student.login(params, ctx);
+    ctx.body = docs;
 });
 
 // 注册接口
@@ -113,6 +113,11 @@ router.get('/addStar', async (ctx, next) => {
 // 提醒数量
 router.get('/remind', async (ctx) => {
     let callback = await student.remind(ctx.query);
+    ctx.body = callback;
+})
+
+router.get('/getTodayHasRoom', async (ctx) => {
+    let callback = await room.getTodayHasRoom(ctx.query);
     ctx.body = callback;
 })
 

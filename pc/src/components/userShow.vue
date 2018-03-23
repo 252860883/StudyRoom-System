@@ -46,7 +46,7 @@ export default {
 .userShow {
   width: 100%;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 5px 0;
   position: relative;
   background: rgba($color: #eee, $alpha: 0.5);
   border-radius: 5px;
