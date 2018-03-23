@@ -61,6 +61,10 @@ router.get('/user', async (ctx) => {
     };
 })
 
+// 退出登陆
+router.post('/edit',async (ctx)=>{
+
+})
 // 获取自习室列表信息
 router.get('/getRoomLists', async (ctx, next) => {
     let roomLists = await room.getRoomLists(ctx.query);

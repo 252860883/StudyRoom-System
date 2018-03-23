@@ -141,6 +141,11 @@ module.exports.remind = async (params) => {
 
 }
 
+// 退出登陆接口
+module.exports.edit=async (params) =>{
+    // 
+}
+
 
 
 
