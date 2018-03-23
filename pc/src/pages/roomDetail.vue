@@ -20,14 +20,13 @@
               <p>加入自习</p>
             </div>
           </div>
-          <!-- 这里需要一个灰色的状态 -->
           <div class="create">
             <img :src="require('../assets/img/btn-save.png')" alt="">
             <p>加入收藏</p>
           </div>
 
           <div class="createClass">
-            <div class="create-yes" v-if="!room.title">
+            <div class="create-yes" v-if="!room.title" @click="createRoom">
               <img :src="require('../assets/img/btn-addCreate.png')" alt="">
               <p>成为管理员</p>
             </div>
@@ -61,54 +60,91 @@
       </div>
     </div>
 
-
+    <!-- 弹框 -->
+    <!-- <select-seat></select-seat> -->
   </div>
 </template>
 
 <script>
+import selectSeat from "../components/selectSeat.vue";
+
 export default {
   data() {
     return {
       istouch: false,
+      isPrompt: true,
       room: {
         roomInfo: ""
-      }
+      },
+      selectSeat: 20,
+      title: "这是一个标题",
+      action: "这是一个简介"
     };
   },
+
   created() {
-    let self = this;
-    console.log(!this.$route.query.roomId);
-    // 如果自习室为空
-
-    this.$http
-      .get("/getRoom", {
-        params: {
-          roomId: this.$route.query.roomId,
-          stuId: 1411651103,
-          isblank: this.$route.query.empty
-        }
-      })
-      .then(res => {
-        self.room = res.data;
-        console.log(self.room.roomInfo.allSeats);
-      });
+    this.getRoomDetail(this.$route.query.roomId, this.$route.query.empty);
   },
-
+  components: {
+    selectSeat
+  },
   filters: {
     numberJudge(num) {
       if (num < 10) {
         return "0" + num;
+      } else {
+        return num;
       }
     }
   },
-  components: {},
   mounted() {},
-  methods: {}
+  methods: {
+    createRoom() {
+      let self = this;
+      this.$http
+        .get("/addAdmin", {
+          params: {
+            stuId: 1411651103,
+            moon: this.$route.query.moon,
+            day: this.$route.query.day,
+            seatIndex: this.selectSeat,
+            roomId: this.room.roomInfo._id,
+            title: this.title,
+            action: this.action
+          }
+        })
+        .then(res => {
+          console.log(res.data.roomId);
+          self.getRoomDetail(res.data.roomId,false);
+          self.$router.replace({
+            path: "/roomdetail",
+            query: {
+              roomId: res.data.roomId,
+              empty: false
+            }
+          });
+        });
+    },
+    getRoomDetail(roomId, isblank) {
+      let self = this;
+      // 如果自习室为空,还需要知道日期
+      this.$http
+        .get("/getRoom", {
+          params: {
+            roomId: roomId,
+            stuId: 1411651103,
+            isblank: isblank
+          }
+        })
+        .then(res => {
+          self.room = res.data;
+        });
+    }
+  }
 };
 </script>
 <style lang="scss"  scoped>
 @import "../assets/common.scss";
-
 .room-detail {
   width: 1200px;
   margin: 0 auto;
@@ -176,9 +212,13 @@ export default {
         float: left;
         width: 40px;
         height: 40px;
-        padding: 8px;
+        padding: 5px;
         box-sizing: border-box;
         cursor: pointer;
+        // border: 1px solid $blue;
+        border-radius: 50%;
+        background: $orange;
+
         img {
           width: 100%;
           height: 100%;
@@ -193,7 +233,7 @@ export default {
       }
     }
   }
-
+  // 按钮区
   .btn-group {
     text-align: center;
     width: 430px;

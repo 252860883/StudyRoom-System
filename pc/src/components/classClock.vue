@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
@@ -47,7 +48,6 @@ export default {
     }).then(res => {
       if (res.data.length) {
         self.todayData = res.data[0];
-        console.log(!todayData);
       }
     });
   }

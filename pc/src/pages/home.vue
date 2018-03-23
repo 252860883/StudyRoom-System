@@ -90,9 +90,20 @@ export default {
       console.log(room);
       // 如果是已经创建的自习室
       if (room.title) {
-        this.$router.push({ path: "/roomdetail", query: { roomId: room._id ,empty:false} });
+        this.$router.push({
+          path: "/roomdetail",
+          query: { roomId: room._id, empty: false }
+        });
       } else {
-        this.$router.push({ path: "/roomdetail", query: { roomId: room.roomInfo._id,empty:true} });
+        this.$router.push({
+          path: "/roomdetail",
+          query: {
+            roomId: room.roomInfo._id,
+            empty: true,
+            moon: this.time.getMonth() + 1,
+            day: this.time.getDate()
+          }
+        });
       }
     },
     getRoomLists() {

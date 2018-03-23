@@ -44,19 +44,20 @@ module.exports.getRoomLists = async (params) => {
 module.exports.creatRoom = async (params) => {
     try {
         // 获取到对应房间信息
-        let hasRoom = await RoomInfo.findOne({
-            build: params.build,
-            floor: params.floor,
-            number: params.number
-        }, '_id');
+        // let hasRoom = await RoomInfo.findOne({
+        //     build: params.build,
+        //     floor: params.floor,
+        //     number: params.number
+        // }, '_id');
         // 判断是否已经被创建 
-        let noBlank = await Room.findOne({ roomInfo: hasRoom._id, moon: params.moon, day: params.day });
+        let noBlank = await Room.findOne({ roomInfo: params.roomId, moon: params.moon, day: params.day });
+        console.log(noBlank);
 
         if (!noBlank) {
             // 查询创建者信息
             let stuInfo = await Student.findOne({ stuId: params.stuId });
             // id绑定到hasroom上
-            params['roomInfo'] = hasRoom._id;
+            params['roomInfo'] = params.roomId;
             params['seatsLists'] = [];
             params.seatsLists.push(params.seatIndex);
             params['stuInfo'] = stuInfo._id;
@@ -76,7 +77,8 @@ module.exports.creatRoom = async (params) => {
 
             return {
                 sucess: true,
-                msg: '自习室创建成功'
+                msg: '自习室创建成功',
+                roomId:roomrecord._id
             }
         } else {
             return {
