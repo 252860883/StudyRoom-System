@@ -12,8 +12,8 @@ let router = new Router();
 router.post('/login', async (ctx) => {
 
     let params = ctx.request.body;
-    let docs = await student.login(params,ctx);
-    ctx.body=docs;
+    let docs = await student.login(params, ctx);
+    ctx.body = docs;
 });
 
 // 注册接口
@@ -61,6 +61,10 @@ router.get('/user', async (ctx) => {
     };
 })
 
+// 退出登陆
+router.post('/edit',async (ctx)=>{
+
+})
 // 获取自习室列表信息
 router.get('/getRoomLists', async (ctx, next) => {
     let roomLists = await room.getRoomLists(ctx.query);
@@ -92,13 +96,13 @@ router.get('/addRoom', async (ctx, next) => {
 })
 
 // 同意加入自习
-router.post('/agree', async (ctx) => {
+router.get('/agree', async (ctx) => {
     let callback = room.agree(ctx.query);
     ctx.body = callback;
 })
 
 // 拒绝加入自习
-router.post('/disagree', async (ctx) => {
+router.get('/disagree', async (ctx) => {
     let callback = await room.disagree(ctx.query);
     ctx.body = callback;
 })
@@ -113,6 +117,11 @@ router.get('/addStar', async (ctx, next) => {
 // 提醒数量
 router.get('/remind', async (ctx) => {
     let callback = await student.remind(ctx.query);
+    ctx.body = callback;
+})
+
+router.get('/getTodayHasRoom', async (ctx) => {
+    let callback = await room.getTodayHasRoom(ctx.query);
     ctx.body = callback;
 })
 

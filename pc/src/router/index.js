@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import home from '@/components/home'
-import roomDetail from '@/components/roomDetail'
-import login from '@/components/login'
-import message from '@/components/message'
-import user from '@/components/user'
-import isSelected from '@/components/isSeleted'
-import userChange from '@/components/userChange'
+import home from '@/pages/home'
+import roomDetail from '@/pages/roomDetail'
+import login from '@/pages/login'
+import user from '@/pages/user'
+import userChange from '@/pages/userChange'
 Vue.use(Router)
 
 export default new Router({
@@ -27,11 +25,6 @@ export default new Router({
       component: login
     },
     {
-      path: '/message',
-      name: 'home',
-      component: message
-    },
-    {
       path: '/user',
       name: 'home',
       component: user
@@ -41,11 +34,5 @@ export default new Router({
       name: 'userinformation',
       component: userChange
     },
-    {
-      path: '/isselected',
-      name: 'isSeleted',
-      component: isSelected
-    },
-
   ]
 })

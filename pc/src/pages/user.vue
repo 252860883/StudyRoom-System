@@ -2,6 +2,12 @@
   <div class="user">
       <div class="user-left">
         <user-show :userdata='userData'></user-show>
+        <!-- 导航 -->
+        <div class="nav">
+          <p><i v-if="navNo==1"></i>个人中心</p>
+          <p><i v-if="navNo==2"></i>对话/申请</p>
+          <p><i v-if="navNo==3"></i>退出账号</p>
+        </div>
       </div>
       <div class="user-right">
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -18,7 +24,7 @@
                 <is-collect-page :hasCollectLists='userData.collectRoomLists' @updateData="getUserData"></is-collect-page>
             </el-tab-pane>
             <el-tab-pane label="申请消息" name="fifth">
-              <remind :remindLists="userData.remind"></remind>
+              <remind :remindLists="userData.remind" @updateData="getUserData"></remind>
             </el-tab-pane>
         </el-tabs>
       </div>
@@ -35,7 +41,8 @@ export default {
   data() {
     return {
       activeName: "second",
-      userData: {}
+      userData: {},
+      navNo:1
     };
   },
   components: {
@@ -44,7 +51,8 @@ export default {
     classClock,
     isCollectPage,
     isReview,
-    remind
+    remind,
+    
   },
   created() {
     let self = this;
@@ -58,10 +66,10 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      // console.log(tab, event);
     },
     getUserData() {
-      let self=this;
+      let self = this;
       this.$http
         .get("/user", {
           params: {
@@ -82,15 +90,53 @@ export default {
   margin: 0 auto;
   overflow: hidden;
   .user-left {
-    width: 280px;
-    height: 300px;
-    background: rgba($color: #eee, $alpha: 0.5);
+    width: 250px;
+    // height: 300px;
+    // background: rgba($color: #eee, $alpha: 0.5);
     border-radius: 5px;
     margin: 10px;
     float: left;
+
+    .nav {
+      background: rgba($color: #eee, $alpha: 0.5);
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+      p{
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        // padding-left: 50px;
+        color: $blue;
+        border-bottom: 1px solid $blank;
+        cursor: pointer;
+        position: relative;
+        &:last-child{
+          border: 0;
+        }
+        &:hover{
+          background: $blue;
+          color: #fff;
+        }
+
+        i{
+          position: absolute;
+          display: block;
+          width: 5px;
+          height: 36px;
+          top: 7px;
+          left: 0;
+          background: $blue;
+
+        }
+      }
+    }
+    .isnav{
+      color: red;
+    }
   }
   .user-right {
-    width: 780px;
+    width: 810px;
     // height: 500px;
     border-radius: 5px;
     margin: 10px;

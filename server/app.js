@@ -29,7 +29,7 @@ app.use(passport.session());
 
 // 连接数据库
 let mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/demo');
+mongoose.connect('mongodb://127.0.0.1:27017/demo');
 
 // 引入 schema
 require('./models/student');

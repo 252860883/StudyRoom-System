@@ -41,6 +41,10 @@ var studentSchema = new mongoose.Schema({
         },
         seatIndex: {
             type: Number
+        },
+        isCreater: {
+            type: Boolean,
+            default: false
         }
     }],
     // 审核中的自习室
@@ -52,9 +56,9 @@ var studentSchema = new mongoose.Schema({
         seatIndex: {
             type: Number
         },
-        reject:{
-            type:Boolean,
-            default:false
+        reject: {
+            type: Boolean,
+            default: false
         }
     }],
     // 创建的自习室
@@ -66,7 +70,10 @@ var studentSchema = new mongoose.Schema({
         roomInfo: {
             type: ObjectId,
             ref: 'hasroom'
-        }
+        },
+        seatIndex: {
+            type: Number
+        },
     }]
 });
 

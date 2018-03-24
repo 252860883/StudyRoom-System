@@ -3,6 +3,7 @@ const Room = mongoose.model('hasroom');
 const RoomInfo = mongoose.model('room');
 const Student = mongoose.model('student');
 let student = require('./student');
+const stu = require('./student');
 
 //  获取自习室列表
 module.exports.getRoomLists = async (params) => {
@@ -27,13 +28,13 @@ module.exports.getRoomLists = async (params) => {
     // 查询出对应的固定自习室信息
     let roomInfoLists = await RoomInfo.find({ build: params.build, floor: params.floor });
 
-    let resultLists=[];//存放结果
+    let resultLists = [];//存放结果
 
     roomInfoLists.map((roomInfo, index) => {
-        if(roomIdLists.length && roomIdLists[0].roomInfo.number== roomInfo.number){
+        if (roomIdLists.length && roomIdLists[0].roomInfo.number == roomInfo.number) {
             resultLists.push(roomIdLists.shift());
-        }else{
-            resultLists.push({roomInfo});
+        } else {
+            resultLists.push({ roomInfo });
         }
     })
     return resultLists;
@@ -43,19 +44,20 @@ module.exports.getRoomLists = async (params) => {
 module.exports.creatRoom = async (params) => {
     try {
         // 获取到对应房间信息
-        let hasRoom = await RoomInfo.findOne({
-            build: params.build,
-            floor: params.floor,
-            number: params.number
-        }, '_id');
+        // let hasRoom = await RoomInfo.findOne({
+        //     build: params.build,
+        //     floor: params.floor,
+        //     number: params.number
+        // }, '_id');
         // 判断是否已经被创建 
-        let noBlank = await Room.findOne({ roomInfo: hasRoom._id, moon: params.moon, day: params.day });
+        let noBlank = await Room.findOne({ roomInfo: params.roomId, moon: params.moon, day: params.day });
+        console.log(noBlank);
 
         if (!noBlank) {
             // 查询创建者信息
             let stuInfo = await Student.findOne({ stuId: params.stuId });
             // id绑定到hasroom上
-            params['roomInfo'] = hasRoom._id;
+            params['roomInfo'] = params.roomId;
             params['seatsLists'] = [];
             params.seatsLists.push(params.seatIndex);
             params['stuInfo'] = stuInfo._id;
@@ -68,13 +70,15 @@ module.exports.creatRoom = async (params) => {
             // 用户信息记录写入加入自习列表
             let newHasroom = {
                 roomRecord: roomrecord._id,
-                seatIndex: params.seatIndex
+                seatIndex: params.seatIndex,
+                isCreater: true
             }
             let a = await Student.update({ stuId: params.stuId }, { $push: { hasRoomLists: newHasroom } });
 
             return {
                 sucess: true,
-                msg: '自习室创建成功'
+                msg: '自习室创建成功',
+                roomId:roomrecord._id
             }
         } else {
             return {
@@ -102,7 +106,7 @@ module.exports.addRoom = async (params) => {
         if (isRemind) return { sucess: false, msg: '已经提交申请，请耐心等待管理员审核通过' }
 
         // 没有问题，写入管理员remind，用户添加到review中
-        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id } } });
+        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id, seatIndex: params.seatIndex } } });
         await Student.update({ stuId: params.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
         return {
             sucess: true,
@@ -149,31 +153,42 @@ module.exports.saveRoom = async (params) => {
 
 // 审核通过加入自习室
 module.exports.agree = async (params) => {
-    // 删除管理员的 remind信息
-    await Student.update(
-        { stuId: params.stuId },
-        {
-            $pull: { remind: { _id: params.remindId } }
-        });
-    // 添加信息到加入者的 hasRoom，移除其review信息
-    await Student.update(
-        { stuId: params.addId },
-        { $pull: { reviewRoomLists: { roomRecord: params.roomId } } }
-    );
-    await Student.update(
-        { stuId: params.addId },
-        { $push: { hasRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } }
-    );
+    try {
+        // 删除管理员的 remind信息
+        await Student.update(
+            { stuId: params.stuId, },
+            {
+                $pull: { remind: { _id: params.remindId } }
+            });
+        // 添加信息到加入者的 hasRoom，移除其review信息
+        await Student.update(
+            { stuId: params.addId },
+            { $pull: { reviewRoomLists: { roomRecord: params.roomId } } }
+        );
+        let isPush = await Student.find(
+            { stuId: params.addId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } }
+        )
+        // console.log(!isPush.length)
+        if (!isPush.length) {
+            await Student.update(
+                { stuId: params.addId },
+                { $push: { hasRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } },
+            );
+        }
 
-    // 更新自习室的信息
-    await Room.update(
-        { _id: params.roomId },
-        { $push: { seatsLists: params.seatIndex } }
-    )
-    return {
-        sucess: true,
-        msg: '审核完成'
+        // 更新自习室的信息
+        await Room.update(
+            { _id: params.roomId },
+            { $push: { seatsLists: params.seatIndex } }
+        )
+        return {
+            sucess: true,
+            msg: '审核完成'
+        }
+    } catch (error) {
+        throw error;
     }
+
 }
 
 // 审核不通过
@@ -206,9 +221,14 @@ module.exports.disagree = async (params) => {
 }
 
 // 删除已经加入的自习室
+// 这里有问题，如果是管理员删除自习室怎么办呢？直接删除掉自习室？还是说不可以删掉？
+// 应该添加一个自习者字段
 module.exports.deleteHasRoom = async (params) => {
     // 删除用户的 has字段
     try {
+        await Room.find({
+            roomId: params.roomId
+        })
         // 删除用户has列表的信息
         await Student.update(
             { stuId: params.stuId },
@@ -228,7 +248,6 @@ module.exports.deleteHasRoom = async (params) => {
         console.log(error);
     }
 
-    // 修改 自习室的座位情况
 }
 
 // 删除收藏的自习室
@@ -249,18 +268,76 @@ module.exports.deleteCollectRoom = async (params) => {
 
 }
 
-
 // 获取自习室详情
 module.exports.getRoom = async (params) => {
-    let room = Room.findOne({
-        _id: params.roomId
-    }).populate([{
-        path: 'stuInfo',
-    }, {
-        path: 'roomInfo',
-        select: 'name stuId'
-    }]);
-    return room;
+    // console.log(params.isblank);
+
+    if (params.isblank == 'true') {
+        let room = await RoomInfo.findOne({
+            _id: params.roomId
+        })
+        let roomInfo = {
+            roomInfo: room
+        }
+        return roomInfo;
+
+    } else {
+        let room = await Room.findOne({
+            _id: params.roomId
+        }).populate([{
+            path: 'stuInfo',
+            select: 'name stuId -_id'
+        }, {
+            path: 'roomInfo'
+        }]).lean();
+
+        let student = await stu.getUser(params);
+
+        // 判断用户是否已经 加入/收藏/审核中..
+        student.hasRoomLists.map(item => {
+            if (item.roomRecord._id == params.roomId) {
+                room['isHas'] = true;
+                room['ownSeat'] = item.seatIndex;
+            }
+        })
+        student.collectRoomLists.map(item => {
+            if (item.roomRecord._id == params.roomId) {
+                room['isCollect'] = true;
+
+            }
+        })
+        student.reviewRoomLists.map(item => {
+            if (item.roomRecord._id == params.roomId) {
+                room['isReview'] = true;
+            }
+        })
+        // 添加自习室创建者
+        room['createdStuId'] = room.stuInfo.stuId;
+        room['createName'] = room.stuInfo.name;
+        delete room.stuInfo;
+        return room;
+    }
+
+}
+
+// 获取今天是否有自习安排
+module.exports.getTodayHasRoom = async (params) => {
+    let moon = new Date().getMonth() + 1;
+    let day = new Date().getDate();
+
+    let Rooms = await stu.getUser(params);
+    let todayHasRooms = [];
+    Rooms.hasRoomLists.map(room => {
+        if (room.roomRecord.moon == moon && room.roomRecord.day == day) {
+            for (let key in room.roomRecord.roomInfo) {
+                room.roomRecord[key] = room.roomRecord.roomInfo[key];
+            }
+            delete room.roomRecord.roomInfo;
+            todayHasRooms.push(room);
+        }
+    })
+    // console.log(todayHasRooms);
+    return todayHasRooms;
 }
 
 

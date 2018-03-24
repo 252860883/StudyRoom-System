@@ -3,81 +3,162 @@
    <!-- 信息 -->
     <div class="detail">
       <div class="detail-con">
-        <div class="title">{{room.build}}{{room.roomId}}</div>
+        <div class="title">{{room.roomInfo.build}}{{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}</div>
         <div>
-          <span>创建者：</span><span>{{room.created ||'暂无'}}</span>
-          <span style="margin-left:20px;">简介：{{room.content || '暂无'}}</span> 
+          <span>创建者：</span><span>{{room.createName ||'暂无'}}</span>
+          <span style="margin-left:20px;">简介：{{room.action || '暂无'}}</span> 
         </div>
         <!-- 按钮区 -->
         <div class="btn-group">
           <div class="addClass">
-            <div class="yes" v-if="room.created">
+            <div class="yes" v-if="room.title && !room.isHas">
               <img :src="require('../assets/img/btn-addClass.png')" alt="">
-              <p>加入我们</p>
+              <p>加入自习</p>
             </div>
-            <div class="no" v-if="!room.created">
+            <div class="no" v-else>
               <img :src="require('../assets/img/btn-addClass-no.png')" alt="">
               <p>加入自习</p>
             </div>
           </div>
-          <div class="create">
+          <div v-if="!room.isCollect" class="create" @click="collectClick">
             <img :src="require('../assets/img/btn-save.png')" alt="">
             <p>加入收藏</p>
           </div>
+
           <div class="createClass">
-            <div class="create-yes" v-if="!room.created">
+            <div class="create-yes" v-if="!room.title" @click="createRoom">
               <img :src="require('../assets/img/btn-addCreate.png')" alt="">
               <p>成为管理员</p>
             </div>
-            <div class="create-no" v-if="room.created"> 
+            <div class="create-no" v-else> 
               <img :src="require('../assets/img/btn-addCreate-no.png')" alt="">
               <p>成为管理员</p>
             </div>
           </div>
         </div>
-    
       </div>
-    </div>
+    </div> 
+
     <!-- 座位 -->
     <div class="seats">
       <div class="title">
-        <img :src="require('../assets/img/seat-on.png')" alt="">
+        <img :src="require('../assets/img/login/seat-on.png')" alt="">
         <span>已选座位</span>
-        <img :src="require('../assets/img/seat-off.png')" alt="">
+        <img :src="require('../assets/img/login/seat-off.png')" alt="">
         <span>可选座位</span>
       </div>
       <div class="desk">讲台</div>
       <div class="seats-border">
-        <div class="seats-one" v-for="i in room.hasNum" :key="i">
-          <img :src="require('../assets/img/seat-on.png')" alt="">
+        
+        <div class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
+
+          <img v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-else-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
         </div>
-        <div class="seats-one" v-for="i in (room.allNum-room.hasNum)" :key="i">
-          <img :src="require('../assets/img/seat-off.png')" alt="">
-        </div>
+
       </div>
     </div>
+
+    <!-- 弹框 -->
+    <!-- <select-seat></select-seat> -->
   </div>
 </template>
 
 <script>
+import selectSeat from "../components/selectSeat.vue";
+
 export default {
   data() {
     return {
-      room: {}
+      istouch: false,
+      isPrompt: true,
+      room: {
+        roomInfo: ""
+      },
+      selectSeat: 20,
+      title: "这是一个标题",
+      action: "这是一个简介"
     };
   },
+
   created() {
-    //这里刷新数据就会消失
-    this.room = this.$route.query.room;
+    this.getRoomDetail(this.$route.query.roomId, this.$route.query.empty);
   },
-  components: {},
+  components: {
+    selectSeat
+  },
+  filters: {
+    numberJudge(num) {
+      if (num < 10) {
+        return "0" + num;
+      } else {
+        return num;
+      }
+    }
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    createRoom() {
+      let self = this;
+      this.$http
+        .get("/addAdmin", {
+          params: {
+            stuId: 1411651103,
+            moon: this.$route.query.moon,
+            day: this.$route.query.day,
+            seatIndex: this.selectSeat,
+            roomId: this.room.roomInfo._id,
+            title: this.title,
+            action: this.action
+          }
+        })
+        .then(res => {
+          console.log(res.data.roomId);
+          self.getRoomDetail(res.data.roomId, false);
+          self.$router.replace({
+            path: "/roomdetail",
+            query: {
+              roomId: res.data.roomId,
+              empty: false
+            }
+          });
+        });
+    },
+    getRoomDetail(roomId, isblank) {
+      let self = this;
+      // 如果自习室为空,还需要知道日期
+      this.$http
+        .get("/getRoom", {
+          params: {
+            roomId: roomId,
+            stuId: 1411651103,
+            isblank: isblank
+          }
+        })
+        .then(res => {
+          self.room = res.data;
+        });
+    },
+    collectClick() {
+      let self = this;
+      this.$http
+        .get("/addStar", {
+          params: {
+            roomId: this.$route.query.roomId,
+            stuId: 1411651103
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          self.getRoomDetail(this.$route.query.roomId, false);
+        });
+    }
+  }
 };
 </script>
 <style lang="scss"  scoped>
 @import "../assets/common.scss";
-
 .room-detail {
   width: 1200px;
   margin: 0 auto;
@@ -145,9 +226,13 @@ export default {
         float: left;
         width: 40px;
         height: 40px;
-        padding: 8px;
+        padding: 5px;
         box-sizing: border-box;
         cursor: pointer;
+        // border: 1px solid $blue;
+        border-radius: 50%;
+        background: $orange;
+
         img {
           width: 100%;
           height: 100%;
@@ -162,7 +247,7 @@ export default {
       }
     }
   }
-
+  // 按钮区
   .btn-group {
     text-align: center;
     width: 430px;

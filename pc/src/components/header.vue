@@ -36,13 +36,13 @@ export default {
   },
   watch:{
     iswhich:function(val,oldval){
-      console.log(val,oldval);
+      // console.log(val,oldval);
     }
   },
   methods:{
       navClick(path,index){
           this.$router.push({path:path,query:{index:index}});
-          this.iswhich=-1;
+          // this.iswhich=-1;
       }
   },
   created(){
@@ -50,7 +50,7 @@ export default {
     this.$http.get('/remind',{params:{
       stuId:1411651103
     }}).then(res=>{
-      console.log(res.data);
+      // console.log(res.data);
       self.newsNum=res.data;
     })
   },

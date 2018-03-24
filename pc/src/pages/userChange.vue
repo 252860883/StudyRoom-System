@@ -32,10 +32,12 @@
     </div>
     <!-- 提示 -->
     <show-tag :msg="msg" v-show="isShowMsg"></show-tag>
+    
   </div>
 </template>
 <script>
 import showTag from "../components/showTag.vue";
+
 export default {
   data() {
     return {
