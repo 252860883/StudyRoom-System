@@ -2,7 +2,9 @@
 
 <div class="userShow">
   <img @click="userInfoClick" class="rename" :src="require('../assets/img/rename.png')">
-  <div class="photo"></div>
+  <div class="photo">
+    <img  src="../assets/img/pic/userPhoto-default.png" alt="">
+  </div>
   <p class="name">{{user.name}}</p>
   <p class="school"><span>{{user.school}}</span> | <span>{{user.major}}</span> </p>
   <div class="award-con"> 
@@ -63,9 +65,14 @@ export default {
   .photo {
     width: 100px;
     height: 100px;
-    background: $light;
+    // background: $light;
     border-radius: 50%;
     margin: 20px auto;
+    overflow: hidden;
+    img{
+      width: 100px;
+      height: 100px;
+    }
   }
   .name {
     text-align: center;

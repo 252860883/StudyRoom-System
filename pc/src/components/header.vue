@@ -61,35 +61,34 @@ export default {
 @import "../assets/common.scss";
 header {
   width: 100%;
-  height: 60px;
+  height: 48px;
   background: $blue;
   overflow: hidden;
   .con {
     //   width: 1200px;
     margin: 0 auto;
     .logo {
-      margin-top: 10px;
+      margin-top: 7px;
       margin-left: 30px;
-      height: 40px;
+      height: 34px;
       width: auto;
       cursor: pointer;
     }
     .btngroup {
       float: right;
-      height: 100%;
+      height: 48px;
       width: 200px;
       line-height: 18px;
       .btn-border {
         width: 60px;
-        height: 100%;
+        height: 48px;
         float: left;
         cursor: pointer;
         text-align: center;
         img {
-          
           height: 20px;
           width: 20px;
-          margin: 20px 0;
+          margin: 14px 0;
         }
         &:first-child {
           width: 50px;
@@ -99,7 +98,7 @@ header {
             cursor: pointer;
             height: 30px;
             width: 30px;
-            margin: 15px 0;
+            margin: 9px 0;
           }
         }
         &:hover{

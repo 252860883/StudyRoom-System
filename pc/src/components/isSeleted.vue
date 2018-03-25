@@ -2,22 +2,27 @@
 <!-- 已经选择的课程 -->
   <div class="isselected">
     <div class="list-con" v-for="(item,index) in tableData" :key="index">
+      <div v-if="item.isCreater" class="creater-icon">
+        <img src="../assets/img/room/creater-icon.png" alt="">
+      </div>
       <div class="list-left">
         <!-- 这里要加一个管理员的标识 -->
         
         <div class="list-left-up">
-          <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span>
-          <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span>
-          <span class="list-title">{{item.roomRecord.title}}</span>
+          <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span> /
+          <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span> /
+          <span class="list-title">座位{{item.seatIndex}}号</span>
         </div>
         <div class="list-left-down">
+          <span>标题：{{item.roomRecord.title }}</span>
           <span>简介：{{item.roomRecord.action}}</span>
         </div>
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
         <!-- 管理员不能删除自习室 -->
-        <a class="del" v-show="!item.isCreater" @click="deleteRoom(item)">删除</a>
+        <a class="del" v-if="!item.isCreater" @click="deleteRoom(item)">删除</a>
+        <a class="del" v-else="!item.isCreater" style="background:#bbb">删除</a>
       </div>
     </div>
       <blank-img v-if="!tableData.length" content='啊哦，还没有已选择自习的信息'></blank-img>
@@ -65,7 +70,6 @@ export default {
       });
     },
     deleteRoom(room) {
-      // console.log(room);
       this.$http
         .get("/delHasList", {
           params: {
@@ -96,32 +100,44 @@ export default {
     background: #fff;
     margin: 10px 0;
     cursor: pointer;
+    position: relative;
     &:hover {
       border: 1px solid $blue;
     }
+    .creater-icon {
+      position: absolute;
+      top: 0;
+      width: 50px;
+      height: 50px;
+      img {
+        width: 50px;
+        height: 50px;
+      }
+    }
     .list-left {
       float: left;
-      line-height: 70px;
-      padding-left: 20px;
+      line-height: 50px;
+      padding-left: 50px;
       .list-left-up {
         height: 30px;
         font-size: 20px;
-        color: $black;
-        .list-date {
-          // margin-left: 20px;
-        }
-        .list-build {
-          margin-left: 50px;
-        }
-        .list-title {
-          margin-left: 50px;
+        color: $blue;
+        span{
+          margin: 0 5px;
+          // font-weight: 500;
         }
       }
       .list-left-down {
-        height: 25px;
         width: 100%;
-        font-size: 16px;
         color: $light;
+        margin-left: 5px;
+        margin-top: 13px;
+        span{
+          display: block;
+          font-size: 14px;
+          line-height: 23px;
+          
+        }
       }
     }
     .list-right {

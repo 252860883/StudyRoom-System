@@ -15,7 +15,7 @@
                 <span class="class-yes" v-else>
                     <span class="class-up">童鞋，今天有自习安排呦</span>
                     <span>{{todayData | roomFormate }}</span>
-                    <a>查看详情</a>
+                    <a @click='toDetail'>查看详情</a>
                 </span>
             </p>
           <p class="class-con"></p>
@@ -56,6 +56,13 @@ export default {
   methods: {
     toHoom() {
       this.$router.push("/");
+    },
+    toDetail() {
+      // console.log(room);
+      this.$router.push({
+        path: "/roomdetail",
+        query: { roomId: this.todayData.roomRecord._id, empty: false }
+      });
     }
   }
 };
@@ -90,7 +97,7 @@ export default {
         }
         display: block;
         font-size: 20px;
-        a{
+        a {
           margin-top: 15px;
         }
       }

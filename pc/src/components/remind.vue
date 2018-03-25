@@ -2,20 +2,26 @@
 <!-- 已经选择的课程 -->
   <div class="isselected">
     <div class="list-con" v-for="(item,index) in tableData" :key="index">
+      <div  class="list-photo">
+        <img src="../assets/img/pic/userPhoto-default.png" alt="">
+      </div>
       <div class="list-left">
         <div class="list-left-up">
-          <span class="list-date">{{item.roomInfo.moon}}月{{item.roomInfo.day}}日</span>
-          <span class="list-build">{{item.roomInfo.build}} {{item.roomInfo | roomNumber}}</span>
-          <span class="list-title">{{item.roomInfo.title}}</span>
-          <br>
-          <!-- <span>{{item.stuInfo.name}}</span> -->
-          <span>{{item.stuId}}</span>
-          <span>{{item.school}}</span>
+          <span>{{item.name}}</span> /
+          <!-- <span>{{item.stuId}}</span> -->
+          <span>{{item.school}}</span> /
           <span>{{item.major}}</span>
-          <span>{{item.name}}</span>
         </div>
         <div class="list-left-down">
-          <!-- <span>简介：{{item.roomRecord.action}}</span> -->
+          <span>申请加入：</span>
+          <span class="list-date">{{item.roomInfo.moon}}月{{item.roomInfo.day}}日，在</span>
+          <span class="list-build">{{item.roomInfo.build}} {{item.roomInfo | roomNumber}} 的自习。</span>
+        
+        </div>
+        <div class="list-left-action">
+          <!-- <span>详细信息：</span><br> -->
+          <span class="list-title">标题为：{{item.roomInfo.title}}</span><br>
+          <span>简介：{{item.roomInfo.action}}</span>
         </div>
       </div>
       <div class="list-right">
@@ -110,7 +116,7 @@ export default {
   box-sizing: border-box;
   .list-con {
     width: 100%;
-    height: 140px;
+    height: 120px;
     border: 1px solid $blank;
     border-radius: 5px;
     background: #fff;
@@ -119,34 +125,52 @@ export default {
     &:hover {
       border: 1px solid $blue;
     }
+    .list-photo {
+      float: left;
+      height: 100%;
+      width: 80px;
+      position: relative;
+      padding: 0 20px;
+
+      img {
+        position: absolute;
+        top: 50%;
+        margin-top: -40px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+      }
+    }
     .list-left {
       float: left;
-      line-height: 70px;
-      padding-left: 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       .list-left-up {
-        height: 30px;
-        font-size: 20px;
-        color: $black;
-        .list-date {
-          // margin-left: 20px;
-        }
-        .list-build {
-          margin-left: 50px;
-        }
-        .list-title {
-          margin-left: 50px;
+        font-size: 16px;
+        color: $blue;
+        span{
+          display: inline-block;
+          font-weight: 600;
+
         }
       }
       .list-left-down {
         height: 25px;
         width: 100%;
         font-size: 16px;
+        margin:2px 0;
+        color: $black;
+      }
+      .list-left-action{
+        font-size: 12px;
         color: $light;
       }
     }
     .list-right {
       float: right;
-      height: 100px;
+      height: 120px;
       a {
         display: inline-block;
         width: 90px;
@@ -156,7 +180,7 @@ export default {
         text-align: center;
         color: #fff;
         border-radius: 5px;
-        margin-top: 26px;
+        margin-top: 40px;
         margin-right: 10px;
         cursor: pointer;
         font-size: 15px;

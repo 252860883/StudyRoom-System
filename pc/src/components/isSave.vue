@@ -4,11 +4,11 @@
     <div class="list-con" v-for="(item,index) in tableData" :key="index">
       <div class="list-left">
         <div class="list-left-up">
-          <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span>
+          <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span> /
           <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span>
-          <span class="list-title">{{item.roomRecord.title}}</span>
         </div>
         <div class="list-left-down">
+          <span>标题：{{item.roomRecord.title}}</span>
           <span>简介：{{item.roomRecord.action}}</span>
         </div>
       </div>
@@ -94,27 +94,27 @@ export default {
     }
     .list-left {
       float: left;
-      line-height: 70px;
+      line-height: 60px;
       padding-left: 20px;
       .list-left-up {
         height: 30px;
         font-size: 20px;
-        color: $black;
-        .list-date {
-          // margin-left: 20px;
-        }
-        .list-build {
-          margin-left: 50px;
-        }
-        .list-title {
-          margin-left: 50px;
+        color: $blue;
+        margin: 0 7px;
+        span {
+          margin:  0 8px;
         }
       }
       .list-left-down {
-        height: 25px;
         width: 100%;
-        font-size: 16px;
         color: $light;
+        margin-left: 15px;
+        margin-top: 13px;
+        span {
+          display: block;
+          font-size: 14px;
+          line-height: 20px;
+        }
       }
     }
     .list-right {
