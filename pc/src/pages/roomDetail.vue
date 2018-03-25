@@ -3,11 +3,44 @@
    <!-- 信息 -->
     <div class="detail">
       <div class="detail-con">
-        <div class="title">{{room.roomInfo.build}}{{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}</div>
-        <div>
-          <span>创建者：</span><span>{{room.createName ||'暂无'}}</span>
-          <span style="margin-left:20px;">简介：{{room.action || '暂无'}}</span> 
+        <div class="title">
+          {{room.roomInfo.build}}
+          {{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}
+          </div>
+
+        <div class="main-info">
+          <img src="../assets/img/login/user.png" alt="">
+          <span>{{room.createName ||'暂无'}}</span>
+          <img src="../assets/img/login/name.png" alt="">
+          <span v-if="room.title">{{room.moon}}月{{room.day}}日</span>       
+          <span v-else>{{this.$route.query.moon}}月{{this.$route.query.day}}日</span>      
+          <img src="../assets/img/login/title.png" alt=""> 
+          <span>{{room.title || '暂无'}}</span> 
         </div>
+        <p class="action" v-if="room.action">{{room.action}}</p>
+      </div>
+    </div> 
+
+    <!-- 座位 -->
+    <div class="seats">
+      <div class="title">
+        <img :src="require('../assets/img/login/seat-on.png')" alt="">
+        <span>已选座位</span>
+        <img :src="require('../assets/img/login/seat-off.png')" alt="">
+        <span>可选座位</span>
+        <div class="own-Sample"></div>
+        <span>您的座位</span>
+      </div>
+      <div class="desk">讲台</div>
+      <div class="seats-border">
+        <div :class="{ownSeat:room.ownSeat==i}" class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
+          <img  v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-else-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
+          <img v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
+        </div>
+
+      </div>
+    </div>
         <!-- 按钮区 -->
         <div class="btn-group">
           <div class="addClass">
@@ -36,29 +69,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div> 
-
-    <!-- 座位 -->
-    <div class="seats">
-      <div class="title">
-        <img :src="require('../assets/img/login/seat-on.png')" alt="">
-        <span>已选座位</span>
-        <img :src="require('../assets/img/login/seat-off.png')" alt="">
-        <span>可选座位</span>
-      </div>
-      <div class="desk">讲台</div>
-      <div class="seats-border">
-        
-        <div class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
-
-          <img v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
-          <img v-else-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
-          <img v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
-        </div>
-
-      </div>
-    </div>
 
     <!-- 弹框 -->
     <!-- <select-seat></select-seat> -->
@@ -160,24 +170,45 @@ export default {
 <style lang="scss"  scoped>
 @import "../assets/common.scss";
 .room-detail {
-  width: 1200px;
+  // width: 1200px;
   margin: 0 auto;
   // 信息
   .detail {
     width: 820px;
     margin: 20px auto;
+    margin-bottom: 10px;
     text-align: center;
     .detail-con {
-      border: 2px solid $blue;
       border-radius: 5px;
       padding: 10px;
-      // padding-bottom: 40px;
+      background: $blank;
+      color: $light;
     }
     .title {
-      font-size: 40px;
+      font-size: 30px;
+      font-weight: 700;
       color: $blue;
-      width: 280px;
       margin: 0 auto;
+    }
+    .main-info{
+      margin-top: 5px;
+      img{
+        vertical-align: middle;
+        width: 22px;
+        height: 22px;
+        margin: 0 3px 0 15px;
+      }
+      span{
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .action{
+      background: #fff;
+      border-radius:  20px;
+      display: inline-block;
+      margin-top: 10px;
+      padding: 2px 15px;
     }
   }
   // 座位图
@@ -185,14 +216,12 @@ export default {
     width: 820px;
     margin: 0 auto;
     padding-bottom: 22px;
-    background: rgba(200, 200, 200, 0.2);
-    border: 2px solid $blue;
+    background: $blank;
     box-sizing: border-box;
     border-radius: 5px;
     overflow: hidden;
-
     .title {
-      width: 150px;
+      width: 250px;
       margin: 0 auto;
       margin-top: 5px;
       img {
@@ -205,9 +234,16 @@ export default {
         vertical-align: middle;
         color: $light;
         font-size: 12px;
-        // font-weight: bold;
-        margin-right: 2px;
+        margin-right: 10px;
       }
+    }
+    .own-Sample{
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      background:#f39800;
+      border-radius:50% ;
+      vertical-align: middle;
     }
     .desk {
       margin: 0 auto;
@@ -229,10 +265,7 @@ export default {
         padding: 5px;
         box-sizing: border-box;
         cursor: pointer;
-        // border: 1px solid $blue;
         border-radius: 50%;
-        background: $orange;
-
         img {
           width: 100%;
           height: 100%;
@@ -244,6 +277,12 @@ export default {
         &:hover {
           transform: translateY(-1px);
         }
+      }
+      .ownSeat{
+        background:#f39800;
+        border-radius: 50%;
+        border: 2px solid $blank;
+        padding: 3px;
       }
     }
   }
