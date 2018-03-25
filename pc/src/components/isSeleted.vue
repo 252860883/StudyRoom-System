@@ -20,10 +20,13 @@
         <a class="del" v-show="!item.isCreater" @click="deleteRoom(item)">删除</a>
       </div>
     </div>
+      <blank-img v-if="!tableData.length" content='啊哦，还没有已选择自习的信息'></blank-img>
   </div>
 </template>
 
 <script>
+import blankImg from "../components/blanik-img";
+
 export default {
   props: {
     hasRoomLists: {
@@ -34,6 +37,9 @@ export default {
     return {
       tableData: []
     };
+  },
+  components: {
+    blankImg
   },
   watch: {
     hasRoomLists: function(n, o) {

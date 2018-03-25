@@ -17,10 +17,12 @@
         <a class="del" @click="deleteRoom(item)">删除</a>
       </div>
     </div>
+      <blank-img v-if="!tableData.length" content='啊哦，您还没有收藏的自习信息'></blank-img>
   </div>
 </template>
 
 <script>
+import blankImg from "../components/blanik-img";
 export default {
   props: {
     hasCollectLists: {
@@ -31,6 +33,9 @@ export default {
     return {
       tableData: []
     };
+  },
+  components: {
+    blankImg
   },
   watch: {
     hasCollectLists: function(n, o) {

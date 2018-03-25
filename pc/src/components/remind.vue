@@ -23,10 +23,12 @@
         <a class="del" @click="disagree(item)">拒绝</a>
       </div>
     </div>
+      <blank-img v-if="!tableData.length" content='啊哦，您还没有待处理的信息'></blank-img>
   </div>
 </template>
 
 <script>
+import blankImg from "../components/blanik-img";
 export default {
   props: {
     remindLists: {
@@ -60,6 +62,9 @@ export default {
         return room.floor + "" + room.number;
       }
     }
+  },
+  components: {
+    blankImg
   },
   methods: {
     agree(room) {

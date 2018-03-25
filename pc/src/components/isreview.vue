@@ -1,5 +1,5 @@
 <template>
-<!-- 已经选择的课程 -->
+<!-- 待审核的课程 -->
   <div class="isselected">
     <div class="list-con" v-for="(item,index) in tableData" :key="index">
       <div class="list-left">
@@ -17,10 +17,12 @@
         <a class="del" @click="toDetail(item)">删除</a>
       </div>
     </div>
+    <blank-img v-if="!tableData.length" content='啊哦，您还没有待审核的自习信息'></blank-img>
   </div>
 </template>
 
 <script>
+import blankImg from '../components/blanik-img';
 export default {
   props: {
     reviewRoomLists: {
@@ -31,6 +33,9 @@ export default {
     return {
       tableData: []
     };
+  },
+  components:{
+    blankImg
   },
   watch: {
     reviewRoomLists: function(n, o) {
