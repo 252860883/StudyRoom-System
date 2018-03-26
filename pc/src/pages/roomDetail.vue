@@ -23,6 +23,23 @@
 
     <!-- 座位 -->
     <div class="seats">
+
+      <div class="desk">讲台</div>
+      <div class="seats-border">
+        <div :class="{ownSeat:room.ownSeat==i ||selectSeat==i}" class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
+          <img  
+            v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " 
+            @mouseout="istouch=-1"  
+            :src="require('../assets/img/login/seat-on.png')">
+            <!-- 没有选择触碰时候的显示 -->
+          <img 
+            v-else-if="!room.title &&istouch==i" 
+            @mouseout="istouch=-1" 
+            @click="seatClick(i)" 
+            :src="require('../assets/img/login/seat-on.png')">
+          <img  v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
+        </div>
+      </div>
       <div class="title">
         <img :src="require('../assets/img/login/seat-on.png')" alt="">
         <span>已选座位</span>
@@ -30,15 +47,6 @@
         <span>可选座位</span>
         <div class="own-Sample"></div>
         <span>您的座位</span>
-      </div>
-      <div class="desk">讲台</div>
-      <div class="seats-border">
-        <div :class="{ownSeat:room.ownSeat==i}" class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
-          <img  v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
-          <img v-else-if="!room.title &&istouch==i" @mouseout="istouch=-1"  :src="require('../assets/img/login/seat-on.png')" alt="">
-          <img v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
-        </div>
-
       </div>
     </div>
         <!-- 按钮区 -->
@@ -71,7 +79,7 @@
         </div>
 
     <!-- 弹框 -->
-    <!-- <select-seat></select-seat> -->
+    <select-seat v-if="promptShow" :seatIndex="selectSeat"></select-seat>
   </div>
 </template>
 
@@ -86,12 +94,12 @@ export default {
       room: {
         roomInfo: ""
       },
-      selectSeat: 20,
+      selectSeat: "",
       title: "这是一个标题",
-      action: "这是一个简介"
+      action: "这是一个简介",
+      promptShow: false
     };
   },
-
   created() {
     this.getRoomDetail(this.$route.query.roomId, this.$route.query.empty);
   },
@@ -163,6 +171,10 @@ export default {
           // console.log(res);
           self.getRoomDetail(this.$route.query.roomId, false);
         });
+    },
+    seatClick(i) {
+      this.promptShow=true;
+      this.selectSeat = i;
     }
   }
 };
@@ -190,22 +202,22 @@ export default {
       color: $blue;
       margin: 0 auto;
     }
-    .main-info{
+    .main-info {
       margin-top: 5px;
-      img{
+      img {
         vertical-align: middle;
         width: 22px;
         height: 22px;
         margin: 0 3px 0 15px;
       }
-      span{
+      span {
         display: inline-block;
         vertical-align: middle;
       }
     }
-    .action{
+    .action {
       background: #fff;
-      border-radius:  20px;
+      border-radius: 20px;
       display: inline-block;
       margin-top: 10px;
       padding: 2px 15px;
@@ -215,19 +227,26 @@ export default {
   .seats {
     width: 820px;
     margin: 0 auto;
-    padding-bottom: 22px;
+    padding-bottom: 15px;
     background: $blank;
     box-sizing: border-box;
     border-radius: 5px;
     overflow: hidden;
+
     .title {
-      width: 250px;
+      width: 270px;
       margin: 0 auto;
-      margin-top: 5px;
+      padding: 5px 0;
+      position: relative;
+      top: 15px;
+      clear: both;
+      background: #ddd;
+      border-radius: 10px 10px 0 0;
       img {
         width: 18px;
         height: 18px;
         vertical-align: middle;
+        margin-left: 10px;
       }
       span {
         display: inline-block;
@@ -235,14 +254,15 @@ export default {
         color: $light;
         font-size: 12px;
         margin-right: 10px;
+        box-sizing: border-box;
       }
     }
-    .own-Sample{
+    .own-Sample {
       width: 12px;
       height: 12px;
       display: inline-block;
-      background:#f39800;
-      border-radius:50% ;
+      background: #f39800;
+      border-radius: 50%;
       vertical-align: middle;
     }
     .desk {
@@ -278,8 +298,8 @@ export default {
           transform: translateY(-1px);
         }
       }
-      .ownSeat{
-        background:#f39800;
+      .ownSeat {
+        background: #f39800;
         border-radius: 50%;
         border: 2px solid $blank;
         padding: 3px;
