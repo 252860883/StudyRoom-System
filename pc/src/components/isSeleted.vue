@@ -22,7 +22,7 @@
         <a @click="toDetail(item)">查看详情</a>
         <!-- 管理员不能删除自习室 -->
         <a class="del" v-if="!item.isCreater" @click="deleteRoom(item)">删除</a>
-        <a class="del" v-else="!item.isCreater" style="background:#bbb">删除</a>
+        <a class="del" v-else style="background:#bbb">删除</a>
       </div>
     </div>
       <blank-img v-if="!tableData.length" content='啊哦，还没有已选择自习的信息'></blank-img>
@@ -101,6 +101,7 @@ export default {
     margin: 10px 0;
     cursor: pointer;
     position: relative;
+    overflow: hidden;
     &:hover {
       border: 1px solid $blue;
     }
@@ -118,17 +119,21 @@ export default {
       float: left;
       line-height: 50px;
       padding-left: 50px;
+      max-width: 540px;
       .list-left-up {
         height: 30px;
         font-size: 20px;
         color: $blue;
         span{
           margin: 0 5px;
+          line-height: 50px;
           // font-weight: 500;
         }
       }
       .list-left-down {
         width: 100%;
+        height: 46px;
+        overflow: hidden;
         color: $light;
         margin-left: 5px;
         margin-top: 13px;

@@ -261,6 +261,8 @@ export default {
     }
     .content {
       margin-top: 5px;
+      max-height: 40px;
+      overflow: hidden;
     }
 
     .room-border,

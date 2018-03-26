@@ -27,19 +27,21 @@
       <div class="desk">讲台</div>
       <div class="seats-border">
         <div :class="{ownSeat:room.ownSeat==i ||selectSeat==i}" class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
+          <!-- 已经选择的 -->
           <img  
-            v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 || istouch==i) " 
-            @mouseout="istouch=-1"  
+            v-if="room.title &&(room.seatsLists.indexOf(String(i))!=-1 ) " 
+            @mouseout="istouch=-1"
             :src="require('../assets/img/login/seat-on.png')">
             <!-- 没有选择触碰时候的显示 -->
           <img 
-            v-else-if="!room.title &&istouch==i" 
+            v-else-if="istouch==i" 
             @mouseout="istouch=-1" 
             @click="seatClick(i)" 
             :src="require('../assets/img/login/seat-on.png')">
           <img  v-else :src="require('../assets/img/login/seat-off.png')" @mouseover="istouch=i"  @mouseout="istouch=-1" alt="">
         </div>
       </div>
+
       <div class="title">
         <img :src="require('../assets/img/login/seat-on.png')" alt="">
         <span>已选座位</span>
@@ -50,7 +52,7 @@
       </div>
     </div>
         <!-- 按钮区 -->
-        <div class="btn-group">
+        <!-- <div class="btn-group">
           <div class="addClass">
             <div class="yes" v-if="room.title && !room.isHas">
               <img :src="require('../assets/img/btn-addClass.png')" alt="">
@@ -76,10 +78,16 @@
               <p>成为管理员</p>
             </div>
           </div>
-        </div>
+        </div> -->
 
     <!-- 弹框 -->
-    <select-seat v-if="promptShow" :seatIndex="selectSeat"></select-seat>
+    <select-seat 
+      :room="room" 
+      @closeprompt="closePrompt()" 
+      @getRoomDetail='getRoomDetail'
+      v-if="promptShow" 
+      :seatIndex="selectSeat"
+    ></select-seat>
   </div>
 </template>
 
@@ -117,33 +125,9 @@ export default {
   },
   mounted() {},
   methods: {
-    createRoom() {
-      let self = this;
-      this.$http
-        .get("/addAdmin", {
-          params: {
-            stuId: 1411651103,
-            moon: this.$route.query.moon,
-            day: this.$route.query.day,
-            seatIndex: this.selectSeat,
-            roomId: this.room.roomInfo._id,
-            title: this.title,
-            action: this.action
-          }
-        })
-        .then(res => {
-          console.log(res.data.roomId);
-          self.getRoomDetail(res.data.roomId, false);
-          self.$router.replace({
-            path: "/roomdetail",
-            query: {
-              roomId: res.data.roomId,
-              empty: false
-            }
-          });
-        });
-    },
+    // 获取自习室的信息
     getRoomDetail(roomId, isblank) {
+      console.log(roomId);
       let self = this;
       // 如果自习室为空,还需要知道日期
       this.$http
@@ -158,23 +142,16 @@ export default {
           self.room = res.data;
         });
     },
-    collectClick() {
-      let self = this;
-      this.$http
-        .get("/addStar", {
-          params: {
-            roomId: this.$route.query.roomId,
-            stuId: 1411651103
-          }
-        })
-        .then(res => {
-          // console.log(res);
-          self.getRoomDetail(this.$route.query.roomId, false);
-        });
-    },
+
     seatClick(i) {
-      this.promptShow=true;
+      this.promptShow = true;
       this.selectSeat = i;
+      console.log("is");
+    },
+    closePrompt() {
+      // console.log('ok')
+      this.promptShow = false;
+      this.selectSeat = false;
     }
   }
 };
