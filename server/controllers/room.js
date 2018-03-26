@@ -61,7 +61,6 @@ module.exports.creatRoom = async (params) => {
             params['seatsLists'] = [];
             params.seatsLists.push(params.seatIndex);
             params['stuInfo'] = stuInfo._id;
-            console.log(params);
 
             // 创建教室记录
             let createRoom = new Room(params);
@@ -78,7 +77,7 @@ module.exports.creatRoom = async (params) => {
             return {
                 sucess: true,
                 msg: '自习室创建成功',
-                roomId:roomrecord._id
+                roomId: roomrecord._id
             }
         } else {
             return {
@@ -138,7 +137,8 @@ module.exports.saveRoom = async (params) => {
 
             return {
                 sucess: true,
-                msg: '收藏成功'
+                msg: '收藏成功',
+                roomId: params.roomId
             };
         } else {
             return {
@@ -271,52 +271,56 @@ module.exports.deleteCollectRoom = async (params) => {
 // 获取自习室详情
 module.exports.getRoom = async (params) => {
     // console.log(params.isblank);
+    try {
+        if (params.isblank == 'true') {
+            let room = await RoomInfo.findOne({
+                _id: params.roomId
+            })
+            let roomInfo = {
+                roomInfo: room
+            }
+            return roomInfo;
 
-    if (params.isblank == 'true') {
-        let room = await RoomInfo.findOne({
-            _id: params.roomId
-        })
-        let roomInfo = {
-            roomInfo: room
+        } else {
+            let room = await Room.findOne({
+                _id: params.roomId
+            }).populate([{
+                path: 'stuInfo',
+                select: 'name stuId -_id'
+            }, {
+                path: 'roomInfo'
+            }]).lean();
+
+            let student = await stu.getUser(params);
+            // console.log(student);
+
+            // 判断用户是否已经 加入/收藏/审核中..
+            student.hasRoomLists.map(item => {
+                if (item.roomRecord._id == params.roomId) {
+                    room['isHas'] = true;
+                    room['ownSeat'] = item.seatIndex;
+                }
+            })
+            student.collectRoomLists.map(item => {
+                if (item.roomRecord && item.roomRecord._id == params.roomId) {
+                    room['isCollect'] = true;
+                }
+            })
+            student.reviewRoomLists.map(item => {
+                if (item.roomRecord && item.roomRecord._id == params.roomId) {
+                    room['isReview'] = true;
+                }
+            })
+            // 添加自习室创建者
+            room['createdStuId'] = room.stuInfo.stuId;
+            room['createName'] = room.stuInfo.name;
+            delete room.stuInfo;
+            return room;
         }
-        return roomInfo;
-
-    } else {
-        let room = await Room.findOne({
-            _id: params.roomId
-        }).populate([{
-            path: 'stuInfo',
-            select: 'name stuId -_id'
-        }, {
-            path: 'roomInfo'
-        }]).lean();
-
-        let student = await stu.getUser(params);
-
-        // 判断用户是否已经 加入/收藏/审核中..
-        student.hasRoomLists.map(item => {
-            if (item.roomRecord._id == params.roomId) {
-                room['isHas'] = true;
-                room['ownSeat'] = item.seatIndex;
-            }
-        })
-        student.collectRoomLists.map(item => {
-            if (item.roomRecord._id == params.roomId) {
-                room['isCollect'] = true;
-
-            }
-        })
-        student.reviewRoomLists.map(item => {
-            if (item.roomRecord._id == params.roomId) {
-                room['isReview'] = true;
-            }
-        })
-        // 添加自习室创建者
-        room['createdStuId'] = room.stuInfo.stuId;
-        room['createName'] = room.stuInfo.name;
-        delete room.stuInfo;
-        return room;
+    } catch (error) {
+        throw error
     }
+
 
 }
 

@@ -83,17 +83,18 @@
     <!-- 弹框 -->
     <select-seat 
       :room="room" 
-      @closeprompt="closePrompt()" 
+      @closeprompt="closePrompt" 
       @getRoomDetail='getRoomDetail'
       v-if="promptShow" 
       :seatIndex="selectSeat"
     ></select-seat>
+    <show-callback :show="callbackShow" :content='callbackContent'></show-callback>
   </div>
 </template>
 
 <script>
 import selectSeat from "../components/selectSeat.vue";
-
+import showCallback from "../components/showCallback.vue";
 export default {
   data() {
     return {
@@ -105,14 +106,17 @@ export default {
       selectSeat: "",
       title: "这是一个标题",
       action: "这是一个简介",
-      promptShow: false
+      promptShow: false,
+      callbackContent: "回调显示",
+      callbackShow: false
     };
   },
   created() {
     this.getRoomDetail(this.$route.query.roomId, this.$route.query.empty);
   },
   components: {
-    selectSeat
+    selectSeat,
+    showCallback
   },
   filters: {
     numberJudge(num) {
@@ -127,7 +131,6 @@ export default {
   methods: {
     // 获取自习室的信息
     getRoomDetail(roomId, isblank) {
-      console.log(roomId);
       let self = this;
       // 如果自习室为空,还需要知道日期
       this.$http
@@ -142,16 +145,17 @@ export default {
           self.room = res.data;
         });
     },
-
     seatClick(i) {
       this.promptShow = true;
       this.selectSeat = i;
       console.log("is");
     },
-    closePrompt() {
-      // console.log('ok')
+    closePrompt(msg) {
+      console.log(msg);
       this.promptShow = false;
       this.selectSeat = false;
+      this.callbackContent = msg;
+      this.callbackShow = true;
     }
   }
 };

@@ -91,7 +91,8 @@ export default {
               empty: false
             }
           });
-          self.$emit("closeprompt");
+          let msg="创建自习室成功"
+          self.$emit("closeprompt",msg);
         });
     },
     collectClick() {
@@ -106,7 +107,7 @@ export default {
         .then(res => {
           // console.log(res);
           self.$emit("getRoomDetail", res.data.roomId, false);
-          self.$emit("closeprompt");
+          self.$emit("closeprompt","收藏成功");
         });
     }
   }
