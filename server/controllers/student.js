@@ -11,10 +11,8 @@ module.exports.login = async function (params, ctx) {
         stuId: params.stuId,
         password: params.password
     }, '-password');
-    console.log(docs);
     if (docs.length) {
-        let n = ctx.session.views || 0;
-        ctx.session.views = ++n;
+        ctx.cookie={'stuId':params.stuId}
         return {
             sucess: true,
             msg: '登陆成功'
