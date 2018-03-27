@@ -55,7 +55,7 @@ module.exports.creatRoom = async (params) => {
 
         if (!noBlank) {
             // 查询创建者信息
-            let stuInfo = await Student.findOne({ stuId: params.stuId });
+            let stuInfo = await Student.findOne({ stuId: global.stuId });
             // id绑定到hasroom上
             params['roomInfo'] = params.roomId;
             params['seatsLists'] = [];
@@ -72,7 +72,7 @@ module.exports.creatRoom = async (params) => {
                 seatIndex: params.seatIndex,
                 isCreater: true
             }
-            let a = await Student.update({ stuId: params.stuId }, { $push: { hasRoomLists: newHasroom } });
+            let a = await Student.update({ stuId: global.stuId }, { $push: { hasRoomLists: newHasroom } });
 
             return {
                 sucess: true,
@@ -95,18 +95,18 @@ module.exports.creatRoom = async (params) => {
 module.exports.addRoom = async (params) => {
     try {
         // 判断是否已经加入这个教室
-        let isHas = await Student.findOne({ stuId: params.stuId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } });
+        let isHas = await Student.findOne({ stuId: global.stuId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } });
         if (isHas) return { sucess: false, msg: '已经加入该自习室' }
         // 获取房间和申请者的信息
         let roomInfo = await Room.findOne({ _id: params.roomId }).populate('stuInfo');
-        let addStu = await student.getUser({ stuId: params.stuId });
+        let addStu = await student.getUser({ stuId: global.stuId });
         // 判断是否已经提交申请了
         let isRemind = await Student.findOne({ stuId: roomInfo.stuInfo.stuId, remind: { $elemMatch: { roomInfo: params.roomId, stuInfo: addStu._id } } });
         if (isRemind) return { sucess: false, msg: '已经提交申请，请耐心等待管理员审核通过' }
 
         // 没有问题，写入管理员remind，用户添加到review中
         await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id, seatIndex: params.seatIndex } } });
-        await Student.update({ stuId: params.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
+        await Student.update({ stuId: global.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
         return {
             sucess: true,
             msg: '加入自习室审核已成功发送至管理员'
@@ -124,13 +124,13 @@ module.exports.saveRoom = async (params) => {
 
         // 查询用户是否已经收藏该自习室
         let isSave = await Student.findOne({
-            stuId: params.stuId,
+            stuId: global.stuId,
             collectRoomLists: { $elemMatch: { roomRecord: params.roomId } }
         });
 
         if (!isSave) {
             await Student.update(
-                { stuId: params.stuId },
+                { stuId: global.stuId },
                 {
                     $push: { collectRoomLists: { roomRecord: params.roomId } }
                 });
@@ -156,7 +156,7 @@ module.exports.agree = async (params) => {
     try {
         // 删除管理员的 remind信息
         await Student.update(
-            { stuId: params.stuId, },
+            { stuId: global.stuId, },
             {
                 $pull: { remind: { _id: params.remindId } }
             });
@@ -196,7 +196,7 @@ module.exports.disagree = async (params) => {
     try {
         // 删除管理员的 remind信息
         await Student.update(
-            { stuId: params.stuId },
+            { stuId: global.stuId },
             {
                 $pull: { remind: { _id: params.remindId } }
             });
@@ -231,7 +231,7 @@ module.exports.deleteHasRoom = async (params) => {
         })
         // 删除用户has列表的信息
         await Student.update(
-            { stuId: params.stuId },
+            { stuId: global.stuId },
             { $pull: { hasRoomLists: { roomRecord: params.roomId } } }
         )
         // 删除room记录的座位表
@@ -255,7 +255,7 @@ module.exports.deleteCollectRoom = async (params) => {
     // 删除用户的 collect字段
     try {
         await Student.update(
-            { stuId: params.stuId },
+            { stuId: global.stuId },
             { $pull: { collectRoomLists: { roomRecord: params.roomId } } }
         )
         return {
@@ -270,7 +270,6 @@ module.exports.deleteCollectRoom = async (params) => {
 
 // 获取自习室详情
 module.exports.getRoom = async (params) => {
-    // console.log(params.isblank);
     try {
         if (params.isblank == 'true') {
             let room = await RoomInfo.findOne({
@@ -343,7 +342,6 @@ module.exports.getTodayHasRoom = async (params) => {
     // console.log(todayHasRooms);
     return todayHasRooms;
 }
-
 
 // 按照对象内部排序
 // 第一个是主属性，后面是子属性

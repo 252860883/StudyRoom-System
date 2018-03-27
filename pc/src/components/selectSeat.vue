@@ -11,7 +11,7 @@
       </div>
       <p class="title">请选择您的操作</p>
       <div class="btn-group">
-        <div class="addRoom">
+        <div class="addRoom" @click="addClick">
           <img src="../assets/img/room/addRoom.png" alt="">
           <p>加入自习</p>
         </div>
@@ -91,8 +91,8 @@ export default {
               empty: false
             }
           });
-          let msg="创建自习室成功"
-          self.$emit("closeprompt",msg);
+          let msg = "创建自习室成功";
+          self.$emit("closeprompt", msg);
         });
     },
     collectClick() {
@@ -107,7 +107,22 @@ export default {
         .then(res => {
           // console.log(res);
           self.$emit("getRoomDetail", res.data.roomId, false);
-          self.$emit("closeprompt","收藏成功");
+          self.$emit("closeprompt", "收藏成功");
+        });
+    },
+    addClick() {
+      let self=this;
+      this.$http
+        .get("/addRoom", {
+          params: {
+            roomId: this.$route.query.roomId,
+            seatIndex:this.seatIndex
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          // self.$emit("getRoomDetail", res.data.roomId, false);
+          self.$emit("closeprompt",res.data.msg);
         });
     }
   }
