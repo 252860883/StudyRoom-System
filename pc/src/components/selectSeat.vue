@@ -22,7 +22,6 @@
         <div @click="collectClick" class="saveRoom">
           <img src="../assets/img/room/saveRoom.png" alt="">
           <p>收藏自习</p>
-
         </div>
       </div>
     </div>

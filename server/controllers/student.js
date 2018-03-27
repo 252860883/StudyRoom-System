@@ -127,6 +127,10 @@ module.exports.getUser = async (params) => {
     delete getInfo.remind
     getInfo['remind'] = remind;
 
+    let hasRoomLists= getInfo.hasRoomLists.sort(compare('roomRecord','day')).sort(compare('roomRecord','moon'));
+    delete getInfo.hasRoomLists;
+    getInfo['hasRoomLists']=hasRoomLists;
+
     return getInfo;
 }
 
@@ -143,7 +147,16 @@ module.exports.remind = async (params) => {
 
 // 退出登陆接口
 module.exports.edit = async (params) => {
-    // 
+}
+
+// 按照对象内部排序
+// 第一个是主属性，后面是子属性
+function compare(property, child) {
+    return function (obj1, obj2) {
+        var value1 = child ? obj1[property][child] : obj1[property];
+        var value2 = child ? obj2[property][child] : obj2[property];
+        return value2 - value1;// 降序
+    }
 }
 
 
