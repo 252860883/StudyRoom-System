@@ -11,16 +11,31 @@
       </div>
       <p class="title">请选择您的操作</p>
       <div class="btn-group">
-        <div class="addRoom" @click="addClick">
+
+        <div v-if="!room.isHas && room.title" class="addRoom" @click="addClick">
           <img src="../assets/img/room/addRoom.png" alt="">
           <p>加入自习</p>
         </div>
-        <div class="createRoom" @click="isShowCreate=true">
+        <div v-else class="addRoom unclick" @click="addClick">
+          <img src="../assets/img/room/addRoom-grey.png" alt="">
+          <p>加入自习</p>
+        </div>
+
+        <div v-if="!room.title" class="createRoom" @click="isShowCreate=true">
           <img src="../assets/img/room/creatdRoom.png" alt="">
           <p>创建自习</p>
         </div>
-        <div @click="collectClick" class="saveRoom">
-          <img src="../assets/img/room/saveRoom.png" alt="">
+        <div v-else class="createRoom unclick" @click="isShowCreate=true">
+          <img src="../assets/img/room/creatdRoom-grey.png" alt="">
+          <p>创建自习</p>
+        </div>
+
+        <div v-if="!room.isCollect && room.title" @click="collectClick" class="saveRoom">
+          <img src="../assets/img/room/saveRoom.png">
+          <p>收藏自习</p>
+        </div>
+        <div v-else @click="collectClick " class="saveRoom unclick">
+          <img src="../assets/img/room/saveRoom-grey.png">
           <p>收藏自习</p>
         </div>
       </div>
@@ -110,18 +125,18 @@ export default {
         });
     },
     addClick() {
-      let self=this;
+      let self = this;
       this.$http
         .get("/addRoom", {
           params: {
             roomId: this.$route.query.roomId,
-            seatIndex:this.seatIndex
+            seatIndex: this.seatIndex
           }
         })
         .then(res => {
           // console.log(res);
           // self.$emit("getRoomDetail", res.data.roomId, false);
-          self.$emit("closeprompt",res.data.msg);
+          self.$emit("closeprompt", res.data.msg);
         });
     }
   }
@@ -211,6 +226,12 @@ export default {
         p {
           color: $light;
         }
+      }
+      .unclick {
+        &:hover {
+          transform: translateY(0);
+        }
+        border: 3px solid $light;
       }
     }
     .create {

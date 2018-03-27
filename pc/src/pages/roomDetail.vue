@@ -6,8 +6,7 @@
         <div class="title">
           {{room.roomInfo.build}}
           {{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}
-          </div>
-
+        </div>
         <div class="main-info">
           <img src="../assets/img/login/user.png" alt="">
           <span>{{room.createName ||'暂无'}}</span>
@@ -23,7 +22,6 @@
 
     <!-- 座位 -->
     <div class="seats">
-
       <div class="desk">讲台</div>
       <div class="seats-border">
         <div :class="{ownSeat:room.ownSeat==i ||selectSeat==i}" class="seats-one" v-for="i in room.roomInfo.allSeats" :key="i">
@@ -51,34 +49,6 @@
         <span>您的座位</span>
       </div>
     </div>
-        <!-- 按钮区 -->
-        <!-- <div class="btn-group">
-          <div class="addClass">
-            <div class="yes" v-if="room.title && !room.isHas">
-              <img :src="require('../assets/img/btn-addClass.png')" alt="">
-              <p>加入自习</p>
-            </div>
-            <div class="no" v-else>
-              <img :src="require('../assets/img/btn-addClass-no.png')" alt="">
-              <p>加入自习</p>
-            </div>
-          </div>
-          <div v-if="!room.isCollect" class="create" @click="collectClick">
-            <img :src="require('../assets/img/btn-save.png')" alt="">
-            <p>加入收藏</p>
-          </div>
-
-          <div class="createClass">
-            <div class="create-yes" v-if="!room.title" @click="createRoom">
-              <img :src="require('../assets/img/btn-addCreate.png')" alt="">
-              <p>成为管理员</p>
-            </div>
-            <div class="create-no" v-else> 
-              <img :src="require('../assets/img/btn-addCreate-no.png')" alt="">
-              <p>成为管理员</p>
-            </div>
-          </div>
-        </div> -->
 
     <!-- 弹框 -->
     <select-seat 
