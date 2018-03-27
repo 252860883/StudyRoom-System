@@ -10,7 +10,7 @@
         
         <div class="list-left-up">
           <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span> /
-          <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span> /
+          <span class="list-build">{{item.roomRecord.roomInfo?item.roomRecord.roomInfo.build:""}} {{item.roomRecord|roomNumber}}</span> /
           <span class="list-title">座位{{item.seatIndex}}号</span>
         </div>
         <div class="list-left-down">
@@ -40,7 +40,15 @@ export default {
   },
   data() {
     return {
-      tableData: []
+      tableData: [
+        {
+          roomRecord: {
+            roomInfo: {
+              build: ""
+            }
+          }
+        }
+      ]
     };
   },
   components: {
@@ -53,6 +61,9 @@ export default {
   },
   filters: {
     roomNumber(room) {
+      if (!room.roomInfo) {
+        return;
+      }
       if (room.roomInfo.number < 10) {
         return room.roomInfo.floor + "0" + room.roomInfo.number;
       } else {
@@ -124,7 +135,7 @@ export default {
         height: 30px;
         font-size: 20px;
         color: $blue;
-        span{
+        span {
           margin: 0 5px;
           line-height: 50px;
           // font-weight: 500;
@@ -137,11 +148,10 @@ export default {
         color: $light;
         margin-left: 5px;
         margin-top: 13px;
-        span{
+        span {
           display: block;
           font-size: 14px;
           line-height: 23px;
-          
         }
       }
     }

@@ -30,30 +30,36 @@
 export default {
   data() {
     return {
-        iswhich:-1,
-        newsNum:1
+      iswhich: -1,
+      newsNum: 0
     };
   },
-  watch:{
-    iswhich:function(val,oldval){
+  watch: {
+    iswhich: function(val, oldval) {
       // console.log(val,oldval);
+    },
+    $route: function(nPath, oPath) {
+      this.getRemind();
     }
   },
-  methods:{
-      navClick(path,index){
-          this.$router.push({path:path,query:{index:index}});
-          // this.iswhich=-1;
-      }
-  },
-  created(){
-    let self=this;
-    this.$http.get('/remind',{params:{
-      stuId:1411651103
-    }}).then(res=>{
-      // console.log(res.data);
-      self.newsNum=res.data;
-    })
-  },
+  methods: {
+    navClick(path, index) {
+      this.$router.push({ path: path, query: { index: index } });
+      // this.iswhich=-1;
+    },
+    getRemind() {
+      let self = this;
+      self.$http
+        .get("/remind", {
+          params: {
+            stuId: 1411651103
+          }
+        })
+        .then(res => {
+          self.newsNum = res.data;
+        });
+    }
+  }
 };
 </script>
 
@@ -101,13 +107,13 @@ header {
             margin: 9px 0;
           }
         }
-        &:hover{
-            background:#fff;
+        &:hover {
+          background: #fff;
         }
       }
     }
   }
-  .el-badge__content.is-fixed{
+  .el-badge__content.is-fixed {
     top: 18px;
     right: 15px;
   }

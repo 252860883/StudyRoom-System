@@ -7,12 +7,14 @@ const Student = mongoose.model('student');
 
 // 登陆
 module.exports.login = async function (params, ctx) {
+    console.log(params);
     let docs = await Student.find({
         stuId: params.stuId,
         password: params.password
     }, '-password');
+    // console.log(docs);
     if (docs.length) {
-        ctx.cookie={'stuId':params.stuId}
+        ctx.cookies.set('stuId', params.stuId);
         return {
             sucess: true,
             msg: '登陆成功'
@@ -106,25 +108,25 @@ module.exports.getUser = async (params) => {
                 }
             ])
         }])
-    .lean();
-    
-    let remind=getInfo.remind.map(item=>{
-        item.roomInfo['roomId']=item.roomInfo.roomInfo._id;
+        .lean();
+
+    let remind = getInfo.remind.map(item => {
+        item.roomInfo['roomId'] = item.roomInfo.roomInfo._id;
         delete item.roomInfo.roomInfo._id;
         delete item.stuInfo._id;
-        for(var key in item.roomInfo.roomInfo ){
-            item.roomInfo[key]=item.roomInfo.roomInfo[key];
+        for (var key in item.roomInfo.roomInfo) {
+            item.roomInfo[key] = item.roomInfo.roomInfo[key];
         }
-        for(let key in item.stuInfo){
-            item[key]=item.stuInfo[key];
+        for (let key in item.stuInfo) {
+            item[key] = item.stuInfo[key];
         }
         delete item.roomInfo.roomInfo
         delete item.stuInfo
         return item;
     })
     delete getInfo.remind
-    getInfo['remind']=remind;
-    
+    getInfo['remind'] = remind;
+
     return getInfo;
 }
 
@@ -140,7 +142,7 @@ module.exports.remind = async (params) => {
 }
 
 // 退出登陆接口
-module.exports.edit=async (params) =>{
+module.exports.edit = async (params) => {
     // 
 }
 

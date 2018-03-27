@@ -1,4 +1,5 @@
 const Koa = require('koa');
+const session = require('koa-session');
 const koaBody = require('koa-bodyparser');
 const passport = require('./lib/passport');
 
@@ -25,14 +26,6 @@ app.use(koaBody());
 // possport要在session的下面
 // app.use(passport.initialize());
 // app.use(passport.session());
-app.use(session({
-    store: new Store()
-}));
-
-app.use(ctx => {
-    let user = ctx.session.user;
-    ctx.session.view = "index";
-});
 
 // 连接数据库
 let mongoose = require('mongoose');
@@ -43,10 +36,35 @@ require('./models/student');
 require('./models/hasroom');
 require('./models/room');
 
+// 中间件，拦截请求中是否有 stuId 的cookie，否则返回 unlogin
+app.use(async (ctx, next) => {
+
+    // console.log(ctx.path)
+
+    if (ctx.path != '/login' && ctx.path != '/register') {
+        let stuId = "";
+        ctx.request.header.cookie.split(';').map(query => {
+            let key = query.split('=')[0];
+            if (key.trim() == 'stuId') {
+                stuId = query.split('=')[1];
+            }
+        })
+        if (stuId) {
+            await next();
+        } else {
+            ctx.body = {
+                error: "unlogin"
+            }
+        }
+    } else {
+        await next();
+    }
+
+})
+
 // 注册路由
 let Router = require('./router');
 app.use(Router.router.routes());
-
 
 app.listen(4000, () => {
     console.log('server is running at 4000');

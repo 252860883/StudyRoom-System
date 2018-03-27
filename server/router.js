@@ -10,16 +10,19 @@ let router = new Router();
 // 登陆接口
 // params: stuId,password
 router.post('/login', async (ctx) => {
-
-    let params = ctx.request.body;
+    
+    let params = ctx.request.body['stuId'] ? ctx.request.body : ctx.query;
+    // console.log(Boolean(ctx.request.body));
     let docs = await student.login(params, ctx);
     ctx.body = docs;
 });
 
+
 // 注册接口
 router.post('/register', async (ctx) => {
     // console.log(ctx.request.body);
-    let hasReg = await student.register(ctx.request.body);
+    let params = ctx.request.body['stuId'] ? ctx.request.body : ctx.query;
+    let hasReg = await student.register(params);
 
     if (hasReg) {
         ctx.body = {
@@ -62,8 +65,11 @@ router.get('/user', async (ctx) => {
 })
 
 // 退出登陆
-router.post('/edit',async (ctx)=>{
-
+router.post('/edit', async (ctx) => {
+    ctx.cookies.set('stuId', "");
+    ctx.body={
+        msg:"注销成功"
+    }  
 })
 // 获取自习室列表信息
 router.get('/getRoomLists', async (ctx, next) => {
