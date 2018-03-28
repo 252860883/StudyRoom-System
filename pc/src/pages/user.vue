@@ -18,7 +18,7 @@
                 <is-select-page :hasRoomLists='userData.hasRoomLists' @updateData="getUserData"></is-select-page>
             </el-tab-pane>
             <el-tab-pane label="待审核" name="third">
-              <is-review :reviewRoomLists="userData.reviewRoomLists"></is-review>
+              <is-review :reviewRoomLists="userData.reviewRoomLists" @updateData="getUserData"></is-review>
             </el-tab-pane>
             <el-tab-pane label="收藏夹" name="forth">
                 <is-collect-page :hasCollectLists='userData.collectRoomLists' @updateData="getUserData"></is-collect-page>

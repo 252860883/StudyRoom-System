@@ -58,7 +58,8 @@
       v-if="promptShow" 
       :seatIndex="selectSeat"
     ></select-seat>
-    <show-callback :show="callbackShow" :content='callbackContent'></show-callback>
+
+    <show-callback @fadeCallback='callbackShow=false' :show="callbackShow" :content='callbackContent'></show-callback>
   </div>
 </template>
 

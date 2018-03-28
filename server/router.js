@@ -8,15 +8,13 @@ const passport = require('./lib/passport');
 let router = new Router();
 
 // 登陆接口
-// params: stuId,password
 router.post('/login', async (ctx) => {
-    
+
     let params = ctx.request.body['stuId'] ? ctx.request.body : ctx.query;
     // console.log(Boolean(ctx.request.body));
     let docs = await student.login(params, ctx);
     ctx.body = docs;
 });
-
 
 // 注册接口
 router.post('/register', async (ctx) => {
@@ -67,9 +65,9 @@ router.get('/user', async (ctx) => {
 // 退出登陆
 router.post('/edit', async (ctx) => {
     ctx.cookies.set('stuId', "");
-    ctx.body={
-        msg:"注销成功"
-    }  
+    ctx.body = {
+        msg: "注销成功"
+    }
 })
 // 获取自习室列表信息
 router.get('/getRoomLists', async (ctx, next) => {
@@ -126,6 +124,7 @@ router.get('/remind', async (ctx) => {
     ctx.body = callback;
 })
 
+// 获取今天的自习
 router.get('/getTodayHasRoom', async (ctx) => {
     let callback = await room.getTodayHasRoom(ctx.query);
     ctx.body = callback;
@@ -143,5 +142,10 @@ router.get('/delHasList', async (ctx) => {
     ctx.body = callback;
 })
 
+// 删除正在审核的自习室
+router.get('/delReviewList', async (ctx) => {
+    let callback = await room.delReviewList(ctx.query);
+    ctx.body = callback;
+})
 
 module.exports.router = router;

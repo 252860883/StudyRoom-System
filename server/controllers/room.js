@@ -43,19 +43,37 @@ module.exports.getRoomLists = async (params) => {
 // 创建自习室
 module.exports.creatRoom = async (params) => {
     try {
-        // 获取到对应房间信息
-        // let hasRoom = await RoomInfo.findOne({
-        //     build: params.build,
-        //     floor: params.floor,
-        //     number: params.number
-        // }, '_id');
         // 判断是否已经被创建 
         let noBlank = await Room.findOne({ roomInfo: params.roomId, moon: params.moon, day: params.day });
-        console.log(noBlank);
 
         if (!noBlank) {
             // 查询创建者信息
-            let stuInfo = await Student.findOne({ stuId: global.stuId });
+            let stuInfo = await stu.getUser(params);
+            let isToadyHas = false, isToadyReview = false;
+            stuInfo.hasRoomLists.map(room => {
+                if (room.roomRecord.moon == params.moon && room.roomRecord.day == params.day) {
+                    isToadyHas = true;
+                }
+            })
+            stuInfo.reviewRoomLists.map(room => {
+                if (room.roomRecord.moon == params.moon && room.roomRecord.day == params.day) {
+                    isToadyReview = true;
+                }
+            })
+
+            if (isToadyHas) {
+                return {
+                    sucess: false,
+                    msg: '您今天已经拥有一节自习，不可重复添加',
+                }
+            }
+            if (isToadyReview) {
+                return {
+                    sucess: false,
+                    msg: '您今天已经提交了一个自习申请，如需更换情先删除',
+                }
+            }
+
             // id绑定到hasroom上
             params['roomInfo'] = params.roomId;
             params['seatsLists'] = [];
@@ -97,12 +115,42 @@ module.exports.addRoom = async (params) => {
         // 判断是否已经加入这个教室
         let isHas = await Student.findOne({ stuId: global.stuId, hasRoomLists: { $elemMatch: { roomRecord: params.roomId } } });
         if (isHas) return { sucess: false, msg: '已经加入该自习室' }
+
         // 获取房间和申请者的信息
         let roomInfo = await Room.findOne({ _id: params.roomId }).populate('stuInfo');
         let addStu = await student.getUser({ stuId: global.stuId });
+
         // 判断是否已经提交申请了
         let isRemind = await Student.findOne({ stuId: roomInfo.stuInfo.stuId, remind: { $elemMatch: { roomInfo: params.roomId, stuInfo: addStu._id } } });
         if (isRemind) return { sucess: false, msg: '已经提交申请，请耐心等待管理员审核通过' }
+
+        // 判断今天是否已经加入自习了
+        let stuInfo = await stu.getUser(params);
+        let isToadyHas = false, isToadyReview = false;
+        stuInfo.hasRoomLists.map(room => {
+            if (room.roomRecord.moon == roomInfo.moon && room.roomRecord.day == roomInfo.day) {
+                isToadyHas = true;
+            }
+        })
+
+        stuInfo.reviewRoomLists.map(room => {
+            if (room.roomRecord.moon == roomInfo.moon && room.roomRecord.day == roomInfo.day) {
+                isToadyReview = true;
+            }
+        })
+
+        if (isToadyHas) {
+            return {
+                sucess: false,
+                msg: '您今天已经拥有一节自习，不可重复添加',
+            }
+        }
+        if (isToadyReview) {
+            return {
+                sucess: false,
+                msg: '您今天已经提交了一个自习申请，如需更换情先删除',
+            }
+        }
 
         // 没有问题，写入管理员remind，用户添加到review中
         await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id, seatIndex: params.seatIndex } } });
@@ -221,8 +269,6 @@ module.exports.disagree = async (params) => {
 }
 
 // 删除已经加入的自习室
-// 这里有问题，如果是管理员删除自习室怎么办呢？直接删除掉自习室？还是说不可以删掉？
-// 应该添加一个自习者字段
 module.exports.deleteHasRoom = async (params) => {
     // 删除用户的 has字段
     try {
@@ -265,7 +311,28 @@ module.exports.deleteCollectRoom = async (params) => {
     } catch (error) {
         console.log(error);
     }
+}
 
+// 删除正在审核的自习室
+module.exports.delReviewList= async (params)=>{
+    try{
+        // 删除用户review的信息
+        await Student.update(
+            { stuId: global.stuId },
+            { $pull: { reviewRoomLists: { roomRecord: params.roomId } } }
+        )
+        // 删除管理员的remind的信息
+        await Student.update(
+            { stuId: params.addId },
+            { $pull: { remind: { roomInfo: params.roomId } } }
+        )
+        return{
+            sucess:true,
+            mag:"删除成功"
+        }
+    }catch(e){
+        console.log(e);
+    }
 }
 
 // 获取自习室详情

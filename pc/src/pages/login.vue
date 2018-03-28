@@ -117,7 +117,7 @@ export default {
         })
         .then(res => {
           if (res.data.sucess) {
-            this.$router.push({ path: "/" });
+            this.$router.push({ path: "/"});
           } else {
             this.showErr("账号或密码错误");
           }

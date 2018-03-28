@@ -15,7 +15,7 @@
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
-        <a class="del" @click="toDetail(item)">删除</a>
+        <a class="del" @click="deleteReview(item)">删除</a>
       </div>
     </div>
     <blank-img v-if="!tableData.length" content='啊哦，您还没有待审核的自习信息'></blank-img>
@@ -58,6 +58,19 @@ export default {
         path: "/roomdetail",
         query: { roomId: room.roomRecord._id, empty: false }
       });
+    },
+    deleteReview(room) {
+      console.log(room);
+      this.$http
+        .get("/delReviewList", {
+          params: {
+            addId: room.roomRecord.stuInfo.stuId,
+            roomId: room.roomRecord._id
+          }
+        })
+        .then(res => {
+          this.$emit("updateData");
+        });
     }
   }
 };
@@ -90,7 +103,7 @@ export default {
         color: $black;
         margin: 0 7px;
         span {
-          margin:  0 8px;
+          margin: 0 8px;
         }
       }
       .list-left-down {

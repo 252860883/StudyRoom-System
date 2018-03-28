@@ -1,8 +1,8 @@
-<template>
+<template >
 <transition name="fade">
     <div class="cbShow" v-if="isShow">
         <p>{{content}}</p>
-    </div>s
+    </div>
 </transition>
 
 </template>
@@ -23,7 +23,7 @@ export default {
     }
   },
   created() {
-    this.isShow = this.show;
+    this.isShow = false;
     this.con = this.content;
   },
   watch: {
@@ -33,6 +33,7 @@ export default {
       if (n) {
         setTimeout(() => {
           self.isShow = false;
+          self.$emit("fadeCallback");
         }, 3000);
       }
     },
@@ -41,6 +42,7 @@ export default {
       let self = this;
       setTimeout(() => {
         self.isShow = false;
+        self.$emit("fadeCallback");
       }, 3000);
     }
   }

@@ -97,8 +97,11 @@ export default {
           }
         })
         .then(res => {
-          
-          console.log(res);
+          if (!res.data.sucess) {
+            self.$emit("closeprompt", res.data.msg);
+            return;
+          }
+
           self.$router.replace({
             path: "/roomdetail",
             query: {
@@ -117,7 +120,7 @@ export default {
       this.$http
         .get("/addStar", {
           params: {
-            roomId: this.$route.query.roomId,
+            roomId: this.$route.query.roomId
           }
         })
         .then(res => {
