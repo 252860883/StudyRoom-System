@@ -14,15 +14,18 @@
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
-        <a class="del" @click="deleteRoom(item)">删除</a>
+        <a class="del" @click="deleteRoomClick(item)">删除</a>
       </div>
     </div>
       <blank-img v-if="!tableData.length" content='啊哦，您还没有收藏的自习信息'></blank-img>
+      <toast v-if="showToast" content="确定要删除该自习吗？" @reset="showToast=false" @promise="deleteRoom"></toast>
   </div>
 </template>
 
 <script>
 import blankImg from "../components/blanik-img";
+import toast from "../components/toast";
+
 export default {
   props: {
     hasCollectLists: {
@@ -31,11 +34,14 @@ export default {
   },
   data() {
     return {
-      tableData: []
+      tableData: [],
+      showToast:false,
+      delRoom:""
     };
   },
   components: {
-    blankImg
+    blankImg,
+    toast
   },
   watch: {
     hasCollectLists: function(n, o) {
@@ -59,7 +65,13 @@ export default {
         query: { roomId: room.roomRecord._id, empty: false }
       });
     },
-    deleteRoom(room) {
+    deleteRoomClick(room){
+      this.showToast=true;
+      this.delRoom=room;
+    },
+    deleteRoom() {
+      this.showToast=false;
+      let room=this.delRoom;
       this.$http
         .get("/delCollectList", {
           params: {

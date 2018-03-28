@@ -15,15 +15,18 @@
       </div>
       <div class="list-right">
         <a @click="toDetail(item)">查看详情</a>
-        <a class="del" @click="deleteReview(item)">删除</a>
+        <a class="del" @click="deleteReviewClick(item)">删除</a>
       </div>
     </div>
     <blank-img v-if="!tableData.length" content='啊哦，您还没有待审核的自习信息'></blank-img>
+    <toast v-if="showToast" content="确定要删除该自习吗？" @reset="showToast=false" @promise="deleteReview"></toast>    
   </div>
 </template>
 
 <script>
 import blankImg from "../components/blanik-img";
+import toast from "../components/toast";
+
 export default {
   props: {
     reviewRoomLists: {
@@ -32,11 +35,14 @@ export default {
   },
   data() {
     return {
-      tableData: []
+      tableData: [],
+      delRoom:"",
+      showToast:false
     };
   },
   components: {
-    blankImg
+    blankImg,
+    toast
   },
   watch: {
     reviewRoomLists: function(n, o) {
@@ -59,8 +65,13 @@ export default {
         query: { roomId: room.roomRecord._id, empty: false }
       });
     },
-    deleteReview(room) {
-      console.log(room);
+    deleteReviewClick(room){
+      this.showToast=true;
+      this.delRoom=room;
+    },
+    deleteReview() {
+      let room = this.delRoom;
+      this.showToast=false;
       this.$http
         .get("/delReviewList", {
           params: {

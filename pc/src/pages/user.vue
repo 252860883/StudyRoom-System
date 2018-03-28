@@ -6,7 +6,7 @@
         <div class="nav">
           <p><i v-if="navNo==1"></i>个人中心</p>
           <p><i v-if="navNo==2"></i>对话/申请</p>
-          <p @click="edit"><i v-if="navNo==3"></i>退出账号</p>
+          <p @click="editClick"><i v-if="navNo==3"></i>退出账号</p>
         </div>
       </div>
       <div class="user-right">
@@ -29,7 +29,7 @@
         </el-tabs>
       </div>
       <!-- 弹框 -->
-      <div></div>
+      <toast content="确定要退出登陆吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
   </div>
 </template>
 <script>
@@ -39,12 +39,14 @@ import userShow from "../components/userShow";
 import isReview from "../components/isreview";
 import classClock from "../components/classClock";
 import remind from "../components/remind";
+import toast from "../components/toast";
 export default {
   data() {
     return {
       activeName: "second",
       userData: {},
-      navNo:1
+      navNo:1,
+      showToast:false
     };
   },
   components: {
@@ -54,6 +56,7 @@ export default {
     isCollectPage,
     isReview,
     remind,
+    toast
     
   },
   created() {
@@ -81,6 +84,9 @@ export default {
         .then(res => {
           self.userData = res.data.data;
         });
+    },
+    editClick(){
+      this.showToast=true;
     },
     // 退出账号
     edit(){
