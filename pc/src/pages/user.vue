@@ -29,7 +29,7 @@
         </el-tabs>
       </div>
       <!-- 弹框 -->
-      <toast content="确定要退出登陆吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
+      <toast content="确定要退出登录吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
   </div>
 </template>
 <script>

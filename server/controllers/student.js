@@ -148,6 +148,32 @@ module.exports.remind = async (params) => {
 module.exports.edit = async (params) => {
 }
 
+// 获取排行榜列表和自己的排行榜名次
+module.exports.rankLists = async (params) => {
+    let selfRank,selfInfo;
+    let stuInfo = await Student.find({}, "stuId name major school hasRoomLists")
+        .populate({
+            path: 'hasRoomLists',
+        }).lean();
+    let rankLists = stuInfo.sort(function (a, b) {
+        return b.hasRoomLists.length - a.hasRoomLists.length
+    }).map((stu,index) => {
+        if(stu.stuId==global.stuId){
+            selfRank=index;
+            selfInfo=stu;
+
+        }
+        stu['hasNumber'] = stu.hasRoomLists.length;
+        delete stu.hasRoomLists;
+        return stu;
+    });
+    return{
+        rankLists:rankLists,
+        selfRank:selfRank,
+        selfInfo:selfInfo
+    }
+}
+
 // 按照对象内部排序
 // 第一个是主属性，后面是子属性
 function compare(property, child) {

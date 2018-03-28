@@ -148,4 +148,10 @@ router.get('/delReviewList', async (ctx) => {
     ctx.body = callback;
 })
 
+// 获取排行榜信息
+router.get('/getRankLists', async (ctx) => {
+    let callback = await student.rankLists(ctx.query);
+    ctx.body = callback;
+})
+
 module.exports.router = router;
