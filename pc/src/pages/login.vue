@@ -7,7 +7,7 @@
     </div>
     <span class="errMsg" v-show="isErr">{{errShow}}</span>
     <!-- 登陆 -->
-    <div class="login" v-if='islogin' >
+    <div class="" v-if='islogin' >
       
       <div class="clomn">
         <img src="../assets/img/login/stuId.png" alt=""> 
@@ -46,9 +46,9 @@
       </div>
       <a class="click" @click="realResigter">注册</a>
     </div>
-
-    
   </div>
+      <img class="bgImg-right" src="../assets/img/pic/clock-yes.png" alt="">
+      <img class="bgImg-left" src="../assets/img/pic/clock-no.png" alt="">
 </div>
   
 </template>
@@ -117,7 +117,7 @@ export default {
         })
         .then(res => {
           if (res.data.sucess) {
-            this.$router.push({ path: "/"});
+            this.$router.push({ path: "/" });
           } else {
             this.showErr("账号或密码错误");
           }
@@ -150,14 +150,13 @@ export default {
         })
         .then(res => {
           if (res.data.sucess) {
-            self.password="";
-            self.name="";
-            self.school="";
-            self.major="";
-            self.isErr=true;
+            self.password = "";
+            self.name = "";
+            self.school = "";
+            self.major = "";
+            self.isErr = true;
             self.showErr("注册成功，请登录");
             self.islogin = true;
-            
           } else {
             self.showErr(res.data.msg);
             return;
@@ -171,7 +170,7 @@ export default {
 <style lang='scss'>
 @import "../assets/common.scss";
 .login {
-  // background: #eee;
+  background: #eee;
   width: 100%;
   height: 100%;
   position: relative;
@@ -181,11 +180,42 @@ export default {
     width: 100%;
     height: 100%;
   }
+  .bgImg-right {
+    position: absolute;
+    // z-index: -10;
+    bottom: -100px;
+    right: 150px;
+    width: 400px;
+    height: 400px;
+    opacity: 0.9;
+    animation: moveup ease-in 1s;
+    
+  }
+  .bgImg-left {
+    position: absolute;
+    // z-index: -10;
+    bottom: -100px;
+    left: 150px;
+    width: 400px;
+    height: 400px;
+    opacity: 0.9;
+    animation: moveup ease-in 1s;
+  }
+
+  @keyframes moveup {
+    0% {
+      bottom: -400px;
+    }
+    100% {
+      bottom: -100px;
+    }
+  }
   .con {
     width: 350px;
     position: absolute;
     top: 50%;
     left: 50%;
+    z-index: 10;
     margin-left: -150px;
     transform: translateY(-50%);
     background: #fff;
