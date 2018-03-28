@@ -55,6 +55,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
   p {
     padding: 20px 30px;
     background: rgba(0, 0, 0, 0.7);

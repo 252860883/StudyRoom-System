@@ -7,7 +7,7 @@ const Student = mongoose.model('student');
 
 // 登陆
 module.exports.login = async function (params, ctx) {
-    console.log(params);
+    // console.log(params);
     let docs = await Student.find({
         stuId: params.stuId,
         password: params.password
@@ -127,10 +127,9 @@ module.exports.getUser = async (params) => {
     delete getInfo.remind
     getInfo['remind'] = remind;
 
-    let hasRoomLists= getInfo.hasRoomLists.sort(compare('roomRecord','day')).sort(compare('roomRecord','moon'));
+    let hasRoomLists = getInfo.hasRoomLists.sort(compare('roomRecord', 'day')).sort(compare('roomRecord', 'moon'));
     delete getInfo.hasRoomLists;
-    getInfo['hasRoomLists']=hasRoomLists;
-
+    getInfo['hasRoomLists'] = hasRoomLists;
     return getInfo;
 }
 

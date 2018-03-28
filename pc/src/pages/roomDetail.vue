@@ -107,7 +107,7 @@ export default {
         .get("/getRoom", {
           params: {
             roomId: roomId,
-            stuId: 1411651103,
+            // stuId: 1411651103,
             isblank: isblank
           }
         })

@@ -6,18 +6,18 @@
     <div class="home-top">
         <div class="home-top-title">
             <p>
-                <span class="con">选择自习地点</span> 
-                <el-select v-model="buildName" placeholder="请选择">
+                <span class="con">选择地点</span> 
+                <el-select v-model="buildName" placeholder="请选择" style="width:120px;">
                     <el-option v-for="item in buildLists" :key="item" :value="item">
                     </el-option>
                 </el-select>
                 <span class="con">选择楼层</span>
-                <el-select v-model="vFloor" placeholder="请选择">
+                <el-select v-model="vFloor" placeholder="请选择" style="width:120px;">
                     <el-option v-for="item in floorLists" :key="item" :value="item">
                     </el-option>
                 </el-select>
                 <span class="con">选择时间</span>
-                <el-date-picker v-model="time" type="date" :clearable="false" :editable="false"></el-date-picker>
+                <el-date-picker v-model="time" type="date" :clearable="false" :editable="false" style="width:160px;"></el-date-picker>
                 <!-- <span class="con">查看已创建的房间</span> -->
                 <button @click="getRoomLists">确定</button>
             </p>
@@ -144,7 +144,7 @@ export default {
     }
   }
   .home-top {
-    height: 80px;
+    height: 70px;
     width: 100%;
     background: $blank;
     text-align: center;

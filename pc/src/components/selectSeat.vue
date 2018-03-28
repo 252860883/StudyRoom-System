@@ -16,7 +16,7 @@
           <img src="../assets/img/room/addRoom.png" alt="">
           <p>加入自习</p>
         </div>
-        <div v-else class="addRoom unclick" @click="addClick">
+        <div v-else class="addRoom unclick">
           <img src="../assets/img/room/addRoom-grey.png" alt="">
           <p>加入自习</p>
         </div>
@@ -97,7 +97,8 @@ export default {
           }
         })
         .then(res => {
-          self.$emit("getRoomDetail", res.data.roomId, false);
+          
+          console.log(res);
           self.$router.replace({
             path: "/roomdetail",
             query: {
@@ -105,25 +106,26 @@ export default {
               empty: false
             }
           });
+          self.$emit("getRoomDetail", res.data.roomId, false);
           let msg = "创建自习室成功";
           self.$emit("closeprompt", msg);
         });
     },
+    // 收藏自习室
     collectClick() {
       let self = this;
       this.$http
         .get("/addStar", {
           params: {
             roomId: this.$route.query.roomId,
-            stuId: 1411651103
           }
         })
         .then(res => {
-          // console.log(res);
           self.$emit("getRoomDetail", res.data.roomId, false);
           self.$emit("closeprompt", "收藏成功");
         });
     },
+    // 加入自习室
     addClick() {
       let self = this;
       this.$http
@@ -134,8 +136,6 @@ export default {
           }
         })
         .then(res => {
-          // console.log(res);
-          // self.$emit("getRoomDetail", res.data.roomId, false);
           self.$emit("closeprompt", res.data.msg);
         });
     }
@@ -182,7 +182,7 @@ export default {
       cursor: pointer;
     }
     .seatInfo {
-      padding: 30px;
+      padding: 50px 0 30px 0;
       span {
         color: $blue;
         font-size: 70px;
