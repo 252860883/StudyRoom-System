@@ -151,7 +151,7 @@ module.exports.edit = async (params) => {
 // 获取排行榜列表和自己的排行榜名次
 module.exports.rankLists = async (params) => {
     let selfRank,selfInfo;
-    let stuInfo = await Student.find({}, "stuId name major school hasRoomLists")
+    let stuInfo = await Student.find({}, "stuId name major school hasRoomLists praise")
         .populate({
             path: 'hasRoomLists',
         }).lean();
@@ -161,7 +161,6 @@ module.exports.rankLists = async (params) => {
         if(stu.stuId==global.stuId){
             selfRank=index;
             selfInfo=stu;
-
         }
         stu['hasNumber'] = stu.hasRoomLists.length;
         delete stu.hasRoomLists;

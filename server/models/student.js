@@ -74,7 +74,14 @@ var studentSchema = new mongoose.Schema({
         seatIndex: {
             type: Number
         },
-    }]
+    }],
+    // 点赞
+    praise:{
+        type:Number,
+        default:0
+    },
+    // 点赞的用户信息
+    praiseStuLists:[]
 });
 
 mongoose.model('student', studentSchema);
