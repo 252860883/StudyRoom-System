@@ -11,7 +11,7 @@
         <span class="praise">操作</span>
       </div>
 
-      <div class="rankItem" v-for="(item,index) in rankLists" :key="item.stuId">
+      <div :class="{selfItem:index==userRank,rankItem:true}" v-for="(item,index) in rankLists" :key="item.stuId">
         <span class="index">{{index+1}}</span>
         <span class="name">{{item.name}}</span>
         <span class="school">{{item.school}}{{item.major}}</span>
@@ -98,7 +98,7 @@ export default {
   .number,
   .level,
   .praise {
-    flex: 0 1 100px;
+    flex: 0 1 130px;
   }
   .nav {
     width: 100%;
@@ -120,6 +120,11 @@ export default {
     align-items: center;
     color: $black;
     font-size: 14px;
+  }
+  .selfItem{
+    background: rgba($color: $orange, $alpha: 0.8);
+    border-radius: 5px;
+    color: #fff;
   }
 }
 </style>
