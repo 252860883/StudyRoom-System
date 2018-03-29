@@ -34,9 +34,17 @@ export default {
   },
   data() {
     return {
-      tableData: [],
-      showToast:false,
-      delRoom:""
+      tableData: [
+        {
+          roomRecord: {
+            roomInfo: {
+              build: ""
+            }
+          }
+        }
+      ],
+      showToast: false,
+      delRoom: ""
     };
   },
   components: {
@@ -47,6 +55,8 @@ export default {
     hasCollectLists: function(n, o) {
       this.tableData = n;
     }
+  },
+  created(){
   },
   filters: {
     roomNumber(room) {
@@ -65,13 +75,13 @@ export default {
         query: { roomId: room.roomRecord._id, empty: false }
       });
     },
-    deleteRoomClick(room){
-      this.showToast=true;
-      this.delRoom=room;
+    deleteRoomClick(room) {
+      this.showToast = true;
+      this.delRoom = room;
     },
     deleteRoom() {
-      this.showToast=false;
-      let room=this.delRoom;
+      this.showToast = false;
+      let room = this.delRoom;
       this.$http
         .get("/delCollectList", {
           params: {
@@ -114,7 +124,7 @@ export default {
         color: $blue;
         margin: 0 7px;
         span {
-          margin:  0 8px;
+          margin: 0 8px;
         }
       }
       .list-left-down {
