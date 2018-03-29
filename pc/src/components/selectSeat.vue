@@ -101,7 +101,10 @@ export default {
             self.$emit("closeprompt", res.data.msg);
             return;
           }
-
+          self.$emit("getRoomDetail", res.data.roomId, false);
+          let msg = "创建自习室成功";
+          self.$emit("closeprompt", msg);
+          
           self.$router.replace({
             path: "/roomdetail",
             query: {
@@ -109,9 +112,8 @@ export default {
               empty: false
             }
           });
-          self.$emit("getRoomDetail", res.data.roomId, false);
-          let msg = "创建自习室成功";
-          self.$emit("closeprompt", msg);
+
+
         });
     },
     // 收藏自习室

@@ -9,9 +9,7 @@ let router = new Router();
 
 // 登陆接口
 router.post('/login', async (ctx) => {
-
     let params = ctx.request.body['stuId'] ? ctx.request.body : ctx.query;
-    // console.log(Boolean(ctx.request.body));
     let docs = await student.login(params, ctx);
     ctx.body = docs;
 });

@@ -5,7 +5,7 @@
         <!-- 导航 -->
         <div class="nav">
           <p><i v-if="navNo==1"></i>个人中心</p>
-          <p><i v-if="navNo==2"></i>对话/申请</p>
+          <p @click="toChat"><i v-if="navNo==2" ></i>对话/申请</p>
           <p @click="editClick"><i v-if="navNo==3"></i>退出账号</p>
         </div>
       </div>
@@ -40,13 +40,14 @@ import isReview from "../components/isreview";
 import classClock from "../components/classClock";
 import remind from "../components/remind";
 import toast from "../components/toast";
+import io from "socket.io-client";
 export default {
   data() {
     return {
       activeName: "second",
       userData: {},
-      navNo:1,
-      showToast:false
+      navNo: 1,
+      showToast: false
     };
   },
   components: {
@@ -57,7 +58,6 @@ export default {
     isReview,
     remind,
     toast
-    
   },
   created() {
     let self = this;
@@ -85,21 +85,32 @@ export default {
           self.userData = res.data.data;
         });
     },
-    editClick(){
-      this.showToast=true;
+    editClick() {
+      this.showToast = true;
+    },
+    // 聊天
+    toChat() {
+      let serverPath=`${location.protocol}//${location.host}:4000`;
+      // const socket = io(serverPath);
+      const socket = io('http://localhost:4000');
+      socket.on("name", function(data) {
+        alert(data.username);
+        socket.emit("my other event", { my: "data" });
+      });
     },
     // 退出账号
-    edit(){
-      let self=this;
-      this.$http.post('/edit').then(res=>{
-        self.$router.replace('/login');
-      })
+    edit() {
+      let self = this;
+      this.$http.post("/edit").then(res => {
+        self.$router.replace("/login");
+      });
     }
   }
 };
 </script>
 <style lang="scss">
 @import "../assets/common.scss";
+
 .user {
   width: 1100px;
   margin: 0 auto;
@@ -117,7 +128,7 @@ export default {
       border-radius: 5px;
       margin-top: 10px;
       overflow: hidden;
-      p{
+      p {
         height: 50px;
         line-height: 50px;
         text-align: center;
@@ -126,15 +137,15 @@ export default {
         border-bottom: 1px solid $blank;
         cursor: pointer;
         position: relative;
-        &:last-child{
+        &:last-child {
           border: 0;
         }
-        &:hover{
+        &:hover {
           background: $blue;
           color: #fff;
         }
 
-        i{
+        i {
           position: absolute;
           display: block;
           width: 5px;
@@ -142,11 +153,10 @@ export default {
           top: 7px;
           left: 0;
           background: $blue;
-
         }
       }
     }
-    .isnav{
+    .isnav {
       color: red;
     }
   }

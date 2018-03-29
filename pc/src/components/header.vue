@@ -70,6 +70,8 @@ header {
   height: 48px;
   background: $blue;
   overflow: hidden;
+  position: fixed;
+  top: 0;
   .con {
     //   width: 1200px;
     margin: 0 auto;

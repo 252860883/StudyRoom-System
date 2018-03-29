@@ -76,6 +76,7 @@ export default {
 .rank {
   width: 850px;
   margin: 10px auto;
+  margin-bottom: 50px;
   padding: 20px;
   background: $blank;
   border-radius: 5px;
