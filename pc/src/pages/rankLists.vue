@@ -14,7 +14,7 @@
       <div :class="{selfItem:index==userRank,rankItem:true}" v-for="(item,index) in rankLists" :key="item.stuId">
         <span class="index">{{index+1}}</span>
         <span class="name">{{item.name}}</span>
-        <span class="school">{{item.school}}{{item.major}}</span>
+        <span class="school">{{item.school}} / {{item.major}}</span>
         <span class="number">{{item.hasNumber}}</span>
         <span class="level">{{item.hasNumber | judgeLevel}}</span>
         <div class="praise">
@@ -74,7 +74,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/common.scss";
 .rank {
-  width: 1000px;
+  width: 850px;
   margin: 10px auto;
   padding: 20px;
   background: $blank;
@@ -114,12 +114,13 @@ export default {
   .rankItem {
     display: flex;
     width: 100%;
-    height: 50px;
+    height: 45px;
     justify-content: center;
     text-align: center;
     align-items: center;
     color: $black;
     font-size: 14px;
+    margin: 8px 0;
   }
   .selfItem{
     background: rgba($color: $orange, $alpha: 0.8);

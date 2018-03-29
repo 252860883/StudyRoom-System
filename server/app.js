@@ -51,6 +51,7 @@ app.use(async (ctx, next) => {
         })
         if (stuId) {
             global.stuId=stuId;
+            console.log(stuId)
             await next();
         } else {
             ctx.body = {
@@ -58,7 +59,6 @@ app.use(async (ctx, next) => {
             }
         }
     } else {
-        console.log('ok')
         await next();
     }
 

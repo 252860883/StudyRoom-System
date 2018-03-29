@@ -60,6 +60,7 @@ module.exports.modify = async function (params) {
 
 // 获取用户资料
 module.exports.getUser = async (params) => {
+    console.log(global.stuId);
     let getInfo = await Student.findOne({ stuId: global.stuId })
         .populate([{
             path: 'hasRoomLists.roomRecord',
@@ -111,11 +112,12 @@ module.exports.getUser = async (params) => {
         .lean();
 
     let remind = getInfo.remind.map(item => {
-        item.roomInfo['roomId'] = item.roomInfo.roomInfo._id;
-        delete item.roomInfo.roomInfo._id;
+        console.log(item)
+        item.roomInfo['roomId'] = item.roomInfo._id;
+        delete item.roomInfo._id;
         delete item.stuInfo._id;
-        for (var key in item.roomInfo.roomInfo) {
-            item.roomInfo[key] = item.roomInfo.roomInfo[key];
+        for (var key in item.roomInfo) {
+            item.roomInfo[key] = item.roomInfo[key];
         }
         for (let key in item.stuInfo) {
             item[key] = item.stuInfo[key];
