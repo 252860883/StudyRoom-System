@@ -6,6 +6,7 @@ import roomDetail from '@/pages/roomDetail'
 import login from '@/pages/login'
 import user from '@/pages/user'
 import userChange from '@/pages/userChange'
+import ranklists from '@/pages/rankLists'
 Vue.use(Router)
 
 export default new Router({
@@ -34,5 +35,9 @@ export default new Router({
       name: 'userinformation',
       component: userChange
     },
+    {
+      path:"/ranklists",
+      component:ranklists
+    }
   ]
 })

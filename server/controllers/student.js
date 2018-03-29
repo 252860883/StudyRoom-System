@@ -150,26 +150,45 @@ module.exports.edit = async (params) => {
 
 // 获取排行榜列表和自己的排行榜名次
 module.exports.rankLists = async (params) => {
-    let selfRank,selfInfo;
-    let stuInfo = await Student.find({}, "stuId name major school hasRoomLists praise")
+    let selfRank, selfInfo;
+    let stuInfo = await Student.find({}, "stuId name major school hasRoomLists praise praiseStuLists")
         .populate({
             path: 'hasRoomLists',
         }).lean();
     let rankLists = stuInfo.sort(function (a, b) {
         return b.hasRoomLists.length - a.hasRoomLists.length
-    }).map((stu,index) => {
-        if(stu.stuId==global.stuId){
-            selfRank=index;
-            selfInfo=stu;
+    }).map((stu, index) => {
+        if (stu.stuId == global.stuId) {
+            selfRank = index;
+            selfInfo = stu;
         }
         stu['hasNumber'] = stu.hasRoomLists.length;
         delete stu.hasRoomLists;
+        // 判断是否已经点赞
+        if(stu.praiseStuLists && stu.praiseStuLists.indexOf(global.stuId)>=0){
+            stu['isPraise']=true;
+        }else{
+            stu['isPraise']=false;            
+        };
+        delete stu.praiseStuLists;
         return stu;
     });
-    return{
-        rankLists:rankLists,
-        selfRank:selfRank,
-        selfInfo:selfInfo
+    return {
+        rankLists: rankLists,
+        selfRank: selfRank,
+        selfInfo: selfInfo
+    }
+}
+// 排行榜点赞
+module.exports.clickPromise = async (params) => {
+    // 被点赞者 praise +1 ，lists里面加入点击者id
+    try {
+        await Student.update({ stuId: params.stuId }, { $push: { praiseStuLists: global.stuId }, $set: { praise: params.praise } });
+        return {
+            msg: "点赞成功"
+        }
+    } catch (error) {
+        throw error;
     }
 }
 

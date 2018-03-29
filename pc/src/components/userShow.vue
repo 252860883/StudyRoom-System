@@ -10,14 +10,20 @@
   <div class="award-con"> 
     <img :src="require('../assets/img/award.png')">
     <div class="award-text">
-      <span class="award-title">自习室小白</span>
-      <span class="award-num">您已经累计{{user.hasRoomLists.length}}课时自习</span>
+      <span class="award-title">{{level}}</span>
     </div>
   </div>
+
+  <div class="award-rank" @click="toRankList">
+    <img src="../assets/img/rank-icon.png" alt="">
+      <span class="award-num">段位排行榜</span>
+  </div>
+
 </div>
 
 </template>
 <script>
+import { judgeLevel } from "../lib/level";
 export default {
   props: {
     userdata: {
@@ -28,17 +34,23 @@ export default {
     return {
       user: {
         hasRoomLists: []
-      }
+      },
+      level: "自习萌新"
     };
   },
   watch: {
     userdata: function(n, o) {
       this.user = n;
+      // console.log(judgeLevel);
+      this.level = judgeLevel(n.hasRoomLists.length);
     }
   },
   methods: {
     userInfoClick() {
       this.$router.push({ path: "/userinfo" });
+    },
+    toRankList(){
+      this.$router.push({ path: "/ranklists" });
     }
   }
 };
@@ -49,9 +61,11 @@ export default {
   width: 100%;
   margin: 0 auto;
   padding: 5px 0;
+  margin-bottom: 60px;
   position: relative;
   background: rgba($color: #eee, $alpha: 0.5);
   border-radius: 5px;
+  color: $light;
   .rename {
     position: absolute;
     width: 20px;
@@ -69,7 +83,7 @@ export default {
     border-radius: 50%;
     margin: 20px auto;
     overflow: hidden;
-    img{
+    img {
       width: 100px;
       height: 100px;
     }
@@ -77,35 +91,58 @@ export default {
   .name {
     text-align: center;
     font-size: 20px;
-    color: $black;
     font-weight: bold;
   }
   .school {
     margin-top: 5px;
     text-align: center;
     font-size: 15px;
-    color: $black;
   }
+
   .award-con {
     width: 180px;
-    margin: 20px auto;
+    margin: 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     img {
-      float: left;
-      width: 50px;
+      width: 22px;
     }
     .award-text {
       span {
         display: block;
       }
       .award-title {
-        font-size: 25px;
+        font-size: 18px;
         font-weight: bold;
-        color: #e16531;
-      }
-      .award-num {
-        font-size: 12px;
         color: #ea9518;
       }
+    }
+  }
+  .award-rank {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background: rgba($color: #eee, $alpha: 0.8);
+    border-radius: 5px;
+    width: 100%;
+    height: 50px;
+    bottom: -55px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+    img {
+      width: 35px;
+      height: 35px;
+    }
+    .award-num {
+      font-size: 18px;
+      font-weight: bold;
+      color: $orange;
+      margin-left: 8px;
     }
   }
 }

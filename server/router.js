@@ -154,4 +154,10 @@ router.get('/getRankLists', async (ctx) => {
     ctx.body = callback;
 })
 
+// 排行榜点赞
+router.get('/clickPromise', async (ctx) => {
+    let callback = await student.clickPromise(ctx.query);
+    ctx.body = callback;
+})
+
 module.exports.router = router;
