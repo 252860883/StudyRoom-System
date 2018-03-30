@@ -2,16 +2,16 @@
 export function judgeLevel(num) {
     console.log(num);
     if (num == 0) {
-        return "自习萌新";
+        return "LV1 自习萌新";
     } else if (num < 5) {
-        return "觉醒学渣";
+        return "Lv2 觉醒学渣";
     } else if (num < 10) {
-        return "初成之秀";
+        return "LV3 初成之秀";
     } else if (num < 15) {
-        return "光辉驻长";
+        return "LV4 光辉驻长";
     } else if (num < 25) {
-        return "永恒学神";
+        return "LV5 永恒学神";
     } else {
-        return "无敌王者";
+        return "LV6 无敌王者";
     }
 }
