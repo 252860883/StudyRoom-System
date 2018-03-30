@@ -1,7 +1,7 @@
 <template>
   <div class="user">
       <div class="user-left">
-        <user-show :userdata='userData'></user-show>
+        <user-show :userdata='userData' @showUserChange="showUserChange=true;"></user-show>
         <!-- 导航 -->
         <div class="nav">
           <p><i v-if="navNo==1"></i>个人中心</p>
@@ -10,7 +10,8 @@
         </div>
       </div>
       <div class="user-right">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <!-- 导航页 -->
+        <el-tabs v-if="!showUserChange" v-model="activeName">
             <el-tab-pane label="自习提醒" name="first">
               <class-clock ></class-clock>
             </el-tab-pane>
@@ -27,6 +28,12 @@
               <remind :remindLists="userData.remind" @updateData="getUserData"></remind>
             </el-tab-pane>
         </el-tabs>
+        <!-- 修改个人信息 -->
+        <el-tabs v-else v-model="userchangeIndex" >
+          <el-tab-pane label="修改资料" name="first" >
+              <user-change @returnBack='showUserChange=false' @modifyBack="getUserData" ></user-change>
+          </el-tab-pane>
+        </el-tabs>
       </div>
       <!-- 弹框 -->
       <toast content="确定要退出登录吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
@@ -40,14 +47,18 @@ import isReview from "../components/isreview";
 import classClock from "../components/classClock";
 import remind from "../components/remind";
 import toast from "../components/toast";
+import userChange from "../pages/userChange";
 import io from "socket.io-client";
 export default {
   data() {
     return {
       activeName: "second",
+      userchangeIndex:'first',
       userData: {},
       navNo: 1,
-      showToast: false
+      showToast: false,
+      showUserChange:false,
+      
     };
   },
   components: {
@@ -57,7 +68,8 @@ export default {
     isCollectPage,
     isReview,
     remind,
-    toast
+    toast,
+    userChange
   },
   created() {
     let self = this;
@@ -70,11 +82,9 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
     getUserData() {
       let self = this;
+      this.showUserChange=false;
       this.$http
         .get("/user", {
           params: {
@@ -85,14 +95,15 @@ export default {
           self.userData = res.data.data;
         });
     },
+    // 退出登陆
     editClick() {
       this.showToast = true;
     },
     // 聊天
     toChat() {
-      let serverPath=`${location.protocol}//${location.host}:4000`;
+      let serverPath = `${location.protocol}//${location.host}:4000`;
       // const socket = io(serverPath);
-      const socket = io('http://localhost:4000');
+      const socket = io("http://localhost:4000");
       socket.on("name", function(data) {
         alert(data.username);
         socket.emit("my other event", { my: "data" });

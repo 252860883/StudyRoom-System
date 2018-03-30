@@ -1,33 +1,39 @@
 <template>
   <div class="user-change">
     <div class="user-con">
-      <div class="btn-group">
-        <a class="btn-sub" @click="submit">确定</a>
-        <!-- <a class="btn-sub" @click="returnBack">返回</a> -->
-      </div>
+
       <div class="photo">
-      设置头像
-      <input type="file" v-on="photoUrl" accept="image/png,image/gif"/>
+        设置头像
+        <input type="file" v-on="photoUrl" accept="image/png,image/gif"/>
       </div>
+
       <div class="user-row">
         <span>姓名</span>
-        <input type="text" v-model="name" >        
+        <input type="text" v-model="name" style="width:140px;"> 
       </div>
+
+      <div class="user-row readOnly">
+        <span>学号</span>
+        <input type="text" readonly v-model="stuId" style="width:140px;">
+        <span class="warn">* 学号在您注册后不能修改</span>
+      </div>
+
       <div class="user-row">
         <span>学校</span>
-        <input type="text" v-model="school">        
-      </div>
-      <div class="user-row">
+        <input type="text" v-model="school" style="width:180px;">   
         <span>专业</span>
-        <input type="text" v-model="major">        
+        <input type="text" v-model="major" >       
       </div>
-      <div class="user-row">
-        <span>学号</span>
-        <input type="text" v-model="stuId">        
-      </div>
+
       <div class="user-row">
         <span>密码</span>
-        <input type="password" v-model="password">        
+        <input type="password" v-model="password">   
+        <span class="warn">* 密码不少于六位</span>     
+      </div>
+      <!-- 按钮 -->
+      <div class="btn-group">
+        <a class="btn-sub" @click="submit">保存</a>
+        <a class="btn-sub" @click="returnBack">返回</a>
       </div>
     </div>
     <!-- 提示 -->
@@ -41,12 +47,12 @@ import showTag from "../components/showTag.vue";
 export default {
   data() {
     return {
-      name: "杜杜杜",
-      school: "123",
-      major: "233",
-      stuId: "1411651104",
-      password: "123456",
-      msg: "这是一个提示",
+      name: "",
+      school: "",
+      major: "",
+      stuId: "12222",
+      password: "",
+      msg: "",
       isShowMsg: false,
       photoUrl: ""
     };
@@ -56,8 +62,18 @@ export default {
   },
   watch: {
     photoUrl: function(val) {
-      console.log(val);
     }
+  },
+  created() {
+    let self=this;
+    this.$http.get('/user').then(res=>{
+      let re=res.data.data;
+      self.name= re.name;
+      self.stuId=re.stuId;
+      self.school=re.school;
+      self.major=re.major;
+      self.password=re.password;
+    })
   },
   methods: {
     submit() {
@@ -70,12 +86,22 @@ export default {
         this.showErr("输入不完整，请填写完整后再提交");
         return;
       }
-      this.$router.push({ path: "/user", query: { index: "first" } });
+      this.$http.post('/modify',{
+        name:this.name,
+        school:this.school,
+        major:this.major,
+        password:this.password
+      }).then(()=>{
+        this.showErr("修改资料成功");
+        this.$emit('modifyBack');
+      })
     },
+    // 返回
     returnBack() {
-      this.$router.push({ path: "/user", query: { index: "first" } });
+      this.$emit('returnBack');
     },
     showErr(msg) {
+      let self=this;
       this.msg = msg;
       this.isShowMsg = true;
       setTimeout(() => {
@@ -101,15 +127,11 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/common.scss";
 .user-change {
-  width: 400px;
-  margin: 20px auto;
+  margin: 0px auto;
   box-sizing: border-box;
-  // background: $blank;
   border-radius: 5px;
   padding: 20px;
   color: $black;
-  border: 2px solid #ddd;
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
   .user-con {
     .photo {
       width: 100px;
@@ -117,7 +139,7 @@ export default {
       display: block;
       background: $light;
       border-radius: 50%;
-      margin: 30px auto;
+      margin: 0px auto;
       text-align: center;
       line-height: 100px;
       color: #fff;
@@ -135,8 +157,8 @@ export default {
       }
     }
     .user-row {
-      width: 295px;
-      margin: 10px auto;
+      width: 555px;
+      margin: 20px auto;
       &:nth-of-type(2) {
         // margin-top: 40px;
       }
@@ -144,27 +166,40 @@ export default {
         // margin-bottom: 20px;
       }
       span {
-        font-size: 20px;
-        margin-right: 5px;
+        font-size: 16px;
+        margin: 0 5px;
         vertical-align: middle;
+        color: $light;
+      }
+      .warn{
+        font-size: 12px;
+        color: #aaa;
       }
       input {
         height: 40px;
         width: 230px;
         border-radius: 5px;
-        border: 1px solid #ccc;
+        border: 0px solid #ccc;
+        background: #fff;
         outline: none;
         padding-left: 10px;
       }
     }
+    .readOnly {
+      input {
+        color: #999;
+        background: $blank;
+      }
+    }
     .btn-group {
       margin-right: 0;
-      // width: 200px;
+      width: 260px;
+      margin:50px auto 20px auto;
       height: 35px;
       .btn-sub {
         display: block;
         float: right;
-        width: 60px;
+        width: 120px;
         height: 35px;
         margin-left: 8px;
         background: $blue;

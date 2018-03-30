@@ -71,6 +71,7 @@ header {
   background: $blue;
   overflow: hidden;
   position: fixed;
+  z-index: 100000;
   top: 0;
   .con {
     //   width: 1200px;

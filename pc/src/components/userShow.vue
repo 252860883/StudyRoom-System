@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     userInfoClick() {
-      this.$router.push({ path: "/userinfo" });
+      this.$emit('showUserChange');
     },
     toRankList(){
       this.$router.push({ path: "/ranklists" });

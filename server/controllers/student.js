@@ -49,7 +49,6 @@ module.exports.register = async function (params) {
 module.exports.modify = async function (params) {
     // 如果学号存在则修改信息
     let hasStudent = await Student.find({ stuId: global.stuId });
-
     if (hasStudent.length) {
         let hasSave = await Student.update({ stuId: global.stuId }, { $set: params });
         return hasSave;
