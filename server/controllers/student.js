@@ -111,7 +111,7 @@ module.exports.getUser = async (params) => {
         .lean();
 
     let remind = getInfo.remind.map(item => {
-        console.log(item)
+
         item.roomInfo['roomId'] = item.roomInfo._id;
         delete item.roomInfo._id;
         delete item.stuInfo._id;

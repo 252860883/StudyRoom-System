@@ -4,14 +4,15 @@
         <user-show :userdata='userData' @showUserChange="showUserChange=true;"></user-show>
         <!-- 导航 -->
         <div class="nav">
-          <p><i v-if="navNo==1"></i>个人中心</p>
+          <p @click="navNo=1"><i v-if="navNo==1"></i>个人中心</p>
           <p @click="toChat"><i v-if="navNo==2" ></i>对话/申请</p>
           <p @click="editClick"><i v-if="navNo==3"></i>退出账号</p>
         </div>
       </div>
+
       <div class="user-right">
         <!-- 导航页 -->
-        <el-tabs v-if="!showUserChange" v-model="activeName">
+        <el-tabs v-if="!showUserChange && navNo==1" v-model="activeName">
             <el-tab-pane label="自习提醒" name="first">
               <class-clock ></class-clock>
             </el-tab-pane>
@@ -28,14 +29,18 @@
               <remind :remindLists="userData.remind" @updateData="getUserData"></remind>
             </el-tab-pane>
         </el-tabs>
+
         <!-- 修改个人信息 -->
-        <el-tabs v-else v-model="userchangeIndex" >
+        <el-tabs v-if="showUserChange && navNo==1" v-model="userchangeIndex" >
           <el-tab-pane label="修改资料" name="first" >
               <user-change @returnBack='showUserChange=false' @modifyBack="getUserData" ></user-change>
           </el-tab-pane>
         </el-tabs>
-
+        <!-- 对话信息 --> 
       </div>
+
+      <!-- 动态子路由 -->
+      <router-view />
 
       <!-- 弹框 -->
       <toast content="确定要退出登录吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
@@ -51,16 +56,16 @@ import remind from "../components/remind";
 import toast from "../components/toast";
 import userChange from "../pages/userChange";
 import io from "socket.io-client";
+import chatLists from "../components/chatlist";
 export default {
   data() {
     return {
       activeName: "second",
-      userchangeIndex:'first',
+      userchangeIndex: "first",
       userData: {},
       navNo: 1,
       showToast: false,
-      showUserChange:false,
-      
+      showUserChange: false
     };
   },
   components: {
@@ -86,7 +91,7 @@ export default {
   methods: {
     getUserData() {
       let self = this;
-      this.showUserChange=false;
+      this.showUserChange = false;
       this.$http
         .get("/user", {
           params: {
@@ -103,12 +108,14 @@ export default {
     },
     // 聊天
     toChat() {
+      this.navNo=2;
       let serverPath = `${location.protocol}//${location.host}:4000`;
-      // const socket = io(serverPath);
       const socket = io("http://localhost:4000");
-      socket.on("name", function(data) {
-        alert(data.username);
-        socket.emit("my other event", { my: "爱你哦" });
+
+      socket.emit("my", {
+        chatId: "5ab8c9fe1a28fe29aa1a18f1",
+        content: "这是我发送的消息，记住了我告诉你哦",
+        date: new Date().getTime()
       });
     },
     // 退出账号

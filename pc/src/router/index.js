@@ -7,37 +7,52 @@ import login from '@/pages/login'
 import user from '@/pages/user'
 import userChange from '@/pages/userChange'
 import ranklists from '@/pages/rankLists'
+import chatlists from '../components/chatlist'
+import chatInfo from '../components/chatInfo'
+
 Vue.use(Router)
 
 export default new Router({
   routes: [{
-      path: '/',
-      name: 'home',
-      component: home
-    },
-    {
-      path: '/roomdetail',
-      name: 'home',
-      component: roomDetail
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: login
-    },
-    {
-      path: '/user',
-      name: 'home',
-      component: user
-    },
-    {
-      path: '/userinfo',
-      name: 'userinformation',
-      component: userChange
-    },
-    {
-      path:"/ranklists",
-      component:ranklists
-    }
+    path: '/',
+    name: 'home',
+    component: home
+  },
+  {
+    path: '/roomdetail',
+    name: 'home',
+    component: roomDetail
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: login
+  },
+  {
+    path: '/user',
+    name: 'home',
+    component: user,
+    children: [
+      {
+        path: "chatlist",
+        component: chatlists
+      },{
+        path:"chatinfo",
+        component:chatInfo
+      },{
+        path:'userchange',
+        component:userChange
+      }
+    ]
+  },
+  {
+    path: '/userinfo',
+    name: 'userinformation',
+    component: userChange
+  },
+  {
+    path: "/ranklists",
+    component: ranklists
+  }
   ]
 })
