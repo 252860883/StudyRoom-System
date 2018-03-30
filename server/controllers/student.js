@@ -115,8 +115,8 @@ module.exports.getUser = async (params) => {
         item.roomInfo['roomId'] = item.roomInfo._id;
         delete item.roomInfo._id;
         delete item.stuInfo._id;
-        for (var key in item.roomInfo) {
-            item.roomInfo[key] = item.roomInfo[key];
+        for (var key in item.roomInfo.roomInfo) {
+            item.roomInfo[key] = item.roomInfo.roomInfo[key];
         }
         for (let key in item.stuInfo) {
             item[key] = item.stuInfo[key];

@@ -4,20 +4,10 @@ const koaBody = require('koa-bodyparser');
 const passport = require('./lib/passport');
 
 let app = new Koa();
+
+// websocket 全双工通信,聊天功能
 var server = require('http').Server(app.callback());
-var io = require('socket.io')(server);
-
-io.sockets.on('connection', function (socket) {
-    socket.emit('name', { username: 'litingting ' + new Date() });
-    socket.on('my other event', function (data) {
-        console.log(data + new Date());
-
-    });
-});
-
-server.listen(4000, () => {
-    console.log('server is running at 4000');
-});
+require('./controllers/chat')(server);
 
 // koa解析body中间件
 app.use(koaBody());
@@ -30,8 +20,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/demo');
 require('./models/student');
 require('./models/hasroom');
 require('./models/room');
+require('./models/chat');
 
-// 中间件，拦截请求中是否有 stuId 的cookie，否则返回 unlogin
+// 中间件，登陆拦截，拦截请求中是否有 stuId 的cookie，否则返回 unlogin
 app.use(async (ctx, next) => {
 
     if (ctx.path != '/login' && ctx.path != '/register') {
@@ -60,9 +51,10 @@ app.use(async (ctx, next) => {
 let Router = require('./router');
 app.use(Router.router.routes());
 
-var io = require('socket.io')();
-io.on('connection', function (client) { });
-io.listen(3000);
+// 绑定端口号
+server.listen(4000, () => {
+    console.log('server is running at 4000');
+});
 
 
 

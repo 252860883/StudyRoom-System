@@ -24,7 +24,7 @@
             <el-tab-pane label="收藏夹" name="forth">
                 <is-collect-page :hasCollectLists='userData.collectRoomLists' @updateData="getUserData"></is-collect-page>
             </el-tab-pane>
-            <el-tab-pane label="申请消息" name="fifth">
+            <el-tab-pane label="消息" name="fifth">
               <remind :remindLists="userData.remind" @updateData="getUserData"></remind>
             </el-tab-pane>
         </el-tabs>
@@ -34,7 +34,9 @@
               <user-change @returnBack='showUserChange=false' @modifyBack="getUserData" ></user-change>
           </el-tab-pane>
         </el-tabs>
+
       </div>
+
       <!-- 弹框 -->
       <toast content="确定要退出登录吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
   </div>
@@ -106,7 +108,7 @@ export default {
       const socket = io("http://localhost:4000");
       socket.on("name", function(data) {
         alert(data.username);
-        socket.emit("my other event", { my: "data" });
+        socket.emit("my other event", { my: "爱你哦" });
       });
     },
     // 退出账号
