@@ -59,7 +59,7 @@ module.exports.modify = async function (params) {
 
 // 获取用户资料
 module.exports.getUser = async (params) => {
-    console.log(global.stuId);
+    // console.log(global.stuId);
     let getInfo = await Student.findOne({ stuId: global.stuId })
         .populate([{
             path: 'hasRoomLists.roomRecord',

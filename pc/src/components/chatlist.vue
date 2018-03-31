@@ -1,6 +1,6 @@
 <template>
   <div>
-      00000000
+      聊天列表
   </div>
 </template>
 <script>

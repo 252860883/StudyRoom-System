@@ -2,9 +2,9 @@
 
 let student = require('./controllers/student');
 let room = require('./controllers/room');
-const Router = require('koa-router');
-const passport = require('./lib/passport');
+let chat=require('./controllers/chat');
 
+const Router = require('koa-router');
 let router = new Router();
 
 // 登陆接口
@@ -156,6 +156,18 @@ router.get('/getRankLists', async (ctx) => {
 // 排行榜点赞
 router.get('/clickPromise', async (ctx) => {
     let callback = await student.clickPromise(ctx.query);
+    ctx.body = callback;
+})
+
+// 获取消息列表
+router.get('/chatLists', async (ctx)=>{
+    let callback =await chat.getChatLists(ctx.query);
+    ctx.body = callback;
+})
+
+// 获取消息详情
+router.get('/chatInfo', async (ctx)=>{
+    let callback =await chat.getChatInfo(ctx.query);
     ctx.body = callback;
 })
 

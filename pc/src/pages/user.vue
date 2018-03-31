@@ -37,6 +37,7 @@
           </el-tab-pane>
         </el-tabs>
         <!-- 对话信息 --> 
+        
       </div>
 
       <!-- 动态子路由 -->
@@ -112,11 +113,13 @@ export default {
       let serverPath = `${location.protocol}//${location.host}:4000`;
       const socket = io("http://localhost:4000");
 
-      socket.emit("my", {
-        chatId: "5ab8c9fe1a28fe29aa1a18f1",
-        content: "这是我发送的消息，记住了我告诉你哦",
+      socket.emit("chatInfo", {
+        sendId: "1411651104",
+        saveId:"1411651103",
+        content: "这是我发送的消息，记住了我告诉",
         date: new Date().getTime()
       });
+
     },
     // 退出账号
     edit() {
@@ -130,7 +133,6 @@ export default {
 </script>
 <style lang="scss">
 @import "../assets/common.scss";
-
 .user {
   width: 1100px;
   margin: 0 auto;
@@ -196,5 +198,6 @@ export default {
     }
   }
 }
+
 </style>
 

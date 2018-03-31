@@ -5,10 +5,6 @@ const passport = require('./lib/passport');
 
 let app = new Koa();
 
-// websocket 全双工通信,聊天功能
-var server = require('http').Server(app.callback());
-require('./controllers/chat')(server);
-
 // koa解析body中间件
 app.use(koaBody());
 
@@ -21,6 +17,11 @@ require('./models/student');
 require('./models/hasroom');
 require('./models/room');
 require('./models/chat');
+
+
+// websocket 全双工通信,聊天功能
+var server = require('http').Server(app.callback());
+require('./controllers/socket')(server);
 
 // 中间件，登陆拦截，拦截请求中是否有 stuId 的cookie，否则返回 unlogin
 app.use(async (ctx, next) => {
