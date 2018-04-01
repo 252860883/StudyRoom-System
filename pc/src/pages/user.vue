@@ -11,7 +11,7 @@
       </div>
 
       <div class="user-right">
-        <!-- 导航页 -->
+        <!-- 导航页 navNo1 -->
         <el-tabs v-if="!showUserChange && navNo==1" v-model="activeName">
             <el-tab-pane label="自习提醒" name="first">
               <class-clock ></class-clock>
@@ -30,18 +30,21 @@
             </el-tab-pane>
         </el-tabs>
 
-        <!-- 修改个人信息 -->
+        <!-- 修改个人信息 navNo1 -->
         <el-tabs v-if="showUserChange && navNo==1" v-model="userchangeIndex" >
           <el-tab-pane label="修改资料" name="first" >
               <user-change @returnBack='showUserChange=false' @modifyBack="getUserData" ></user-change>
           </el-tab-pane>
         </el-tabs>
-        <!-- 对话信息 --> 
+        <!-- 对话列表信息 navNo2 --> 
+        <chart-lists v-if="navNo==2 && !showChatInfo"></chart-lists>  
+
+        <!-- 对话详情信息 navNo2 --> 
+        <chart-info v-if="navNo==2 && showChatInfo"></chart-info>
         
       </div>
 
       <!-- 动态子路由 -->
-      <router-view />
 
       <!-- 弹框 -->
       <toast content="确定要退出登录吗？" v-if="showToast" @reset="showToast=false" @promise="edit"></toast>
@@ -58,6 +61,7 @@ import toast from "../components/toast";
 import userChange from "../pages/userChange";
 import io from "socket.io-client";
 import chatLists from "../components/chatlist";
+import chartInfo from "../components/chatInfo";
 export default {
   data() {
     return {
@@ -66,7 +70,8 @@ export default {
       userData: {},
       navNo: 1,
       showToast: false,
-      showUserChange: false
+      showUserChange: false,
+      showChatInfo:true
     };
   },
   components: {
@@ -77,7 +82,9 @@ export default {
     isReview,
     remind,
     toast,
-    userChange
+    userChange,
+    chatLists,
+    chartInfo
   },
   created() {
     let self = this;

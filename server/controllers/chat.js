@@ -62,7 +62,10 @@ module.exports.getChatInfo = async function (params) {
         stuId: params.chaterId
     }, "stuId name major school -_id");
 
-    return {chatInfoLists,cheaterInfo};
+    return {
+        chatInfoLists,
+        cheaterInfo
+    };
 }
 
 // 获取聊天消息列表
@@ -88,5 +91,30 @@ module.exports.getChatLists = async function () {
 // 删除聊天列表
 // 添加一个标识字段还是直接删除？ 直接删除
 module.exports.delchatLists = async function () {
+    let aId, bId;
+    if (params.chaterId > global.stuId) {
+        bId = params.chaterId;
+        aId = global.stuId;
+    } else {
+        aId = params.chaterId;
+        bId = global.stuId;
+    }
+    let chatInfoLists = await Chat.findOne({
+        chatNumber: [aId, bId]
+    }).lean();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }
