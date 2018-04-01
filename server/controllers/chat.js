@@ -44,6 +44,7 @@ module.exports.drawChatdb = async function (data) {
         })
     }
 }
+
 // 获取聊天消息详情
 module.exports.getChatInfo = async function (params) {
     let aId, bId;
@@ -54,14 +55,18 @@ module.exports.getChatInfo = async function (params) {
         aId = params.chaterId;
         bId = global.stuId;
     }
+
     let chatInfoLists = await Chat.findOne({
         chatNumber: [aId, bId]
     }).lean();
+    console.log(aId, bId);
     delete chatInfoLists.chatNumber;
+
     let cheaterInfo = await Student.findOne({
         stuId: params.chaterId
     }, "stuId name major school -_id");
-
+    console.log(       chatInfoLists,
+        cheaterInfo)
     return {
         chatInfoLists,
         cheaterInfo
@@ -116,5 +121,5 @@ module.exports.delchatLists = async function () {
 
 
 
-    
+
 }

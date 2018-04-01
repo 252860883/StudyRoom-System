@@ -120,12 +120,12 @@ export default {
       let serverPath = `${location.protocol}//${location.host}:4000`;
       const socket = io("http://localhost:4000");
 
-      socket.emit("chatInfo", {
-        sendId: "1411651104",
-        saveId:"1411651103",
-        content: "这是我发送的消息，记住了我告诉",
-        date: new Date().getTime()
-      });
+      // socket.emit("chatInfo", {
+      //   sendId: "1411651107",
+      //   saveId:"1411651103",
+      //   content: "那就先这样吧，886",
+      //   date: new Date().getTime()
+      // });
 
     },
     // 退出账号
