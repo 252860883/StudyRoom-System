@@ -2,7 +2,7 @@
   <div class="chatInfo">
     <div class="left">
       <div class="bar">
-        <div class="return-btn"><</div>
+        <div class="return-btn"></div>
         <p>{{chatInfo.name}}与你的对话</p>
       </div>
       <div class="chat-message">
@@ -20,8 +20,8 @@
         </div>
       </div>
       <div class="input-con">
-        <input type="text">
-        <div class="send">发送</div>
+        <input type="text" v-model="sendInfoNow">
+        <div class="send" @click="sendInfo">发送</div>
       </div>
     </div>
     <div class="right">
@@ -30,11 +30,13 @@
   </div>
 </template>
 <script>
+import io from "socket.io-client";
 export default {
   data() {
     return {
       chatInfo: {}, //聊天者信息
-      chatLists: [] //聊天记录
+      chatLists: [], //聊天记录
+      sendInfoNow: ""
     };
   },
   created() {
@@ -54,6 +56,24 @@ export default {
           self.chatLists = res.data.chatInfoLists.chatLists;
           console.log(self.chatLists);
         });
+    },
+    sendInfo() {
+      let self = this;
+      let serverPath = `${location.protocol}//${location.host}:4000`;
+      const socket = io("http://localhost:4000");
+      console.log(this.chatInfo.stuId);
+      socket.emit("chatInfo", {
+        sendId: "1411651102",
+        saveId: this.chatInfo.stuId.toString(),
+        content: this.sendInfoNow,
+        date: new Date().getTime()
+      });
+      this.chatLists.push({
+        content: self.sendInfoNow,
+        stuId: 1411651102,
+        date: new Date().getTime()
+      });
+      this.sendInfoNow = "";
     }
   }
 };
@@ -110,7 +130,7 @@ export default {
             position: relative;
             color: $light;
             max-width: 200px;
-            margin-top: 15px;
+            margin: 15px 0;
             &::after {
               position: absolute;
               left: -10px;
@@ -133,7 +153,7 @@ export default {
             padding: 15px;
             position: relative;
             max-width: 200px;
-            margin-top: 15px;
+            margin: 15px 0;
             color: #ffffff;
             &::after {
               position: absolute;
@@ -148,19 +168,21 @@ export default {
         }
       }
     }
-    .input-con{
+    .input-con {
       display: flex;
       align-items: center;
       justify-content: space-around;
-      height: 60px;
-      input{
+      height: 54px;
+      input {
         flex: 0 1 80%;
         border: 0;
         background: #fff;
         height: 40px;
         border-radius: 5px;
+        padding-left: 10px;
+        font-size: 20px;
       }
-      .send{
+      .send {
         flex: 0 1 15%;
         height: 40px;
         background: $blue;
@@ -169,7 +191,6 @@ export default {
         line-height: 40px;
         text-align: center;
       }
-
     }
   }
 }

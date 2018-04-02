@@ -121,9 +121,9 @@ export default {
       const socket = io("http://localhost:4000");
 
       // socket.emit("chatInfo", {
-      //   sendId: "1411651107",
-      //   saveId:"1411651103",
-      //   content: "那就先这样吧，886",
+      //   sendId: "1411651103",
+      //   saveId:"1411651102",
+      //   content: "深井冰....",
       //   date: new Date().getTime()
       // });
 

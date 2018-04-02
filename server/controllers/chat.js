@@ -6,43 +6,48 @@ const Student = mongoose.model('student');
 module.exports.drawChatdb = async function (data) {
     // 查找有没有已经存在的数据
     // 规定，前面的id大于后面的id
-    let aId, bId;
-    if (data.sendId > data.saveId) {
-        bId = data.sendId;
-        aId = data.saveId;
-    } else {
-        aId = data.sendId;
-        bId = data.saveId;
-    }
-    console.log(aId, bId)
-    let chatNum = await Chat.find({
-        chatNumber: [aId, bId]
-    });
-    if (chatNum.length > 0) {
-        // 向数组里添加聊天记录
-        console.log('zhixing');
-
-        await Chat.update({
+    try {
+        let aId, bId;
+        if (data.sendId > data.saveId) {
+            bId = data.sendId;
+            aId = data.saveId;
+        } else {
+            aId = data.sendId;
+            bId = data.saveId;
+        }
+        console.log(aId, bId)
+        let chatNum = await Chat.find({
             chatNumber: [aId, bId]
-        }, {
-            $push: {
-                chatLists: {
+        });
+        if (chatNum.length > 0) {
+            // 向数组里添加聊天记录
+            console.log('zhixing');
+
+            await Chat.update({
+                chatNumber: [aId, bId]
+            }, {
+                    $push: {
+                        chatLists: {
+                            stuId: data.sendId,
+                            content: data.content,
+                            date: data.date
+                        }
+                    }
+                })
+        } else {
+            Chat.create({
+                chatNumber: [aId, bId],
+                chatLists: [{
                     stuId: data.sendId,
                     content: data.content,
                     date: data.date
-                }
-            }
-        })
-    } else {
-        Chat.create({
-            chatNumber: [aId, bId],
-            chatLists: [{
-                stuId: data.sendId,
-                content: data.content,
-                date: data.date
-            }]
-        })
+                }]
+            })
+        }
+    } catch (error) {
+        throw error;
     }
+
 }
 
 // 获取聊天消息详情
@@ -65,7 +70,7 @@ module.exports.getChatInfo = async function (params) {
     let cheaterInfo = await Student.findOne({
         stuId: params.chaterId
     }, "stuId name major school -_id");
-    console.log(       chatInfoLists,
+    console.log(chatInfoLists,
         cheaterInfo)
     return {
         chatInfoLists,
