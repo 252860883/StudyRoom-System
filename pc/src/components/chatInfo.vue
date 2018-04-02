@@ -36,19 +36,32 @@ export default {
     return {
       chatInfo: {}, //聊天者信息
       chatLists: [], //聊天记录
-      sendInfoNow: ""
+      sendInfoNow: "",
+      chatMemberLists:[]
     };
   },
   created() {
     this.getChatInfo();
+    this.getChatMemberLists();
   },
   methods: {
-    getChatLists() {},
+    getChatMemberLists() {
+      let self = this;
+      this.$http
+        .get("/getChatLists", {
+          params: { chaterId: 1411651103 }
+        })
+        .then(res => {
+          console.log(res);
+          self.chatMemberLists = res.data.chatInfoLists.chatLists;
+          console.log(self.chatLists);
+        });
+    },
     getChatInfo() {
       let self = this;
       this.$http
         .get("/chatInfo", {
-          params: { chaterId: 1411651103 }
+          params: { chaterId: 1411651107 }
         })
         .then(res => {
           console.log(res);
@@ -63,8 +76,10 @@ export default {
       const socket = io("http://localhost:4000");
       console.log(this.chatInfo.stuId);
       socket.emit("chatInfo", {
-        sendId: "1411651102",
-        saveId: this.chatInfo.stuId.toString(),
+        saveId: "1411651103",
+        sendId: this.chatInfo.stuId.toString(),
+        // sendId: "1411651103",
+        // saveId: this.chatInfo.stuId.toString(),
         content: this.sendInfoNow,
         date: new Date().getTime()
       });
