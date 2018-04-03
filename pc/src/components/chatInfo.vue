@@ -148,7 +148,7 @@ export default {
       text-align: center;
       border-bottom: 2px solid #fff;
       color: #ffffff;
-      background: $light;
+      background: #aaa;
       border-radius: 5px 0 0 0;
 
       .return-btn {
@@ -256,7 +256,7 @@ export default {
       border-bottom: 2px solid #fff;
       line-height: 50px;
       box-sizing: border-box;
-      background: $light;
+      background: #aaa;
       border-radius: 0 5px 0 0;
       color: #fff;
     }

@@ -52,6 +52,11 @@ module.exports.drawChatdb = async function (data) {
 // 获取聊天消息详情
 module.exports.getChatInfo = async function (params) {
     let aId, bId;
+    // 如果传来的chaterId不是正常数，那么取第一个
+
+    if (isNaN(params.chaterId)) {
+        
+    }
     if (params.chaterId > global.stuId) {
         bId = params.chaterId;
         aId = global.stuId;
@@ -71,7 +76,7 @@ module.exports.getChatInfo = async function (params) {
         return {
             chatInfoLists,
             cheaterInfo,
-            userId:global.stuId            
+            userId: global.stuId
         };
     } else {
         // 如果第一次聊天需要将信息写入

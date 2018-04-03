@@ -7,9 +7,12 @@
           {{room.roomInfo.build}}
           {{room.roomInfo.floor}}{{room.roomInfo.number | numberJudge}}
         </div>
-        <div class="main-info">
-          <img src="../assets/img/login/user.png" alt="">
-          <span>{{room.createName ||'暂无'}}</span>
+        <div class="main-info" @click="chatToCreater">
+          <div class="user-main" style="display:inline-block;">
+            <img src="../assets/img/login/user.png" alt="">
+            <span>{{room.createName ||'暂无'}}</span>
+          </div>
+
           <img src="../assets/img/login/name.png" alt="">
           <span v-if="room.title">{{room.moon}}月{{room.day}}日</span>       
           <span v-else>{{this.$route.query.moon}}月{{this.$route.query.day}}日</span>      
@@ -127,6 +130,9 @@ export default {
       this.selectSeat = false;
       this.callbackContent = msg;
       this.callbackShow = true;
+    },
+    chatToCreater(){
+      this.$router.push({path:'/user',query:{index:'first',nav:2,chaterId:this.room.createdStuId}});
     }
   }
 };
@@ -156,6 +162,16 @@ export default {
     }
     .main-info {
       margin-top: 5px;
+      .user-main{
+        cursor: pointer;
+        span{
+          color: $orange;
+        }
+        &:hover{
+          opacity: 0.9
+          // border-bottom: 2px solid $light;
+        }
+      }
       img {
         vertical-align: middle;
         width: 22px;
@@ -165,6 +181,7 @@ export default {
       span {
         display: inline-block;
         vertical-align: middle;
+        font-weight: 600;
       }
     }
     .action {
