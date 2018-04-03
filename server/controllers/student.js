@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Student = mongoose.model('student');
+const chat=require('./chat');
 
 /**
  * 封装一系列和用户有关的方法
@@ -142,7 +143,6 @@ module.exports.remind = async (params) => {
     } catch (err) {
         throw err;
     }
-
 }
 
 // 退出登陆接口
@@ -190,6 +190,28 @@ module.exports.clickPromise = async (params) => {
         }
     } catch (error) {
         throw error;
+    }
+}
+
+// 获取提醒的列表信息
+module.exports.remindLists = async (params) => {
+    try {
+        // 获取申请的消息
+        let stuInfo = await this.getUser(params);
+        // 获取新的消息
+        let chatLists = await chat.getChatLists();
+
+        let newArr =stuInfo.remind.concat(chatLists);
+
+        let newArr2=newArr.sort(function(a,b){
+            let newA=a.date? a.date :a.lastlist.date;
+            let newB=b.date? b.date :b.lastlist.date;
+            return newB-newA;
+        })
+
+        return {newArr2};
+    } catch (err) {
+        throw err;
     }
 }
 

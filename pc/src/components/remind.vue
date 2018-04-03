@@ -44,13 +44,13 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          roomInfo: {
-            roomInfo: {
-              build: ""
-            }
-          }
-        }
+        // {
+        //   roomInfo: {
+        //     roomInfo: {
+        //       build: ""
+        //     }
+        //   }
+        // }
       ]
     };
   },
@@ -114,6 +114,7 @@ export default {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
+  height: 450px;
   .list-con {
     width: 100%;
     height: 120px;

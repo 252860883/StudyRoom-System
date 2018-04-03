@@ -25,9 +25,7 @@
             <el-tab-pane label="收藏夹" name="forth">
                 <is-collect-page :hasCollectLists='userData.collectRoomLists' @updateData="getUserData"></is-collect-page>
             </el-tab-pane>
-            <el-tab-pane label="消息" name="fifth">
-              <remind :remindLists="userData.remind" @updateData="getUserData"></remind>
-            </el-tab-pane>
+            <!-- <el-tab-pane label="消息" name="fifth"></el-tab-pane> -->
         </el-tabs>
 
         <!-- 修改个人信息 navNo1 -->
@@ -37,8 +35,8 @@
           </el-tab-pane>
         </el-tabs>
         <!-- 对话列表信息 navNo2 --> 
-        <chart-lists v-if="navNo==2 && !showChatInfo"></chart-lists>  
-
+        <!-- <chart-lists v-if="navNo==2 && !showChatInfo"></chart-lists>   -->
+        <remind v-if="navNo==2 && !showChatInfo" :remindLists="userData.remind" @updateData="getUserData"></remind>
         <!-- 对话详情信息 navNo2 --> 
         <chart-info v-if="navNo==2 && showChatInfo"></chart-info>
         
@@ -71,7 +69,7 @@ export default {
       navNo: 1,
       showToast: false,
       showUserChange: false,
-      showChatInfo:true
+      showChatInfo: true
     };
   },
   components: {
@@ -90,11 +88,14 @@ export default {
     let self = this;
     this.activeName = this.$route.query.index;
     this.getUserData();
-    this.navNo=this.$route.query.nav || 1;
+    this.navNo = this.$route.query.nav || 1;
   },
   watch: {
     "$route.query.index": function(val) {
       this.activeName = this.$route.query.index;
+    },
+    "$route.query.nav": function(val) {
+      this.navNo = this.$route.query.nav || 1;
     }
   },
   methods: {
@@ -117,7 +118,7 @@ export default {
     },
     // 聊天
     toChat() {
-      this.navNo=2;
+      this.navNo = 2;
       let serverPath = `${location.protocol}//${location.host}:4000`;
       const socket = io("http://localhost:4000");
 
@@ -127,7 +128,6 @@ export default {
       //   content: "深井冰....",
       //   date: new Date().getTime()
       // });
-
     },
     // 退出账号
     edit() {
@@ -206,6 +206,5 @@ export default {
     }
   }
 }
-
 </style>
 

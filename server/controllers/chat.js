@@ -30,7 +30,8 @@ module.exports.drawChatdb = async function (data) {
                             stuId: data.sendId,
                             content: data.content,
                             date: data.date
-                        }
+                        },
+                        chatNoSeeMumber: data.saveId
                     }
                 })
         } else {
@@ -46,17 +47,12 @@ module.exports.drawChatdb = async function (data) {
     } catch (error) {
         throw error;
     }
-
 }
 
 // 获取聊天消息详情
 module.exports.getChatInfo = async function (params) {
     let aId, bId;
-    // 如果传来的chaterId不是正常数，那么取第一个
 
-    if (isNaN(params.chaterId)) {
-        
-    }
     if (params.chaterId > global.stuId) {
         bId = params.chaterId;
         aId = global.stuId;
@@ -71,6 +67,16 @@ module.exports.getChatInfo = async function (params) {
     let chatInfoLists = await Chat.findOne({
         chatNumber: [aId, bId]
     }).lean();
+
+    // 把未读状态改为已读
+    await Chat.update({
+        chatNumber: [aId, bId]
+    }, {
+            $pull: {
+                chatNoSeeMumber: global.stuId.toString()
+            }
+        })
+
     if (chatInfoLists) {
         delete chatInfoLists.chatNumber;
         return {
@@ -85,7 +91,6 @@ module.exports.getChatInfo = async function (params) {
             chatLists: []
         })
 
-
         return { cheaterInfo, chatInfoLists: [], userId: global.stuId }
     }
 }
@@ -97,17 +102,26 @@ module.exports.getChatLists = async function () {
     // 存储最后的数据
     let selfChatList = [];
     for (chatItem of chatLists) {
+
         if (chatItem.chatNumber.indexOf(global.stuId) >= 0) {
             let anotherStuId = chatItem.chatNumber[0] == global.stuId ? chatItem.chatNumber[1] : chatItem.chatNumber[0]
             let anotherInfo = await Student.findOne({
                 stuId: anotherStuId
             }, "stuId name major school -_id");
+
+            let noSee= chatItem.chatNoSeeMumber && chatItem.chatNoSeeMumber.indexOf(global.stuId) >= 0 ? true : false
+
             selfChatList.push({
                 lastlist: chatItem.chatLists.pop(),
-                chater: anotherInfo
+                chater: anotherInfo,
+                noSee
             })
         }
     }
+    selfChatList.sort(function (a, b) {
+        return b.lastlist.date - a.lastlist.date
+    })
+
     return selfChatList;
 }
 
@@ -125,19 +139,4 @@ module.exports.delchatLists = async function () {
     let chatInfoLists = await Chat.findOne({
         chatNumber: [aId, bId]
     }).lean();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -50,16 +50,20 @@ module.exports.creatRoom = async (params) => {
             // 查询创建者信息
             let stuInfo = await stu.getUser(params);
             let isToadyHas = false, isToadyReview = false;
-            stuInfo.hasRoomLists.map(room => {
-                if (room.roomRecord.moon == params.moon && room.roomRecord.day == params.day) {
-                    isToadyHas = true;
-                }
-            })
-            stuInfo.reviewRoomLists.map(room => {
-                if (room.roomRecord.moon == params.moon && room.roomRecord.day == params.day) {
-                    isToadyReview = true;
-                }
-            })
+            if (stuInfo.hasRoomLists.length != 0) {
+                stuInfo.hasRoomLists.map(room => {
+                    if (room.roomRecord.moon == params.moon && room.roomRecord.day == params.day) {
+                        isToadyHas = true;
+                    }
+                })
+            }
+            if (stuInfo.reviewRoomLists.length != 0) {
+                stuInfo.reviewRoomLists.map(room => {
+                    if (room.roomRecord.moon == params.moon && room.roomRecord.day == params.day) {
+                        isToadyReview = true;
+                    }
+                })
+            }
 
             if (isToadyHas) {
                 return {
@@ -127,6 +131,7 @@ module.exports.addRoom = async (params) => {
         // 判断今天是否已经加入自习了
         let stuInfo = await stu.getUser(params);
         let isToadyHas = false, isToadyReview = false;
+
         stuInfo.hasRoomLists.map(room => {
             if (room.roomRecord.moon == roomInfo.moon && room.roomRecord.day == roomInfo.day) {
                 isToadyHas = true;
@@ -153,7 +158,14 @@ module.exports.addRoom = async (params) => {
         }
 
         // 没有问题，写入管理员remind，用户添加到review中
-        await Student.update({ stuId: roomInfo.stuInfo.stuId }, { $push: { remind: { roomInfo: params.roomId, stuInfo: addStu._id, seatIndex: params.seatIndex } } });
+        await Student.update(
+            { stuId: roomInfo.stuInfo.stuId },
+            {
+                $push: {
+                    remind:
+                        { roomInfo: params.roomId, stuInfo: addStu._id, seatIndex: params.seatIndex, date: new Date().getTime() }
+                }
+            });
         await Student.update({ stuId: global.stuId }, { $push: { reviewRoomLists: { roomRecord: params.roomId, seatIndex: params.seatIndex } } })
         return {
             sucess: true,
@@ -314,8 +326,8 @@ module.exports.deleteCollectRoom = async (params) => {
 }
 
 // 删除正在审核的自习室
-module.exports.delReviewList= async (params)=>{
-    try{
+module.exports.delReviewList = async (params) => {
+    try {
         // 删除用户review的信息
         await Student.update(
             { stuId: global.stuId },
@@ -326,11 +338,11 @@ module.exports.delReviewList= async (params)=>{
             { stuId: params.addId },
             { $pull: { remind: { roomInfo: params.roomId } } }
         )
-        return{
-            sucess:true,
-            mag:"删除成功"
+        return {
+            sucess: true,
+            mag: "删除成功"
         }
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
 }

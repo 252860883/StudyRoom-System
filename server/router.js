@@ -122,6 +122,13 @@ router.get('/remind', async (ctx) => {
     let callback = await student.remind(ctx.query);
     ctx.body = callback;
 })
+// remindLists
+
+// 提醒数量
+router.get('/remindLists', async (ctx) => {
+    let callback = await student.remindLists(ctx.query);
+    ctx.body = callback;
+})
 
 // 获取今天的自习
 router.get('/getTodayHasRoom', async (ctx) => {

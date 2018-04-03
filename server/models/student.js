@@ -74,6 +74,9 @@ var studentSchema = new mongoose.Schema({
         seatIndex: {
             type: Number
         },
+        date:{
+            type:Number
+        }
     }],
     // 点赞
     praise:{
