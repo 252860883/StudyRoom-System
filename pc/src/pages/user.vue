@@ -90,6 +90,7 @@ export default {
     let self = this;
     this.activeName = this.$route.query.index;
     this.getUserData();
+    this.navNo=this.$route.query.nav || 1;
   },
   watch: {
     "$route.query.index": function(val) {

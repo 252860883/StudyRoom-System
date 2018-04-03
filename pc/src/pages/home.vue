@@ -236,12 +236,14 @@ export default {
 
     .seat-con {
       height: 18px;
+      display: flex;
+      justify-content: center;
       .seats-num {
         display: inline-block;
         text-align: left;
       }
       .created {
-        width: 45px;
+        // width: 60px;
         text-align: left;
       }
       .icon-seat {

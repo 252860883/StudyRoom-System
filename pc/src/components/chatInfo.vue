@@ -5,8 +5,8 @@
         <div class="return-btn"></div>
         <p>{{chatInfo.name}}与你的对话</p>
       </div>
-      <div class="chat-message">
-        <div class="item" v-for="item in chatLists" :key="item.date">
+      <div class="chat-message" id="chat-message">
+        <div class="item" v-if="chatLists.length" v-for="item in chatLists" :key="item.date">
           <div class="chater" v-if="item.stuId==chatInfo.stuId">
             <img class="" src="../assets/img/pic/userPhoto-default.png" alt="">
             <div class="massage">{{item.content}}</div> 
@@ -16,15 +16,27 @@
             <div class="massage">{{item.content}}</div> 
             <img class="" src="../assets/img/pic/userPhoto-default.png" alt="">
           </div>
-
         </div>
       </div>
       <div class="input-con">
-        <input type="text" v-model="sendInfoNow">
-        <div class="send" @click="sendInfo">发送</div>
+        <input type="text" v-model="sendInfoNow" @keyup.enter="sendInfo">
+        <div class="send" @click="sendInfo" >发送</div>
       </div>
     </div>
     <div class="right">
+      <div class="title">对话列表</div>
+      <div style="overflow-y:scroll;height:500px">
+      <div :class="{'chat-item':true,'chat-item-blue':chatInfo.stuId==item.chater.stuId}" v-for="item in  chatMemberLists" :key="item.stuId" @click="changeChatInfo(item.chater)" >
+       <div class="chat-item-top">
+        <img src="../assets/img/pic/userPhoto-default.png" alt="">
+        <div class="chater-info">
+          <span class="name">{{item.chater.name}}</span>
+          <span class="school">{{item.chater.school}}{{item.chater.major}}</span>
+        </div>
+       </div>
+      <p class="last-info">{{item.lastlist && item.lastlist.content || ''}}</p>
+      </div>
+      </div>
 
     </div>
   </div>
@@ -37,58 +49,81 @@ export default {
       chatInfo: {}, //聊天者信息
       chatLists: [], //聊天记录
       sendInfoNow: "",
-      chatMemberLists:[]
+      chatMemberLists: [],
+      chaterId: "141651122",
+      userId: "" //本人id
     };
   },
   created() {
-    this.getChatInfo();
-    this.getChatMemberLists();
+    // 这个值从何获取是个问题
+    let self=this;
+    this.getChatInfo(Number(this.$route.query.chaterId));
+    setTimeout(() => {
+      self.getChatMemberLists();
+    }, 0);
   },
   methods: {
+    // 切换用户信息
+    changeChatInfo(stu) {
+      this.getChatInfo(stu.stuId);
+    },
     getChatMemberLists() {
       let self = this;
       this.$http
-        .get("/getChatLists", {
-          params: { chaterId: 1411651103 }
+        .get("/chatLists", {
+          params: { chaterId: 1411651102 }
         })
         .then(res => {
-          console.log(res);
-          self.chatMemberLists = res.data.chatInfoLists.chatLists;
-          console.log(self.chatLists);
+          self.chatMemberLists = res.data;
+          console.log(self.chatMemberLists);
         });
     },
-    getChatInfo() {
+    getChatInfo(stuId) {
       let self = this;
       this.$http
         .get("/chatInfo", {
-          params: { chaterId: 1411651107 }
+          params: { chaterId: stuId }
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           self.chatInfo = res.data.cheaterInfo;
-          self.chatLists = res.data.chatInfoLists.chatLists;
-          console.log(self.chatLists);
+          self.chatLists = res.data.chatInfoLists.chatLists || [];
+          self.userId = res.data.userId;
+          self.scrollToBottom();
         });
     },
     sendInfo() {
       let self = this;
       let serverPath = `${location.protocol}//${location.host}:4000`;
       const socket = io("http://localhost:4000");
-      console.log(this.chatInfo.stuId);
+
+      if (this.sendInfoNow == "") return;
+
       socket.emit("chatInfo", {
-        saveId: "1411651103",
-        sendId: this.chatInfo.stuId.toString(),
-        // sendId: "1411651103",
-        // saveId: this.chatInfo.stuId.toString(),
+        sendId: this.userId.toString(),
+        saveId: this.chatInfo.stuId.toString(),
         content: this.sendInfoNow,
         date: new Date().getTime()
       });
       this.chatLists.push({
         content: self.sendInfoNow,
-        stuId: 1411651102,
+        stuId: this.userId,
         date: new Date().getTime()
       });
       this.sendInfoNow = "";
+      this.scrollToBottom();
+      setTimeout(() => {
+        self.getChatMemberLists();
+      }, 0);
+    },
+    // 滚动条到最底部
+    scrollToBottom() {
+      this.$nextTick(() => {
+        let scrollDom = document.getElementById("chat-message");
+        let height = scrollDom.getBoundingClientRect().height;
+        console.log(scrollDom.scrollHeight);
+        scrollDom.scrollTop = scrollDom.scrollHeight;
+      });
     }
   }
 };
@@ -101,7 +136,7 @@ export default {
 .chatInfo {
   width: 100%;
   display: flex;
-  height: 500px;
+  height: 550px;
   .left {
     flex: 0 1 70%;
     border-right: 2px solid #fff;
@@ -112,7 +147,10 @@ export default {
       position: relative;
       text-align: center;
       border-bottom: 2px solid #fff;
-      color: $light;
+      color: #ffffff;
+      background: $light;
+      border-radius: 5px 0 0 0;
+
       .return-btn {
         position: absolute;
         left: 0;
@@ -123,7 +161,7 @@ export default {
     }
     .chat-message {
       width: 100%;
-      height: 390px;
+      height: 440px;
       overflow-y: scroll;
       border-bottom: 2px solid #fff;
       img {
@@ -132,7 +170,7 @@ export default {
         padding: 15px;
       }
       .item {
-        font-size: 15px;
+        font-size: 13px;
         .chater {
           display: flex;
           justify-content: flex-start;
@@ -205,6 +243,83 @@ export default {
         color: #fff;
         line-height: 40px;
         text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+  .right {
+    color: $light;
+    flex: 0 1 30%;
+    .title {
+      width: 100%;
+      text-align: center;
+      border-bottom: 2px solid #fff;
+      line-height: 50px;
+      box-sizing: border-box;
+      background: $light;
+      border-radius: 0 5px 0 0;
+      color: #fff;
+    }
+    .chat-item {
+      height: 100px;
+      width: 100%;
+      border-bottom: 1px solid #fff;
+      position: relative;
+      // &::after {
+      &:hover {
+        &::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 10%;
+          width: 10px;
+          height: 80%;
+          background: $blue;
+        }
+      }
+      // }
+
+      cursor: pointer;
+      .chat-item-top {
+        display: flex;
+        img {
+          width: 40px;
+          height: 40px;
+          padding: 15px;
+        }
+        .chater-info {
+          margin-top: 10px;
+          .name {
+            font-size: 18px;
+            color: $black;
+            font-weight: 600;
+            display: block;
+          }
+          .school {
+            font-size: 13px;
+          }
+        }
+      }
+      .last-info {
+        color: #bbb;
+        width: 200px;
+        font-size: 14px;
+        padding: 0 20px;
+        overflow: hidden; /*超出部分隐藏*/
+        white-space: nowrap; /*不换行*/
+        text-overflow: ellipsis; /*超出部分省略号显示*/
+      }
+    }
+    .chat-item-blue {
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 10%;
+        width: 10px;
+        height: 80%;
+        background: $blue;
       }
     }
   }

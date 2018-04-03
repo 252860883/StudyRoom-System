@@ -244,7 +244,7 @@ export default {
         }
         &:nth-of-type(14n + 5),
         &:nth-of-type(14n + 11) {
-          margin-left: 20px;
+          margin-left: 30px;
         }
         &:hover {
           transform: translateY(-1px);

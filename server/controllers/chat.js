@@ -21,7 +21,6 @@ module.exports.drawChatdb = async function (data) {
         });
         if (chatNum.length > 0) {
             // 向数组里添加聊天记录
-            console.log('zhixing');
 
             await Chat.update({
                 chatNumber: [aId, bId]
@@ -60,27 +59,36 @@ module.exports.getChatInfo = async function (params) {
         aId = params.chaterId;
         bId = global.stuId;
     }
+    let cheaterInfo = await Student.findOne({
+        stuId: params.chaterId
+    }, "stuId name major school -_id");
 
     let chatInfoLists = await Chat.findOne({
         chatNumber: [aId, bId]
     }).lean();
-    console.log(aId, bId);
-    delete chatInfoLists.chatNumber;
+    if (chatInfoLists) {
+        delete chatInfoLists.chatNumber;
+        return {
+            chatInfoLists,
+            cheaterInfo,
+            userId:global.stuId            
+        };
+    } else {
+        // 如果第一次聊天需要将信息写入
+        await Chat.create({
+            chatNumber: [aId, bId],
+            chatLists: []
+        })
 
-    let cheaterInfo = await Student.findOne({
-        stuId: params.chaterId
-    }, "stuId name major school -_id");
-    console.log(chatInfoLists,
-        cheaterInfo)
-    return {
-        chatInfoLists,
-        cheaterInfo
-    };
+
+        return { cheaterInfo, chatInfoLists: [], userId: global.stuId }
+    }
 }
 
 // 获取聊天消息列表
 module.exports.getChatLists = async function () {
-    let chatLists = await Chat.find({});
+    let chatLists = await Chat.find({}).lean();
+    chatLists.reverse();
     // 存储最后的数据
     let selfChatList = [];
     for (chatItem of chatLists) {
