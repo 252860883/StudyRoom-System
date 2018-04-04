@@ -35,15 +35,17 @@ export default {
     };
   },
   watch: {
-    iswhich: function(val, oldval) {
-    },
+    iswhich: function(val, oldval) {},
     $route: function(nPath, oPath) {
       this.getRemind();
     }
   },
+  mounted() {
+    this.getRemind();
+  },
   methods: {
-    navClick(path, index,nav) {
-      this.$router.push({ path: path, query: { index: index, nav: nav ||1 } });
+    navClick(path, index, nav) {
+      this.$router.push({ path: path, query: { index: index, nav: nav || 1 } });
     },
     getRemind() {
       let self = this;
@@ -65,6 +67,16 @@ header {
   position: fixed;
   z-index: 100000;
   top: 0;
+  .el-badge__content {
+    height: 12px;
+    width: 12px;
+    text-align: center;
+    line-height: 12px;
+    padding: 1px;
+  }
+  .el-badge__content,.is-fixed {
+    top: 15px !important;
+  }
   .con {
     //   width: 1200px;
     margin: 0 auto;

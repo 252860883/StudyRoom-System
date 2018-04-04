@@ -139,7 +139,13 @@ module.exports.getUser = async (params) => {
 module.exports.remind = async (params) => {
     try {
         let stuInfo = await this.getUser(params);
-        return stuInfo.remind.length;
+        // console.log(stuInfo.remind)
+        let num= stuInfo.remind.length
+        let chatLists = await chat.getChatLists();
+        chatLists.map(item=>{
+            if(item.noSee)  num++;
+        })
+        return num;
     } catch (err) {
         throw err;
     }
