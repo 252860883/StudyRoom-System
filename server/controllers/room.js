@@ -373,22 +373,30 @@ module.exports.getRoom = async (params) => {
             // console.log(student);
 
             // 判断用户是否已经 加入/收藏/审核中..
-            student.hasRoomLists.map(item => {
-                if (item.roomRecord._id == params.roomId) {
-                    room['isHas'] = true;
-                    room['ownSeat'] = item.seatIndex;
-                }
-            })
-            student.collectRoomLists.map(item => {
-                if (item.roomRecord && item.roomRecord._id == params.roomId) {
-                    room['isCollect'] = true;
-                }
-            })
-            student.reviewRoomLists.map(item => {
-                if (item.roomRecord && item.roomRecord._id == params.roomId) {
-                    room['isReview'] = true;
-                }
-            })
+            console.log(student.hasRoomLists.length)
+            if (student.hasRoomLists.length) {
+                student.hasRoomLists.map(item => {
+                    if (item.roomRecord._id == params.roomId) {
+                        room['isHas'] = true;
+                        room['ownSeat'] = item.seatIndex;
+                    }
+                })
+            }
+            if (student.collectRoomLists.length) {
+                student.collectRoomLists.map(item => {
+                    if (item.roomRecord && item.roomRecord._id == params.roomId) {
+                        room['isCollect'] = true;
+                    }
+                })
+            }
+            if (student.reviewRoomLists.length) {
+                student.reviewRoomLists.map(item => {
+                    if (item.roomRecord && item.roomRecord._id == params.roomId) {
+                        room['isReview'] = true;
+                    }
+                })
+            }
+
             // 添加自习室创建者
             room['createdStuId'] = room.stuInfo.stuId;
             room['createName'] = room.stuInfo.name;
@@ -409,6 +417,7 @@ module.exports.getTodayHasRoom = async (params) => {
 
     let Rooms = await stu.getUser(params);
     let todayHasRooms = [];
+    console.log(Rooms);
     Rooms.hasRoomLists.map(room => {
         if (room.roomRecord.moon == moon && room.roomRecord.day == day) {
             for (let key in room.roomRecord.roomInfo) {

@@ -104,7 +104,7 @@ export default {
           self.$emit("getRoomDetail", res.data.roomId, false);
           let msg = "创建自习室成功";
           self.$emit("closeprompt", msg);
-          alert(res.data.roomId);
+          // alert(res.data.roomId);
           
           self.$router.replace({
             path: "/roomdetail",

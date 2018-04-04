@@ -93,29 +93,27 @@ export default {
       this.$http
         .get("/agree", {
           params: {
-            roomId: room.roomInfo._id,
-            stuId: 1411651103,
+            roomId: room.roomInfo.roomId,
             remindId: room._id,
             addId: room.stuId,
             seatIndex: room.seatIndex
           }
         })
         .then(res => {
-          this.$emit("updateData");
+          this.getRemindLists();
         });
     },
     disagree(room) {
       this.$http
         .get("/disagree", {
           params: {
-            roomId: room.roomInfo._id,
-            stuId: 1411651103,
+            roomId: room.roomInfo.roomId,
             remindId: room._id,
             addId: room.stuId
           }
         })
         .then(res => {
-          this.$emit("updateData");
+          this.getRemindLists();
         });
     },
     getRemindLists() {
@@ -125,10 +123,12 @@ export default {
         self.tableData = res.data;
       });
     },
-    chatTo(item){
-      this.$router.push({path:'/user',query:{index:'first',nav:2,chaterId:item.chater.stuId}}); 
+    chatTo(item) {
+      this.$router.push({
+        path: "/user",
+        query: { index: "first", nav: 2, chaterId: item.chater.stuId }
+      });
     }
-
   }
 };
 </script>
@@ -149,16 +149,17 @@ export default {
     margin: 10px 0;
     overflow: hidden;
     cursor: pointer;
-    .apply,.chat {
+    .apply,
+    .chat {
       height: 100%;
       display: flex;
       align-items: center;
     }
     // 未看的样式
-    .noSee{
+    .noSee {
       // background: rgba($color: $light, $alpha: 0.1);
       position: relative;
-      &::after{
+      &::after {
         content: "";
         position: absolute;
         left: 10px;
