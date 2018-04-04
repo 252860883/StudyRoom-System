@@ -400,6 +400,11 @@ module.exports.getRoom = async (params) => {
             // 添加自习室创建者
             room['createdStuId'] = room.stuInfo.stuId;
             room['createName'] = room.stuInfo.name;
+
+            // 判断是否是本人创建
+            if (room.stuInfo.stuId) {
+                room['isCreater'] = true;
+            }
             delete room.stuInfo;
             return room;
         }

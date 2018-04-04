@@ -132,6 +132,7 @@ export default {
       this.callbackShow = true;
     },
     chatToCreater(){
+      if(this.room.isCreater) return;
       this.$router.push({path:'/user',query:{index:'first',nav:2,chaterId:this.room.createdStuId}});
     }
   }
