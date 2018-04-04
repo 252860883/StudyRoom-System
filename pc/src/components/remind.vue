@@ -2,7 +2,7 @@
 <!-- 已经选择的课程 -->
   <div class="isselected">
     <div class="list-con"  v-for="(item,index) in tableData" :key="index">
-    <div v-if="item.date" class="apply">
+    <div v-if="item.date" class="apply noSee">
       <div  class="list-photo">
         <img src="../assets/img/pic/userPhoto-default.png" alt="">
       </div>
@@ -29,7 +29,7 @@
         <!-- <a class="del" @click="disagree(item)">找TA</a> -->
       </div>
     </div>
-    <div v-else class="chat">
+    <div v-else :class={chat:true,noSee:item.noSee} >
       <div  class="list-photo">
         <img src="../assets/img/pic/userPhoto-default.png" alt="">
       </div>
@@ -139,7 +139,7 @@ export default {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
-  height: 450px;
+  min-height: 450px;
   .list-con {
     width: 100%;
     height: 120px;
@@ -147,11 +147,27 @@ export default {
     border-radius: 5px;
     background: #fff;
     margin: 10px 0;
+    overflow: hidden;
     cursor: pointer;
     .apply,.chat {
       height: 100%;
       display: flex;
       align-items: center;
+    }
+    // 未看的样式
+    .noSee{
+      // background: rgba($color: $light, $alpha: 0.1);
+      position: relative;
+      &::after{
+        content: "";
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: 10px;
+        height: 10px;
+        background: $red;
+        border-radius: 50%;
+      }
     }
     &:hover {
       border: 1px solid $blue;

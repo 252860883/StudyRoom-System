@@ -1,7 +1,7 @@
 <template>
 <!-- 已经收藏的课程 -->
   <div class="isselected">
-    <div class="list-con" v-for="(item,index) in tableData" :key="index">
+    <div class="list-con" v-if="tableData.length"  v-for="(item,index) in tableData" :key="index">
       <div class="list-left">
         <div class="list-left-up">
           <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span> /
@@ -35,13 +35,6 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          roomRecord: {
-            roomInfo: {
-              build: ""
-            }
-          }
-        }
       ],
       showToast: false,
       delRoom: ""

@@ -100,7 +100,7 @@ export default {
       this.navNo = this.$route.query.nav || 1;
     },
     "$route.query.chaterId": function(val) {
-      this.showChatInfo = val ? true :false;
+      this.showChatInfo = val ? true : false;
     }
   },
   methods: {
