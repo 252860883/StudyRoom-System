@@ -36,12 +36,11 @@
         </el-tabs>
         <!-- 对话列表信息 navNo2 --> 
         <!-- <chart-lists v-if="navNo==2 && !showChatInfo"></chart-lists>   -->
-        <remind v-if="navNo==2 && !showChatInfo" :remindLists="userData.remind" @updateData="getUserData"></remind>
+        <remind v-if="navNo==2 && !showChatInfo" :remindLists="userData.remind"></remind>
         <!-- 对话详情信息 navNo2 --> 
         <chart-info v-if="navNo==2 && showChatInfo"></chart-info>
         
       </div>
-
       <!-- 动态子路由 -->
 
       <!-- 弹框 -->
@@ -69,7 +68,7 @@ export default {
       navNo: 1,
       showToast: false,
       showUserChange: false,
-      showChatInfo: true
+      showChatInfo: false
     };
   },
   components: {
@@ -89,6 +88,9 @@ export default {
     this.activeName = this.$route.query.index;
     this.getUserData();
     this.navNo = this.$route.query.nav || 1;
+    if (this.$route.query.chaterId) {
+      this.showChatInfo = true;
+    }
   },
   watch: {
     "$route.query.index": function(val) {
@@ -96,6 +98,9 @@ export default {
     },
     "$route.query.nav": function(val) {
       this.navNo = this.$route.query.nav || 1;
+    },
+    "$route.query.chaterId": function(val) {
+      this.showChatInfo = val ? true :false;
     }
   },
   methods: {
@@ -121,13 +126,6 @@ export default {
       this.navNo = 2;
       let serverPath = `${location.protocol}//${location.host}:4000`;
       const socket = io("http://localhost:4000");
-
-      // socket.emit("chatInfo", {
-      //   sendId: "1411651103",
-      //   saveId:"1411651102",
-      //   content: "深井冰....",
-      //   date: new Date().getTime()
-      // });
     },
     // 退出账号
     edit() {

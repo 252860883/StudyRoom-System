@@ -2,7 +2,7 @@
   <div class="chatInfo">
     <div class="left">
       <div class="bar">
-        <div class="return-btn"></div>
+        <div class="return-btn" @click="backChatLists"></div>
         <p>{{chatInfo.name}}与你的对话</p>
       </div>
       <div class="chat-message" id="chat-message">
@@ -124,6 +124,9 @@ export default {
         console.log(scrollDom.scrollHeight);
         scrollDom.scrollTop = scrollDom.scrollHeight;
       });
+    },
+    backChatLists(){
+      this.$router.push({path:'/user',query:{index:'first',nav:2}}); 
     }
   }
 };
@@ -148,15 +151,25 @@ export default {
       text-align: center;
       border-bottom: 2px solid #fff;
       color: #ffffff;
-      background: #aaa;
+      background: $blue;
       border-radius: 5px 0 0 0;
+      overflow: hidden;
 
       .return-btn {
         position: absolute;
         left: 0;
         width: 50px;
+        height: 100%;
         text-align: center;
+        background: #fff;
         cursor: pointer;
+        &::after{
+          display: block;
+          content: "<";
+          color:#fff;
+          font-weight: 700;
+          font-size: 23px;background: rgba($color: $blue, $alpha: 0.7);
+        }
       }
     }
     .chat-message {
@@ -256,7 +269,7 @@ export default {
       border-bottom: 2px solid #fff;
       line-height: 50px;
       box-sizing: border-box;
-      background: #aaa;
+      background: $blue;
       border-radius: 0 5px 0 0;
       color: #fff;
     }

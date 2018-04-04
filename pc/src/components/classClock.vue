@@ -43,7 +43,7 @@ export default {
   },
   created() {
     let self = this;
-    this.$http("/getTodayHasRoom", {
+    this.$http.get("/getTodayHasRoom", {
       params: {
         stuId: 1411651103
       }

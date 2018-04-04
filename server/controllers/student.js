@@ -209,7 +209,7 @@ module.exports.remindLists = async (params) => {
             return newB-newA;
         })
 
-        return {newArr2};
+        return newArr2;
     } catch (err) {
         throw err;
     }

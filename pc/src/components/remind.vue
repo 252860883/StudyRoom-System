@@ -1,14 +1,14 @@
 <template>
 <!-- 已经选择的课程 -->
   <div class="isselected">
-    <div class="list-con" v-for="(item,index) in tableData" :key="index">
+    <div class="list-con"  v-for="(item,index) in tableData" :key="index">
+    <div v-if="item.date" class="apply">
       <div  class="list-photo">
         <img src="../assets/img/pic/userPhoto-default.png" alt="">
       </div>
       <div class="list-left">
         <div class="list-left-up">
           <span>{{item.name}}</span> /
-          <!-- <span>{{item.stuId}}</span> -->
           <span>{{item.school}}</span> /
           <span>{{item.major}}</span>
         </div>
@@ -16,7 +16,6 @@
           <span>申请加入：</span>
           <span class="list-date">{{item.roomInfo.moon}}月{{item.roomInfo.day}}日，在</span>
           <span class="list-build">{{item.roomInfo.build}} {{item.roomInfo | roomNumber}} 的自习。</span>
-        
         </div>
         <div class="list-left-action">
           <!-- <span>详细信息：</span><br> -->
@@ -27,7 +26,33 @@
       <div class="list-right">
         <a @click="agree(item)">同意</a>
         <a class="del" @click="disagree(item)">拒绝</a>
+        <!-- <a class="del" @click="disagree(item)">找TA</a> -->
       </div>
+    </div>
+    <div v-else class="chat">
+      <div  class="list-photo">
+        <img src="../assets/img/pic/userPhoto-default.png" alt="">
+      </div>
+      <div class="list-left">
+        <div class="list-left-up">
+          <span>{{item.chater.name}}</span> /
+          <span>{{item.chater.school}}</span> /
+          <span>{{item.chater.major}}</span>
+        </div>
+        <div class="list-left-down">
+          <span>给您发来了新消息</span>
+        </div>
+        <div class="list-left-action">
+          <span>{{item.lastlist.content}}</span>
+        </div>
+      </div>
+      <div class="list-right">
+        <a @click="chatTo(item)">回复</a>
+      </div>
+
+    </div>
+
+
     </div>
       <blank-img v-if="!tableData.length" content='啊哦，您还没有待处理的信息'></blank-img>
   </div>
@@ -43,22 +68,8 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        // {
-        //   roomInfo: {
-        //     roomInfo: {
-        //       build: ""
-        //     }
-        //   }
-        // }
-      ]
+      tableData: []
     };
-  },
-  watch: {
-    remindLists: function(n, o) {
-      // console.log(n);
-      this.tableData = n;
-    }
   },
   filters: {
     roomNumber(room) {
@@ -68,6 +79,9 @@ export default {
         return room.floor + "" + room.number;
       }
     }
+  },
+  created() {
+    this.getRemindLists();
   },
   components: {
     blankImg
@@ -103,7 +117,18 @@ export default {
         .then(res => {
           this.$emit("updateData");
         });
+    },
+    getRemindLists() {
+      let self = this;
+      this.$http.get("/remindLists").then(res => {
+        console.log(res);
+        self.tableData = res.data;
+      });
+    },
+    chatTo(item){
+      this.$router.push({path:'/user',query:{index:'first',nav:2,chaterId:item.chater.stuId}}); 
     }
+
   }
 };
 </script>
@@ -123,27 +148,26 @@ export default {
     background: #fff;
     margin: 10px 0;
     cursor: pointer;
+    .apply,.chat {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
     &:hover {
       border: 1px solid $blue;
     }
     .list-photo {
-      float: left;
-      height: 100%;
+      height: 80px;
       width: 80px;
-      position: relative;
       padding: 0 20px;
-
       img {
-        position: absolute;
-        top: 50%;
-        margin-top: -40px;
         width: 80px;
         height: 80px;
         border-radius: 50%;
       }
     }
     .list-left {
-      float: left;
+      flex: 0 1 70%;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -151,38 +175,39 @@ export default {
       .list-left-up {
         font-size: 16px;
         color: $blue;
-        span{
+        span {
           display: inline-block;
           font-weight: 600;
-
         }
       }
       .list-left-down {
         height: 25px;
         width: 100%;
         font-size: 16px;
-        margin:2px 0;
+        margin: 2px 0;
         color: $black;
       }
-      .list-left-action{
+      .list-left-action {
         font-size: 12px;
         color: $light;
+        height: 34px;
       }
     }
     .list-right {
-      float: right;
       height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       a {
-        display: inline-block;
-        width: 90px;
-        height: 40px;
-        line-height: 40px;
+        display: block;
+        width: 80px;
+        height: 35px;
+        line-height: 35px;
         background: $blue;
         text-align: center;
         color: #fff;
         border-radius: 5px;
-        margin-top: 40px;
-        margin-right: 10px;
+        margin: 5px;
         cursor: pointer;
         font-size: 15px;
         &:hover {
@@ -191,7 +216,7 @@ export default {
       }
       .del {
         background: $red;
-        width: 60px;
+        // width: 60px;
       }
     }
   }
