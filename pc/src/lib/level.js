@@ -1,6 +1,6 @@
 
 export function judgeLevel(num) {
-    console.log(num);
+    // console.log(num);
     if (num == 0) {
         return "LV1 自习萌新";
     } else if (num < 5) {

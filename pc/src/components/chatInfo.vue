@@ -43,6 +43,8 @@
 </template>
 <script>
 import io from "socket.io-client";
+let serverPath = `${location.protocol}//${location.host}:4000`;
+const socket = io("http://localhost:4000");
 export default {
   data() {
     return {
@@ -56,7 +58,8 @@ export default {
   },
   created() {
     // 这个值从何获取是个问题
-    let self=this;
+    let self = this;
+    // 获取详细信息
     this.getChatInfo(Number(this.$route.query.chaterId));
     setTimeout(() => {
       self.getChatMemberLists();
@@ -67,6 +70,7 @@ export default {
     changeChatInfo(stu) {
       this.getChatInfo(stu.stuId);
     },
+    // 获取用户信息
     getChatMemberLists() {
       let self = this;
       this.$http
@@ -75,30 +79,29 @@ export default {
         })
         .then(res => {
           self.chatMemberLists = res.data;
-          console.log(self.chatMemberLists);
+          // console.log(self.chatMemberLists);
         });
     },
     getChatInfo(stuId) {
       let self = this;
-      this.$http
-        .get("/chatInfo", {
-          params: { chaterId: stuId }
-        })
-        .then(res => {
-          // console.log(res);
-          self.chatInfo = res.data.cheaterInfo;
-          self.chatLists = res.data.chatInfoLists.chatLists || [];
-          self.userId = res.data.userId;
-          self.scrollToBottom();
-        });
+      // setInterval(function() {
+        self.$http
+          .get("/chatInfo", {
+            params: { chaterId: stuId }
+          })
+          .then(res => {
+            // console.log(res);
+            self.chatInfo = res.data.cheaterInfo;
+            self.chatLists = res.data.chatInfoLists.chatLists || [];
+            self.userId = res.data.userId;
+            self.scrollToBottom();
+          });
+      // },1000);
     },
     sendInfo() {
       let self = this;
-      let serverPath = `${location.protocol}//${location.host}:4000`;
-      const socket = io("http://localhost:4000");
 
       if (this.sendInfoNow == "") return;
-
       socket.emit("chatInfo", {
         sendId: this.userId.toString(),
         saveId: this.chatInfo.stuId.toString(),
@@ -121,12 +124,12 @@ export default {
       this.$nextTick(() => {
         let scrollDom = document.getElementById("chat-message");
         let height = scrollDom.getBoundingClientRect().height;
-        console.log(scrollDom.scrollHeight);
+        // console.log(scrollDom.scrollHeight);
         scrollDom.scrollTop = scrollDom.scrollHeight;
       });
     },
-    backChatLists(){
-      this.$router.push({path:'/user',query:{index:'first',nav:2}}); 
+    backChatLists() {
+      this.$router.push({ path: "/user", query: { index: "first", nav: 2 } });
     }
   }
 };
@@ -163,12 +166,13 @@ export default {
         text-align: center;
         background: #fff;
         cursor: pointer;
-        &::after{
+        &::after {
           display: block;
           content: "<";
-          color:#fff;
+          color: #fff;
           font-weight: 700;
-          font-size: 23px;background: rgba($color: $blue, $alpha: 0.7);
+          font-size: 23px;
+          background: rgba($color: $blue, $alpha: 0.7);
         }
       }
     }
