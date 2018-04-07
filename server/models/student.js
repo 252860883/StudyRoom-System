@@ -16,7 +16,8 @@ var studentSchema = new mongoose.Schema({
         required: true
     },
     avatorUrl: {
-        type: String
+        type: String,
+        default:"http://p6tfuzc6r.bkt.clouddn.com/userPhoto-default.png"
     },
     school: {
         type: String,

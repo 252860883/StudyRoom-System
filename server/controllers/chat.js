@@ -15,13 +15,12 @@ module.exports.drawChatdb = async function (data) {
             aId = data.sendId;
             bId = data.saveId;
         }
-        console.log(aId, bId)
+
         let chatNum = await Chat.find({
             chatNumber: [aId, bId]
         });
         if (chatNum.length > 0) {
-            // 向数组里添加聊天记录
-
+            // 向数组里添加新的聊天记录
             await Chat.update({
                 chatNumber: [aId, bId]
             }, {
@@ -118,7 +117,7 @@ module.exports.getChatLists = async function () {
             })
         }
     }
-    console.log(selfChatList)
+    // console.log(selfChatList)
     selfChatList.sort(function (a, b) {
         return b.lastlist.date - a.lastlist.date
     })

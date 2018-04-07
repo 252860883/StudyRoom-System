@@ -174,7 +174,7 @@ router.get('/chatLists', async (ctx)=>{
 
 // 获取消息详情
 router.get('/chatInfo', async (ctx)=>{
-    console.log(ctx.query);
+    // console.log(ctx.query);
     let callback =await chat.getChatInfo(ctx.query);
     ctx.body = callback;
 })
