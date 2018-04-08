@@ -64,6 +64,12 @@ export default {
     setTimeout(() => {
       self.getChatMemberLists();
     }, 0);
+
+    socket.on("updateChatInfo",function(data){
+      data.stuId=data.sendId;
+      self.chatLists.push(data);
+      self.scrollToBottom();
+    });
   },
   methods: {
     // 切换用户信息
@@ -85,17 +91,17 @@ export default {
     getChatInfo(stuId) {
       let self = this;
       // setInterval(function() {
-        self.$http
-          .get("/chatInfo", {
-            params: { chaterId: stuId }
-          })
-          .then(res => {
-            // console.log(res);
-            self.chatInfo = res.data.cheaterInfo;
-            self.chatLists = res.data.chatInfoLists.chatLists || [];
-            self.userId = res.data.userId;
-            self.scrollToBottom();
-          });
+      self.$http
+        .get("/chatInfo", {
+          params: { chaterId: stuId }
+        })
+        .then(res => {
+          // console.log(res);
+          self.chatInfo = res.data.cheaterInfo;
+          self.chatLists = res.data.chatInfoLists.chatLists || [];
+          self.userId = res.data.userId;
+          self.scrollToBottom();
+        });
       // },1000);
     },
     sendInfo() {

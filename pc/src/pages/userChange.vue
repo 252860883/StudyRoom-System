@@ -2,7 +2,7 @@
   <div class="user-change">
     <div class="user-con">
 
-      <div class="photo">
+      <div class="photo" >
         设置头像
         <input type="file" v-on="photoUrl" accept="image/png,image/gif"/>
       </div>
@@ -43,7 +43,8 @@
 </template>
 <script>
 import showTag from "../components/showTag.vue";
-
+// 引入七牛云
+import * as qiniu from "qiniu-js";
 export default {
   data() {
     return {
@@ -61,19 +62,22 @@ export default {
     showTag
   },
   watch: {
+    // 当图片更换时
     photoUrl: function(val) {
+      var observable = qiniu.upload(file, key, token, putExtra, config);
+      var subscription = observable.subscribe(observer); // 上传开始
     }
   },
   created() {
-    let self=this;
-    this.$http.get('/user').then(res=>{
-      let re=res.data.data;
-      self.name= re.name;
-      self.stuId=re.stuId;
-      self.school=re.school;
-      self.major=re.major;
-      self.password=re.password;
-    })
+    let self = this;
+    this.$http.get("/user").then(res => {
+      let re = res.data.data;
+      self.name = re.name;
+      self.stuId = re.stuId;
+      self.school = re.school;
+      self.major = re.major;
+      self.password = re.password;
+    });
   },
   methods: {
     submit() {
@@ -86,22 +90,24 @@ export default {
         this.showErr("输入不完整，请填写完整后再提交");
         return;
       }
-      this.$http.post('/modify',{
-        name:this.name,
-        school:this.school,
-        major:this.major,
-        password:this.password
-      }).then(()=>{
-        this.showErr("修改资料成功");
-        this.$emit('modifyBack');
-      })
+      this.$http
+        .post("/modify", {
+          name: this.name,
+          school: this.school,
+          major: this.major,
+          password: this.password
+        })
+        .then(() => {
+          this.showErr("修改资料成功");
+          this.$emit("modifyBack");
+        });
     },
     // 返回
     returnBack() {
-      this.$emit('returnBack');
+      this.$emit("returnBack");
     },
     showErr(msg) {
-      let self=this;
+      let self = this;
       this.msg = msg;
       this.isShowMsg = true;
       setTimeout(() => {
@@ -171,7 +177,7 @@ export default {
         vertical-align: middle;
         color: $light;
       }
-      .warn{
+      .warn {
         font-size: 12px;
         color: #aaa;
       }
@@ -194,7 +200,7 @@ export default {
     .btn-group {
       margin-right: 0;
       width: 260px;
-      margin:50px auto 20px auto;
+      margin: 50px auto 20px auto;
       height: 35px;
       .btn-sub {
         display: block;
