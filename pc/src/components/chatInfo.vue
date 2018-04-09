@@ -37,7 +37,6 @@
       <p class="last-info">{{item.lastlist && item.lastlist.content || ''}}</p>
       </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -64,12 +63,6 @@ export default {
     setTimeout(() => {
       self.getChatMemberLists();
     }, 0);
-
-    socket.on("updateChatInfo",function(data){
-      data.stuId=data.sendId;
-      self.chatLists.push(data);
-      self.scrollToBottom();
-    });
   },
   methods: {
     // 切换用户信息
@@ -100,6 +93,12 @@ export default {
           self.chatInfo = res.data.cheaterInfo;
           self.chatLists = res.data.chatInfoLists.chatLists || [];
           self.userId = res.data.userId;
+          socket.on(self.userId, function(data) {
+            data.stuId = data.sendId;
+            self.chatLists.push(data);
+            self.scrollToBottom();
+          });
+
           self.scrollToBottom();
         });
       // },1000);
