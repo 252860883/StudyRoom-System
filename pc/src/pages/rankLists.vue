@@ -29,7 +29,7 @@
           <span v-else>
             <img src="../assets/img/rank/promise-off.png" alt="">            
           </span>
-          <span>{{item.praise|| 0}}</span>
+          <span class="number">{{item.praise|| 0}}</span>
         </div>
       </div>
 
@@ -128,10 +128,11 @@ export default {
       height: 18px;
       vertical-align: top;
     }
-    span {
+    .number {
       display: inline-block;
       vertical-align: middle;
-      // padding-top: 5px;
+      width: 30px;
+      text-align: left;
     }
   }
   .nav {

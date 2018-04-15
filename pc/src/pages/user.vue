@@ -1,7 +1,7 @@
 <template>
   <div class="user">
       <div class="user-left">
-        <user-show :userdata='userData' @showUserChange="showUserChange=true;"></user-show>
+        <user-show :userdata='userData' @showUserChange="showUserChange=true;navNo=1;"></user-show>
         <!-- 导航 -->
         <div class="nav">
           <p @click="navNo=1"><i v-if="navNo==1"></i>个人中心</p>

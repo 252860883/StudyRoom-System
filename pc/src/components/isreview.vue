@@ -36,13 +36,16 @@ export default {
   data() {
     return {
       tableData: [],
-      delRoom:"",
-      showToast:false
+      delRoom: "",
+      showToast: false
     };
   },
   components: {
     blankImg,
     toast
+  },
+  created() {
+    this.tableData = this.reviewRoomLists;
   },
   watch: {
     reviewRoomLists: function(n, o) {
@@ -65,13 +68,13 @@ export default {
         query: { roomId: room.roomRecord._id, empty: false }
       });
     },
-    deleteReviewClick(room){
-      this.showToast=true;
-      this.delRoom=room;
+    deleteReviewClick(room) {
+      this.showToast = true;
+      this.delRoom = room;
     },
     deleteReview() {
       let room = this.delRoom;
-      this.showToast=false;
+      this.showToast = false;
       this.$http
         .get("/delReviewList", {
           params: {

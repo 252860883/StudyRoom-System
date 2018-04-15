@@ -263,7 +263,7 @@ export default {
     }
     .content {
       margin-top: 5px;
-      max-height: 40px;
+      max-height: 35px;
       overflow: hidden;
     }
 

@@ -51,13 +51,16 @@ export default {
         //   }
         // }
       ],
-      showToast:false,
-      delRoom:""
+      showToast: false,
+      delRoom: ""
     };
   },
   components: {
     blankImg,
     toast
+  },
+  created() {
+    this.tableData=this.hasRoomLists;
   },
   watch: {
     hasRoomLists: function(n, o) {
@@ -85,12 +88,12 @@ export default {
         query: { roomId: room.roomRecord._id, empty: false }
       });
     },
-    deleteRoomClick(room){
-      this.showToast=true;
-      this.delRoom=room;
+    deleteRoomClick(room) {
+      this.showToast = true;
+      this.delRoom = room;
     },
     deleteRoom() {
-      let room=this.delRoom;
+      let room = this.delRoom;
       this.$http
         .get("/delHasList", {
           params: {
@@ -101,8 +104,7 @@ export default {
         .then(res => {
           this.$emit("updateData");
         });
-        this.showToast=false;
-    
+      this.showToast = false;
     }
   }
 };
