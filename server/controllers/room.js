@@ -37,6 +37,9 @@ module.exports.getRoomLists = async (params) => {
             resultLists.push({ roomInfo });
         }
     })
+    resultLists=resultLists.sort(function(a,b){
+        return a.roomInfo.number-b.roomInfo.number
+    })
     return resultLists;
 }
 
@@ -402,7 +405,7 @@ module.exports.getRoom = async (params) => {
             room['createName'] = room.stuInfo.name;
 
             // 判断是否是本人创建
-            if (room.stuInfo.stuId) {
+            if (room.stuInfo.stuId==global.stuId) {
                 room['isCreater'] = true;
             }
             delete room.stuInfo;

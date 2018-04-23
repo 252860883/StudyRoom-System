@@ -5,7 +5,8 @@
       <div class="list-left">
         <div class="list-left-up">
           <span class="list-date">{{item.roomRecord.moon}}月{{item.roomRecord.day}}日</span> /
-          <span class="list-build">{{item.roomRecord.roomInfo.build}} {{item.roomRecord|roomNumber}}</span>
+          <span class="list-build">{{item.roomRecord.roomInfo.build}}</span> / 
+          <span>{{item.roomRecord|roomNumber}}</span> 
         </div>
         <div class="list-left-down">
           <span>标题：{{item.roomRecord.title}}</span>

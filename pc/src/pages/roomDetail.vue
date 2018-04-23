@@ -86,6 +86,7 @@ export default {
     };
   },
   created() {
+    console.log('created')
     this.getRoomDetail(this.$route.query.roomId, this.$route.query.empty);
   },
   components: {
@@ -101,17 +102,16 @@ export default {
       }
     }
   },
-  mounted() {},
   methods: {
     // 获取自习室的信息
     getRoomDetail(roomId, isblank) {
+      console.log('getroom')
       let self = this;
       // 如果自习室为空,还需要知道日期
       this.$http
         .get("/getRoom", {
           params: {
             roomId: roomId,
-            // stuId: 1411651103,
             isblank: isblank
           }
         })
