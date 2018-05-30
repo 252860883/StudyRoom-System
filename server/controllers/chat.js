@@ -61,7 +61,11 @@ module.exports.getChatInfo = async function (params) {
     }
     let cheaterInfo = await Student.findOne({
         stuId: params.chaterId
-    }, "stuId name major school -_id");
+    }, "stuId name major school avatorUrl -_id");
+
+    let createrInfo = await Student.findOne({
+        stuId: global.stuId
+    }, "stuId name major school avatorUrl -_id");
 
     let chatInfoLists = await Chat.findOne({
         chatNumber: [aId, bId]
@@ -81,7 +85,7 @@ module.exports.getChatInfo = async function (params) {
         return {
             chatInfoLists,
             cheaterInfo,
-            userId: global.stuId
+            createrInfo
         };
     } else {
         // 如果第一次聊天需要将信息写入
@@ -90,7 +94,7 @@ module.exports.getChatInfo = async function (params) {
             chatLists: []
         })
 
-        return { cheaterInfo, chatInfoLists: [], userId: global.stuId }
+        return { cheaterInfo, chatInfoLists: [], createrInfo }
     }
 }
 
@@ -106,9 +110,9 @@ module.exports.getChatLists = async function () {
             let anotherStuId = chatItem.chatNumber[0] == global.stuId ? chatItem.chatNumber[1] : chatItem.chatNumber[0]
             let anotherInfo = await Student.findOne({
                 stuId: anotherStuId
-            }, "stuId name major school -_id");
+            }, "stuId name major school avatorUrl -_id");
 
-            let noSee= chatItem.chatNoSeeMumber && chatItem.chatNoSeeMumber.indexOf(global.stuId) >= 0 ? true : false
+            let noSee = chatItem.chatNoSeeMumber && chatItem.chatNoSeeMumber.indexOf(global.stuId) >= 0 ? true : false
 
             selfChatList.push({
                 lastlist: chatItem.chatLists.pop(),

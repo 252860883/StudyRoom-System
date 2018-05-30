@@ -31,7 +31,7 @@
     </div>
     <div v-else :class={chat:true,noSee:item.noSee} >
       <div  class="list-photo">
-        <img src="../assets/img/pic/userPhoto-default.png" alt="">
+        <img :src="item.chater.avatorUrl" alt="">
       </div>
       <div class="list-left">
         <div class="list-left-up">
@@ -49,10 +49,7 @@
       <div class="list-right">
         <a @click="chatTo(item)">回复</a>
       </div>
-
     </div>
-
-
     </div>
       <blank-img v-if="!tableData.length" content='啊哦，您还没有待处理的信息'></blank-img>
   </div>

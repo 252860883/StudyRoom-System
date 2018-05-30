@@ -3,7 +3,7 @@
 <div class="userShow">
   <img @click="userInfoClick" class="rename" :src="require('../assets/img/rename.png')">
   <div class="photo">
-    <img  src="../assets/img/pic/userPhoto-default.png" alt="">
+    <img  :src="user.avatorUrl" alt="">
   </div>
   <p class="name">{{user.name}}</p>
   <p class="school"><span>{{user.school}}</span> | <span>{{user.major}}</span> </p>
@@ -47,9 +47,9 @@ export default {
   },
   methods: {
     userInfoClick() {
-      this.$emit('showUserChange');
+      this.$emit("showUserChange");
     },
-    toRankList(){
+    toRankList() {
       this.$router.push({ path: "/ranklists" });
     }
   }

@@ -8,13 +8,13 @@
       <div class="chat-message" id="chat-message">
         <div class="item" v-if="chatLists.length" v-for="item in chatLists" :key="item.date">
           <div class="chater" v-if="item.stuId==chatInfo.stuId">
-            <img class="" src="../assets/img/pic/userPhoto-default.png" alt="">
+            <img class="" :src="chatInfo.avatorUrl" alt="">
             <div class="massage">{{item.content}}</div> 
           </div>
 
           <div class="owner" v-else>
             <div class="massage">{{item.content}}</div> 
-            <img class="" src="../assets/img/pic/userPhoto-default.png" alt="">
+            <img class="" :src="createrInfo.avatorUrl" alt="">
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@
       <div style="overflow-y:scroll;height:500px">
       <div :class="{'chat-item':true,'chat-item-blue':chatInfo.stuId==item.chater.stuId}" v-for="item in  chatMemberLists" :key="item.stuId" @click="changeChatInfo(item.chater)" >
        <div class="chat-item-top">
-        <img src="../assets/img/pic/userPhoto-default.png" alt="">
+        <img :src="item.chater.avatorUrl" alt="">
         <div class="chater-info">
           <span class="name">{{item.chater.name}}</span>
           <span class="school">{{item.chater.school}}{{item.chater.major}}</span>
@@ -48,6 +48,7 @@ export default {
   data() {
     return {
       chatInfo: {}, //聊天者信息
+      createrInfo:{},//发送者信息
       chatLists: [], //聊天记录
       sendInfoNow: "",
       chatMemberLists: [],
@@ -91,8 +92,9 @@ export default {
         .then(res => {
           // console.log(res);
           self.chatInfo = res.data.cheaterInfo;
+          self.createrInfo=res.data.createrInfo;
           self.chatLists = res.data.chatInfoLists.chatLists || [];
-          self.userId = res.data.userId;
+          self.userId = res.data.createrInfo.stuId;
           socket.on(self.userId, function(data) {
             data.stuId = data.sendId;
             self.chatLists.push(data);
