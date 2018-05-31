@@ -8,8 +8,7 @@ module.exports = async function (server) {
             socket.on('chatInfo', function (data) {
                 chat.drawChatdb(data);
                 // 如果chatId 当前用户匹配，则响应数据返回
-                // if (data.saveId == global.stuId) {
-                console.log('6666:' + JSON.stringify(data));
+                // console.log('6666:' + JSON.stringify(data));
                 socket.emit('1411651103', '666这个消息');
             });
         // })

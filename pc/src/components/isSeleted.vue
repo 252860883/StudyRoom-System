@@ -43,13 +43,8 @@ export default {
   data() {
     return {
       tableData: [
-        // {
-        //   roomRecord: {
-        //     roomInfo: {
-        //       build: ""
-        //     }
-        //   }
-        // }
+        {
+        }
       ],
       showToast: false,
       delRoom: ""

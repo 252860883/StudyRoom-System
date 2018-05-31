@@ -49,8 +49,10 @@
           <input class="title-input" v-model="title" type="text" required>
         </div>
           <textarea  v-model="action" id="" cols="30" rows="10"></textarea>  
+          <div class="selectBar" @click="clickSelectBar"><div :class="isSelectBar?'selectIconOk selectIcon':'selectIcon' "></div> 开启自习加入申请</div>
           <input class="btn-input" @click="createRoom" type="submit">      
       </form>
+      
     </div>
 
   </div>
@@ -71,7 +73,8 @@ export default {
     return {
       title: "",
       action: "",
-      isShowCreate: false
+      isShowCreate: false,
+      isSelectBar: true
     };
   },
   methods: {
@@ -93,7 +96,8 @@ export default {
             seatIndex: this.seatIndex,
             roomId: this.room.roomInfo._id,
             title: this.title,
-            action: this.action
+            action: this.action,
+            isSelectBar:this.isSelectBar
           }
         })
         .then(res => {
@@ -103,16 +107,7 @@ export default {
           }
           let msg = "创建自习室成功";
           self.$emit("closeprompt", msg);
-          // self.$router.replace({
-          //   path: "/roomdetail",
-          //   query: {
-          //     roomId: res.data.roomId,
-          //     empty: false
-          //   }
-          // });
-          // setTimeout(() => {
-            self.$emit("getRoomDetail", res.data.roomId, false);
-          // });
+          self.$emit("getRoomDetail", res.data.roomId, false);
         });
     },
     // 收藏自习室
@@ -142,6 +137,11 @@ export default {
         .then(res => {
           self.$emit("closeprompt", res.data.msg);
         });
+    },
+
+    // 点击是否开启申请按钮
+    clickSelectBar() {
+      this.isSelectBar = !this.isSelectBar;
     }
   }
 };
@@ -241,7 +241,7 @@ export default {
     .create {
       width: 280px;
       margin: 0 auto;
-      margin-top: 70px;
+      margin-top: 60px;
       .title {
         position: relative;
         img {
@@ -265,7 +265,7 @@ export default {
       }
       textarea {
         width: 100%;
-        height: 150px;
+        height: 140px;
         border: 2px solid $light;
         border-radius: 6px;
         margin-top: 10px;
@@ -275,8 +275,30 @@ export default {
         resize: none; //限制不能拖动文本框
         padding: 10px;
       }
+      .selectBar {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: $black;
+        height: 16px;
+        line-height: 15px;
+        margin-top: 10px;
+      }
+      .selectIcon {
+        width: 15px;
+        height: 15px;
+        border: 2px solid $blue;
+        border-radius: 50%;
+        margin-right: 10px;
+        margin-left: 10px;
+        box-sizing: border-box;
+      }
+      .selectIconOk {
+        background: #94c7f6;
+      }
+
       .btn-input {
-        width: 90%;
+        width: 100%;
         background: $blue;
         height: 40px;
         border: 0;

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Student = mongoose.model('student');
-const chat=require('./chat');
+const chat = require('./chat');
 
 /**
  * 封装一系列和用户有关的方法
@@ -128,7 +128,6 @@ module.exports.getUser = async (params) => {
     })
     delete getInfo.remind
     getInfo['remind'] = remind;
-
     let hasRoomLists = getInfo.hasRoomLists.sort(compare('roomRecord', 'day')).sort(compare('roomRecord', 'moon'));
     delete getInfo.hasRoomLists;
     getInfo['hasRoomLists'] = hasRoomLists;
@@ -140,10 +139,10 @@ module.exports.remind = async (params) => {
     try {
         let stuInfo = await this.getUser(params);
         // console.log(stuInfo.remind)
-        let num= stuInfo.remind.length
+        let num = stuInfo.remind.length
         let chatLists = await chat.getChatLists();
-        chatLists.map(item=>{
-            if(item.noSee)  num++;
+        chatLists.map(item => {
+            if (item.noSee) num++;
         })
         return num;
     } catch (err) {
@@ -172,10 +171,10 @@ module.exports.rankLists = async (params) => {
         stu['hasNumber'] = stu.hasRoomLists.length;
         delete stu.hasRoomLists;
         // 判断是否已经点赞
-        if(stu.praiseStuLists && stu.praiseStuLists.indexOf(global.stuId)>=0){
-            stu['isPraise']=true;
-        }else{
-            stu['isPraise']=false;            
+        if (stu.praiseStuLists && stu.praiseStuLists.indexOf(global.stuId) >= 0) {
+            stu['isPraise'] = true;
+        } else {
+            stu['isPraise'] = false;
         };
         delete stu.praiseStuLists;
         return stu;
@@ -207,12 +206,12 @@ module.exports.remindLists = async (params) => {
         // 获取新的消息
         let chatLists = await chat.getChatLists();
 
-        let newArr =stuInfo.remind.concat(chatLists);
+        let newArr = stuInfo.remind.concat(chatLists);
 
-        let newArr2=newArr.sort(function(a,b){
-            let newA=a.date? a.date :a.lastlist.date;
-            let newB=b.date? b.date :b.lastlist.date;
-            return newB-newA;
+        let newArr2 = newArr.sort(function (a, b) {
+            let newA = a.date ? a.date : a.lastlist.date;
+            let newB = b.date ? b.date : b.lastlist.date;
+            return newB - newA;
         })
 
         return newArr2;
