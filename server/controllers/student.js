@@ -71,7 +71,7 @@ module.exports.getUser = async (params) => {
             })
         }, {
             path: 'remind.stuInfo',
-            select: 'stuId name major school'
+            select: 'stuId name major school avatorUrl'
 
         }, {
             path: 'remind.roomInfo',

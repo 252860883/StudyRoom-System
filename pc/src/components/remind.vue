@@ -4,7 +4,7 @@
     <div class="list-con"  v-for="(item,index) in tableData" :key="index">
     <div v-if="item.date" class="apply noSee">
       <div  class="list-photo">
-        <img src="../assets/img/pic/userPhoto-default.png" alt="">
+        <img :src="item.avatorUrl" alt="">
       </div>
       <div class="list-left">
         <div class="list-left-up">
