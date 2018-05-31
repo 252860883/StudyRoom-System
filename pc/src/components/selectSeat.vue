@@ -49,7 +49,7 @@
           <input class="title-input" v-model="title" type="text" required>
         </div>
           <textarea  v-model="action" id="" cols="30" rows="10"></textarea>  
-          <div class="selectBar" @click="clickSelectBar"><div :class="isSelectBar?'selectIconOk selectIcon':'selectIcon' "></div> 开启自习加入申请</div>
+          <div class="selectBar" @click="clickSelectBar"><div :class="isSelectBar?'selectIconOk selectIcon':'selectIcon' "></div>开启自习申请验证</div>
           <input class="btn-input" @click="createRoom" type="submit">      
       </form>
       

@@ -326,12 +326,15 @@ export default {
       }
       .last-info {
         color: #bbb;
-        width: 200px;
+        width: 160px;
         font-size: 14px;
         padding: 0 20px;
         overflow: hidden; /*超出部分隐藏*/
         white-space: nowrap; /*不换行*/
         text-overflow: ellipsis; /*超出部分省略号显示*/
+        margin: 0 20px;
+        border-radius: 10px;
+        background: #eee;
       }
     }
     .chat-item-blue {

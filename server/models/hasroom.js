@@ -33,9 +33,10 @@ var roomSchema = new mongoose.Schema({
     action: {
         type: String
     },
-    // 是否开启审核
+    // 是否开启审核 
     isSelectBar:{
-        type:Boolean
+        type:Boolean,
+        default:true
     }
 
 });
