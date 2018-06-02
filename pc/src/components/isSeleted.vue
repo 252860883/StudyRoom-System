@@ -25,13 +25,13 @@
         <a class="del" v-else style="background:#bbb">删除</a>
       </div>
     </div>
-      <blank-img v-if="!tableData.length" content='啊哦，还没有已选择自习的信息'></blank-img>
+      <blank-img v-if="tableData==''" content='啊哦，还没有已选择自习的信息'></blank-img>
       <toast v-if="showToast" content="确定要删除该自习吗？" @reset="showToast=false" @promise="deleteRoom"></toast>
   </div>
 </template>
 
 <script>
-import blankImg from "../components/blanik-img";
+import blankImg from "../components/blank-img";
 import toast from "../components/toast";
 
 export default {
@@ -42,10 +42,7 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-        }
-      ],
+      tableData: "",
       showToast: false,
       delRoom: ""
     };

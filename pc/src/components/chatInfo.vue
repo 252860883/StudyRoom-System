@@ -43,7 +43,7 @@
 <script>
 import io from "socket.io-client";
 let serverPath = `${location.protocol}//${location.host}:4000`;
-const socket = io("http://localhost:4000");
+const socket = io(serverPath);
 export default {
   data() {
     return {
@@ -75,11 +75,10 @@ export default {
       let self = this;
       this.$http
         .get("/chatLists", {
-          params: { chaterId: 1411651102 }
+          // params: { chaterId: 1411651102 }
         })
         .then(res => {
           self.chatMemberLists = res.data;
-          // console.log(self.chatMemberLists);
         });
     },
     getChatInfo(stuId) {

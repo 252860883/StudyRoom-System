@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import blankImg from "../components/blanik-img";
+import blankImg from "../components/blank-img";
 import toast from "../components/toast";
 
 export default {

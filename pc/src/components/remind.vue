@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import blankImg from "../components/blanik-img";
+import blankImg from "../components/blank-img";
 export default {
   props: {
     remindLists: {

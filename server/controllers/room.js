@@ -7,26 +7,38 @@ const stu = require('./student');
 
 //  获取自习室列表
 module.exports.getRoomLists = async (params) => {
+    let roomIdLists, roomInfoLists;
 
-    let roomIdLists = await Room.find({
-        moon: params.moon,
-        day: params.day
-    }).populate([{
-        path: 'roomInfo ',
-        match: { build: params.build, floor: params.floor },
-        select: 'number build floor allSeats'
-    }, {
-        path: 'stuInfo',
-        select: 'name stuId -_id'
-    }]);
+    async function searchRoomLists(matchParams) {
+        roomIdLists = await Room.find({
+            moon: params.moon,
+            day: params.day
+        }).populate([{
+            path: 'roomInfo ',
+            // match: { build: params.build, floor: params.floor },
+            match: matchParams,
+            select: 'number build floor allSeats'
+        }, {
+            path: 'stuInfo',
+            select: 'name stuId -_id'
+        }]);
+        // 过滤不符合的自习室，同时按照教室号排序,这是已经有的自习室
+        roomIdLists = roomIdLists.filter((value) => {
+            return value.roomInfo != null;
+        }).sort(compare('roomInfo', 'number'));
+        // 查询出对应的固定自习室信息
+        roomInfoLists = await RoomInfo.find(matchParams);
+    }
 
-    // 过滤不符合的自习室，同时按照教室号排序,这是已经有的自习室
-    roomIdLists = roomIdLists.filter((value) => {
-        return value.roomInfo != null;
-    }).sort(compare('roomInfo', 'number'));
-
-    // 查询出对应的固定自习室信息
-    let roomInfoLists = await RoomInfo.find({ build: params.build, floor: params.floor });
+    if (params.build == "不限" && params.floor == "不限") {
+        await searchRoomLists({})
+    } else if (params.build == "不限") {
+        await searchRoomLists({ floor: params.floor })
+    } else if (params.floor == "不限") {
+        await searchRoomLists({ build: params.build })
+    } else {
+        await searchRoomLists({ build: params.build, floor: params.floor })
+    }
 
     let resultLists = [];//存放结果
 
@@ -37,9 +49,21 @@ module.exports.getRoomLists = async (params) => {
             resultLists.push({ roomInfo });
         }
     })
-    resultLists=resultLists.sort(function(a,b){
-        return a.roomInfo.number-b.roomInfo.number
-    })
+
+    // resultLists = resultLists.sort(function (a, b) {
+    //     if (a.roomInfo.build == b.roomInfo.build) {
+    //         if (a.roomInfo.floor == b.roomInfo.floor) {
+    //             return a.roomInfo.number - b.roomInfo.number
+    //         } else {
+    //             return a.roomInfo.floor > b.roomInfo.floor
+    //         }
+    //     } else if (a.roomInfo.build == '一公教') {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // })
+
     return resultLists;
 }
 
@@ -405,7 +429,7 @@ module.exports.getRoom = async (params) => {
             room['createName'] = room.stuInfo.name;
 
             // 判断是否是本人创建
-            if (room.stuInfo.stuId==global.stuId) {
+            if (room.stuInfo.stuId == global.stuId) {
                 room['isCreater'] = true;
             }
             delete room.stuInfo;

@@ -7,7 +7,6 @@ import login from '@/pages/login'
 import user from '@/pages/user'
 import userChange from '@/pages/userChange'
 import ranklists from '@/pages/rankLists'
-import chatlists from '../components/chatlist'
 import chatInfo from '../components/chatInfo'
 
 Vue.use(Router)
@@ -32,11 +31,7 @@ export default new Router({
     path: '/user',
     name: 'home',
     component: user,
-    children: [
-      {
-        path: "chatlist",
-        component: chatlists
-      },{
+    children: [{
         path:"chatinfo",
         component:chatInfo
       },{

@@ -57,7 +57,6 @@ import remind from "../components/remind";
 import toast from "../components/toast";
 import userChange from "../pages/userChange";
 import io from "socket.io-client";
-import chatLists from "../components/chatlist";
 import chartInfo from "../components/chatInfo";
 export default {
   data() {
@@ -80,7 +79,6 @@ export default {
     remind,
     toast,
     userChange,
-    chatLists,
     chartInfo
   },
   created() {

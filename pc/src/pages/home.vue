@@ -26,10 +26,11 @@
 
     <!-- 教室情况 -->
     <div class="home-seats">
-        <div  v-for="room in roomLists" :key="room.roomInfo.number">
+        <div  v-for="room in roomLists" :key="room.roomInfo._id">
             <div  :class="room.title ? 'room-border' : 'room-border-no'" @click="toDetail(room)">
                 <span class="roomId">{{ room |roomNumber}}</span>
-                  <span class="seat-con">
+                <span class="roomBuild">{{room.roomInfo.build}}</span>
+                <span class="seat-con">
                   <img class="icon-seat"  :src="room.title ? require('../assets/img/login/seat-off.png') :require('../assets/img/login/seat-off-grey.png')" alt="">
                   <span class="seats-num">{{room.roomInfo.allSeats}}</span>
                   <img class="icon-seat"  :src="room.title ? require('../assets/img/login/seat-on.png') :require('../assets/img/login/seat-on-grey.png')" alt="">
@@ -49,10 +50,10 @@
 export default {
   data() {
     return {
-      buildName: "一公教",
-      buildLists: ["一公教", "二公教"],
-      vFloor: "1",
-      floorLists: ["1", "2", "3"],
+      buildName: "不限",
+      buildLists: ["不限", "一公教", "二公教"],
+      vFloor: "不限",
+      floorLists: ["不限", "1", "2", "3"],
       time: new Date(),
       roomLists: []
     };
@@ -106,6 +107,7 @@ export default {
         });
       }
     },
+    // 获取自习室列表
     getRoomLists() {
       let self = this;
       this.$http
@@ -199,9 +201,15 @@ export default {
       }
 
       .roomId {
-        height: 50px;
-        line-height: 50px;
-        font-size: 40px;
+        height: 30px;
+        line-height: 35px;
+        font-size: 30px;
+        color: $blank;
+        margin-top: 0;
+        background: $blue;
+      }
+      .roomBuild{
+        font-size: 14px;
         color: $blank;
         margin-bottom: 10px;
         margin-top: 0;
@@ -223,10 +231,16 @@ export default {
         font-size: 14px;
         margin-top: 5px;
       }
-      .roomId {
-        height: 50px;
-        line-height: 50px;
-        font-size: 40px;
+            .roomId {
+        height: 30px;
+        line-height: 35px;
+        font-size: 30px;
+        color: $black;
+        margin-top: 0;
+        background: $blank;
+      }
+      .roomBuild{
+        font-size: 14px;
         color: $black;
         margin-bottom: 10px;
         margin-top: 0;
@@ -256,14 +270,18 @@ export default {
     .title,
     .content {
       color: $light;
-      padding: 0 18px;
+      margin: 0 10px;
+      padding: 0 8px;
       font-size: 13px;
+      // line-height: 20px;
       margin-top: 25px;
       text-align: left;
+      background: #eee;
+      border-radius: 5px;
     }
     .content {
       margin-top: 5px;
-      max-height: 35px;
+      min-height: 55px;
       overflow: hidden;
     }
 
