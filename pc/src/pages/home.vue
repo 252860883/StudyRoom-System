@@ -53,7 +53,7 @@ export default {
       buildName: "不限",
       buildLists: ["不限", "一公教", "二公教"],
       vFloor: "不限",
-      floorLists: ["不限", "1", "2", "3"],
+      floorLists: ["不限", "1", "2"],
       time: new Date(),
       roomLists: []
     };

@@ -1,30 +1,26 @@
+<!-- 资料修改页面 -->
 <template>
   <div class="user-change">
     <div class="user-con">
-
-      <div class="photo" >
-        设置头像
-        <input type="file" v-on="photoUrl" accept="image/png,image/gif"/>
+      <div class="photo" :style="photoUrlStyle">
+        <!-- <span v-if="!photoUrlStyle">设置头像</span> / -->
+        <input type="file" @change="uploadPhoto($event)" accept="image/png,image/jpeg,image/jpg"/>
       </div>
-
       <div class="user-row">
         <span>姓名</span>
         <input type="text" v-model="name" style="width:140px;"> 
       </div>
-
       <div class="user-row readOnly">
         <span>学号</span>
         <input type="text" readonly v-model="stuId" style="width:140px;">
         <span class="warn">* 学号在您注册后不能修改</span>
       </div>
-
       <div class="user-row">
         <span>学校</span>
         <input type="text" v-model="school" style="width:180px;">   
         <span>专业</span>
         <input type="text" v-model="major" >       
       </div>
-
       <div class="user-row">
         <span>密码</span>
         <input type="password" v-model="password">   
@@ -38,7 +34,6 @@
     </div>
     <!-- 提示 -->
     <show-tag :msg="msg" v-show="isShowMsg"></show-tag>
-    
   </div>
 </template>
 <script>
@@ -51,11 +46,12 @@ export default {
       name: "",
       school: "",
       major: "",
-      stuId: "12222",
+      stuId: "",
       password: "",
       msg: "",
       isShowMsg: false,
-      photoUrl: ""
+      photoUrl: "",
+      photoUrlStyle: ""
     };
   },
   components: {
@@ -63,10 +59,11 @@ export default {
   },
   watch: {
     // 当图片更换时
-    photoUrl: function(val) {
-      var observable = qiniu.upload(file, key, token, putExtra, config);
-      var subscription = observable.subscribe(observer); // 上传开始
-    }
+    // photoUrl: function(val) {
+    //   // var observable = qiniu.upload(file, key, token, putExtra, config);
+    //   // var subscription = observable.subscribe(observer); // 上传开始
+    //   console.log("ok");
+    // }
   },
   created() {
     let self = this;
@@ -77,6 +74,7 @@ export default {
       self.school = re.school;
       self.major = re.major;
       self.password = re.password;
+      self.photoUrlStyle = "backgroundImage:url('" + re.avatorUrl + "')";
     });
   },
   methods: {
@@ -95,7 +93,8 @@ export default {
           name: this.name,
           school: this.school,
           major: this.major,
-          password: this.password
+          password: this.password,
+          avatorUrl: this.photoUrl
         })
         .then(() => {
           this.showErr("修改资料成功");
@@ -114,18 +113,45 @@ export default {
         self.isShowMsg = false;
       }, 2000);
     },
-    uploadPhoto() {
+    // 上传图片
+    uploadPhoto(e) {
       var file = e.target.files[0]; //获取File对象，这里是上传单张图片，[0]代表第一张图片。如果多张，就是一个var file = e.target.files;
-      var type = file.type.split("/")[0]; //按照惯例，不应该由前端判断格式，因为这里是根据后缀名判断的，修改后缀名仍旧可以上传，理应由后端根据文件格式来判断。
-      if (type != "image") {
-        alert("请上传图片");
-        return;
-      }
-      var size = Math.round(file.size / 1024 / 1024);
-      if (size > 3) {
-        alert("图片大小不得超过3M");
-        return;
-      }
+      // 获取token
+      this.$http.post("/getQiNiuToken").then(res => {
+        console.log(res.data.token);
+        var config = {
+          useCdnDomain: true,
+          region: qiniu.region.z0
+        };
+        var putExtra = {
+          fname: "",
+          params: {},
+          mimeType: [] || null
+        };
+        var observable = qiniu.upload(
+          file,
+          "photo" + file.name,
+          res.data.token,
+          putExtra,
+          config
+        );
+        let self = this;
+        var observer = {
+          next(res) {
+            // console.log(res);
+          },
+          error(err) {
+            console.log(err);
+          },
+          complete(res) {
+            let key = JSON.parse(JSON.stringify(res)).key;
+            let photoUrl = "http://p6tfuzc6r.bkt.clouddn.com/" + key;
+            self.photoUrl = photoUrl;
+            self.photoUrlStyle = "backgroundImage:url('" + photoUrl + "')";
+          }
+        };
+        var subscription = observable.subscribe(observer); // 上传开始
+      });
     }
   }
 };
@@ -144,6 +170,9 @@ export default {
       height: 100px;
       display: block;
       background: $light;
+      border: 2px solid $blank;
+      // background-image: url("http://p6tfuzc6r.bkt.clouddn.com/photo1.jpeg");
+      background-size: 100%;
       border-radius: 50%;
       margin: 0px auto;
       text-align: center;
@@ -157,9 +186,23 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
+        z-index: 3;
         background: transparent;
         cursor: pointer;
         opacity: 0;
+      }
+    }
+    .photo:hover {
+      &::after {
+        position: absolute;
+        content: "修改头像";
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        display: block;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2;
       }
     }
     .user-row {

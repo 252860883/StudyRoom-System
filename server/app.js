@@ -18,7 +18,6 @@ require('./models/hasroom');
 require('./models/room');
 require('./models/chat');
 
-
 // websocket 全双工通信,聊天功能
 var server = require('http').Server(app.callback());
 require('./controllers/socket')(server);

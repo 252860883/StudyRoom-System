@@ -43,7 +43,8 @@
 <script>
 import io from "socket.io-client";
 let serverPath = `${location.protocol}//${location.host}:4000`;
-const socket = io(serverPath);
+const socket = io("http://localhost:4000");
+// const socket = io('localhost:8080');
 export default {
   data() {
     return {

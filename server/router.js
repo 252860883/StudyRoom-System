@@ -2,10 +2,12 @@
 
 let student = require('./controllers/student');
 let room = require('./controllers/room');
-let chat=require('./controllers/chat');
+let chat = require('./controllers/chat');
 
 const Router = require('koa-router');
 let router = new Router();
+
+let qiniu=require('./lib/qiniu')
 
 // 登陆接口
 router.post('/login', async (ctx) => {
@@ -35,7 +37,7 @@ router.post('/register', async (ctx) => {
 
 // 修改个人信息
 router.post('/modify', async (ctx, next) => {
-    let params = ctx.request.body ;
+    let params = ctx.request.body;
     console.log(params);
     let hasModify = await student.modify(params);
 
@@ -167,16 +169,20 @@ router.get('/clickPromise', async (ctx) => {
 })
 
 // 获取消息列表
-router.get('/chatLists', async (ctx)=>{
-    let callback =await chat.getChatLists(ctx.query);
+router.get('/chatLists', async (ctx) => {
+    let callback = await chat.getChatLists(ctx.query);
     ctx.body = callback;
 })
 
 // 获取消息详情
-router.get('/chatInfo', async (ctx)=>{
+router.get('/chatInfo', async (ctx) => {
     // console.log(ctx.query);
-    let callback =await chat.getChatInfo(ctx.query);
+    let callback = await chat.getChatInfo(ctx.query);
     ctx.body = callback;
 })
 
+router.post('/getQiNiuToken', async (ctx) => {
+    let token = await qiniu.getQiNiuToken();
+    ctx.body = {token};
+})
 module.exports.router = router;

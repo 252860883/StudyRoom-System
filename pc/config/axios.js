@@ -14,7 +14,7 @@ axios.interceptors.request.use(function (config) {
 // 响应接口的拦截器
 axios.interceptors.response.use(function (response) {
     // 这里面可以对axios做统一的处理
-    console.log(response.data);
+    // console.log(response.data);
     if (response.data.error == 'unlogin') {
         // console.log(window.location);
         window.location.href=window.origin+'/#/login';
