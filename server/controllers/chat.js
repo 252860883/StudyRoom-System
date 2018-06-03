@@ -121,7 +121,7 @@ module.exports.getChatLists = async function () {
             })
         }
     }
-    // console.log(selfChatList)
+    
     selfChatList.sort(function (a, b) {
         return b.lastlist.date - a.lastlist.date
     })
