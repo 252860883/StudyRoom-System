@@ -25,7 +25,7 @@
           <img src="../assets/img/room/creatdRoom.png" alt="">
           <p>创建自习</p>
         </div>
-        <div v-else class="createRoom unclick" @click="isShowCreate=true">
+        <div v-else class="createRoom unclick" >
           <img src="../assets/img/room/creatdRoom-grey.png" alt="">
           <p>创建自习</p>
         </div>
@@ -34,7 +34,7 @@
           <img src="../assets/img/room/saveRoom.png">
           <p>收藏自习</p>
         </div>
-        <div v-else @click="collectClick " class="saveRoom unclick">
+        <div v-else class="saveRoom unclick">
           <img src="../assets/img/room/saveRoom-grey.png">
           <p>收藏自习</p>
         </div>
@@ -90,23 +90,25 @@ export default {
       this.$http
         .get("/addAdmin", {
           params: {
-            stuId: 1411651103,
+            // stuId: 1411651103,
             moon: this.$route.query.moon,
             day: this.$route.query.day,
             seatIndex: this.seatIndex,
             roomId: this.room.roomInfo._id,
             title: this.title,
             action: this.action,
-            isSelectBar:this.isSelectBar
+            isSelectBar: this.isSelectBar
           }
         })
         .then(res => {
+          // alert(res);
           if (!res.data.sucess) {
             self.$emit("closeprompt", res.data.msg);
             return;
           }
           let msg = "创建自习室成功";
           self.$emit("closeprompt", msg);
+          // alert(res.data.roomId);
           self.$emit("getRoomDetail", res.data.roomId, false);
         });
     },

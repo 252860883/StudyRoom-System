@@ -22,10 +22,25 @@ module.exports.getRoomLists = async (params) => {
             path: 'stuInfo',
             select: 'name stuId -_id'
         }]);
-        // 过滤不符合的自习室，同时按照教室号排序,这是已经有的自习室
+        // 过滤不符合的自习室，同时按照教室号排序,这是已经有的自习室 
         roomIdLists = roomIdLists.filter((value) => {
             return value.roomInfo != null;
-        }).sort(compare('roomInfo', 'number'));
+            // }).sort(compare('roomInfo', 'number'));
+        }).sort(function (a, b) {
+            // compare('roomInfo', 'number')
+            let aBuild = a.roomInfo.build == '一公教' ? 1 : 2
+            let bBuild = b.roomInfo.build == '一公教' ? 1 : 2
+            if (aBuild == bBuild) {
+                if (a.roomInfo.floor == b.roomInfo.floor) {
+                    return a.roomInfo.number > b.roomInfo.number
+                } else {
+                    return a.roomInfo.floor > b.roomInfo.floor
+                }
+            } else {
+                return aBuild > bBuild
+            }
+        });
+        // console.log(roomIdLists)
         // 查询出对应的固定自习室信息
         roomInfoLists = await RoomInfo.find(matchParams);
     }
@@ -43,7 +58,9 @@ module.exports.getRoomLists = async (params) => {
     let resultLists = [];//存放结果
 
     roomInfoLists.map((roomInfo, index) => {
-        if (roomIdLists.length && roomIdLists[0].roomInfo.number == roomInfo.number) {
+        // console.log(roomInfo, roomIdLists[0].roomInfo.number == roomInfo.number, roomIdLists[0].roomInfo.build == roomInfo.build, roomIdLists[0].roomInfo.floor == roomInfo.floor)
+        // console.log(roomInfo, roomIdLists[0].roomInfo.number, roomInfo.number, roomIdLists[0].roomInfo.build, roomInfo.build, roomIdLists[0].roomInfo.floor, roomInfo.floor)
+        if (roomIdLists.length && roomIdLists[0].roomInfo.number == roomInfo.number && roomIdLists[0].roomInfo.build == roomInfo.build && roomIdLists[0].roomInfo.floor == roomInfo.floor) {
             resultLists.push(roomIdLists.shift());
         } else {
             resultLists.push({ roomInfo });

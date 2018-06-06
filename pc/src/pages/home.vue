@@ -26,7 +26,7 @@
 
     <!-- 教室情况 -->
     <div class="home-seats">
-        <div  v-for="room in roomLists" :key="room.roomInfo._id">
+        <div  v-for="(room,index) in roomLists" :key="index">
             <div  :class="room.title ? 'room-border' : 'room-border-no'" @click="toDetail(room)">
                 <span class="roomId">{{ room |roomNumber}}</span>
                 <span class="roomBuild">{{room.roomInfo.build}}</span>
