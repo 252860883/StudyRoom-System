@@ -1,6 +1,7 @@
 # StudyRoom-System
 <b>毕业设计-校园约自习网站的设计与实现</b>
 ---
+![image](https://img.zcool.cn/community/0119005acccf1ba801204029769cd7.jpg@1280w_1l_2o_100sh.webp)
 client：VUE vue-cli vue-router vuex
 
 server：nodejs koa koa-router  
