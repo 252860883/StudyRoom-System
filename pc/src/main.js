@@ -4,8 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-import element from 'element-ui';
-Vue.use(element);
+import element from 'element-ui'
+Vue.use(element)
 
 // import axios from 'axios'
 // Vue.use(axios)
